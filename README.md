@@ -68,7 +68,7 @@ cd vps-value-calculator
 docker compose up -d
 ```
 
-默认数据和图片会存储在当前目录的 `data/` 与 `static/images/` 下。
+默认数据和图片会存储在 `/opt/vps-value-calculator/data/` 与 `/opt/vps-value-calculator/static/images/` 下。
 
 访问示例：
 
