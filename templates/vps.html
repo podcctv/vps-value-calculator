@@ -11,11 +11,15 @@
 </head>
 <body class="min-h-screen font-mono">
 <nav class="banner">
-    <div class="banner-title">
-        ⚡ <span>VPS</span> <span>剩余价值计算器</span>
+    <div class="banner-left">
+        <div class="banner-title">
+            ⚡ <span>VPS</span> <span>剩余价值计算器</span>
+        </div>
+        <div class="banner-stats">
+            在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
+        </div>
     </div>
     <div class="banner-subinfo">
-        在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
         {% if current_user %}
         <span>你好, {{ current_user.username }}</span>
         <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>
@@ -51,7 +55,7 @@
                 <div class="vps-row"><span>内存：</span><span>{{ specs.memory }}</span></div>
                 <div class="vps-row"><span>存储：</span><span>{{ specs.storage }}</span></div>
                 <div class="vps-row"><span>月流量：</span><span>{{ vps.traffic_limit or '-' }}</span></div>
-                <div class="vps-row"><span>IP 地址：</span><span>{{ ip_info.flag }} {{ ip_info.ip_display }} ({{ ip_info.ping_status }})</span></div>
+                <div class="vps-row"><span>IP 地址：</span><span>{{ ip_info.flag }} {{ ip_info.ip_display }} (<span class="ping-status" data-ip="{{ vps.ip_address }}">{{ ip_info.ping_status }}</span>)</span></div>
                 <div class="vps-row"><span>续费金额：</span><span>{{ vps.renewal_price or '-' }} {{ vps.currency }}</span></div>
                 <div class="vps-row"><span>购买日期：</span><span>{{ vps.purchase_date.strftime('%Y-%m-%d') if vps.purchase_date and vps.status == 'active' else '-' }}</span></div>
                 <div class="vps-row"><span>续费周期：</span><span>{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</span></div>
@@ -73,6 +77,17 @@
             window.location.href = card.dataset.href;
         });
     });
+
+    function updatePingStatus() {
+        document.querySelectorAll('.ping-status').forEach(el => {
+            const ip = el.dataset.ip;
+            fetch(`/ping/${ip}`).then(r => r.text()).then(t => {
+                el.textContent = t;
+            });
+        });
+    }
+    updatePingStatus();
+    setInterval(updatePingStatus, 60000);
 </script>
 <footer class="py-4 text-center text-xs text-gray-400">© {{ config.copyright }}</footer>
 

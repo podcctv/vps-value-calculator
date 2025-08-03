@@ -1,10 +1,16 @@
 /* Banner */
 .banner {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 1rem 1.5rem;
   background-color: rgba(0, 0, 0, 0.8);
   border-bottom: 1px solid var(--font-blue);
+}
+
+.banner-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .banner-title {
@@ -15,6 +21,11 @@
   font-family: 'JetBrains Mono', 'Courier New', monospace;
   font-weight: 700;
   color: var(--font-blue);
+}
+
+.banner-stats {
+  font-size: 1rem;
+  color: #ccc;
 }
 
 .banner-subinfo {
@@ -68,10 +79,14 @@
 .vps-card.sold .vps-title,
 .vps-card.inactive .vps-title,
 .vps-card.sold .vps-row span,
-.vps-card.inactive .vps-row span,
+.vps-card.inactive .vps-row span {
+  color: #6b7280;
+}
+
 .vps-card.sold .card-status-tag,
 .vps-card.inactive .card-status-tag {
-  color: #6b7280;
+  background: #6b7280;
+  color: #fff;
 }
 
 /* 状态标签 */
