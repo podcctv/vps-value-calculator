@@ -38,7 +38,8 @@ def twemoji_filter(emoji: str) -> str:
     url = f"{TWEMOJI_BASE}/{code_points}.svg"
     return Markup(
         f'<img src="{url}" alt="{emoji}" class="twemoji" '
-        'style="height:1em;width:1em;vertical-align:-0.1em;">'
+        'style="display:inline-block;height:1em;width:1em;vertical-align:-0.1em;">'
+
     )
 
 
