@@ -1,7 +1,7 @@
 input[type="date"] {
-  background-color: #000;
-  color: #0f0;
-  border: 1px solid #0f0;
+  background-color: var(--bg-color);
+  color: var(--font-green);
+  border: 1px solid var(--font-green);
   padding: 0.5rem;
   border-radius: 6px;
 }

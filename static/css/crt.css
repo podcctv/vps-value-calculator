@@ -1,12 +1,31 @@
+/* Theme variables */
+:root {
+  --bg-color: #0d1117;
+  --card-bg: #161b22;
+  --card-border: #3eff7c;
+  --font-color: #c9d1d9;
+  --font-green: #a6e22e;
+  --font-blue: #58a6ff;
+  --highlight-green: #8aff80;
+  --border-radius: 12px;
+  --box-shadow: 0 0 15px rgba(62, 255, 124, 0.2);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  font-family: 'Fira Code', 'Courier New', monospace;
+}
+
 .crt {
-  background-color: #000;
-  color: #00ff00;
+  background-color: var(--bg-color);
+  color: var(--highlight-green);
   font-family: 'Share Tech Mono', monospace;
-  box-shadow: 0 0 4px #0f0, 0 0 10px #0f0;
+  box-shadow: 0 0 4px var(--highlight-green), 0 0 10px var(--highlight-green);
   background-image: repeating-linear-gradient(
     to bottom,
-    rgba(0, 255, 0, 0.05),
-    rgba(0, 255, 0, 0.05) 1px,
+    rgba(138, 255, 128, 0.05),
+    rgba(138, 255, 128, 0.05) 1px,
     transparent 2px,
     transparent 4px
   );
@@ -26,5 +45,6 @@
 .crt svg {
   width: 100%;
   height: auto;
-  fill: #00ff00;
+  fill: var(--highlight-green);
 }
+

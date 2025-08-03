@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
 </head>
-<body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
+<body class="min-h-screen font-mono">
 <nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
     <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
         <a href="{{ url_for('vps_list') }}">⚡ VPS 价值</a>
@@ -35,13 +35,13 @@
     {% if vps_data %}
     <div class="card-container">
         {% for vps, data, specs in vps_data %}
-        <div class="vps-card relative" data-href="{{ url_for('view_vps', name=vps.name) }}">
+        <div class="vps-card relative {% if vps.status == 'sold' %}sold{% elif vps.status == 'inactive' %}inactive{% endif %}" data-href="{{ url_for('view_vps', name=vps.name) }}">
             {% if vps.status == 'active' %}
-            <span class="status-badge bg-green-500">在使用</span>
+            <span class="status-badge">在使用</span>
             {% elif vps.status == 'sold' %}
-            <span class="status-badge bg-yellow-500">已转让</span>
+            <span class="status-badge">已转让</span>
             {% elif vps.status == 'inactive' %}
-            <span class="status-badge bg-gray-500">已停用</span>
+            <span class="status-badge">已停用</span>
             {% endif %}
             <h3 class="vps-title">{{ vps.name }}</h3>
             <div class="vps-content">
