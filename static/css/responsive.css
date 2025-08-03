@@ -44,6 +44,7 @@ body {
     grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0 1rem;
+    width: 100%;
   }
 
   .vps-card {
@@ -52,6 +53,8 @@ body {
     border-radius: 12px;
     font-size: 0.9rem;
     box-shadow: 0 0 12px rgba(0, 255, 128, 0.1);
+    width: 100%;
+    max-width: 100%;
   }
 
   .card-status-tag {

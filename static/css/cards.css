@@ -39,14 +39,21 @@
   gap: 1rem;
 }
 
+/* 全局变量 */
+:root {
+  --card-width: 20ch; /* 默认卡片宽度，JS 会根据标题长度更新 */
+}
+
 /* 卡片容器布局 */
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(4, var(--card-width));
   gap: 1.5rem;
+  justify-content: center;
   align-items: stretch;
   padding: 1rem;
-  max-width: 1320px;
+  width: fit-content;
+  max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -56,8 +63,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 100%;
+  width: var(--card-width);
+  max-width: var(--card-width);
   min-height: 520px;
   height: auto;
   padding: 1rem;

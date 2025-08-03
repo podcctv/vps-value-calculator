@@ -81,6 +81,18 @@
         });
     });
 
+    function adjustCardWidth() {
+        const titles = document.querySelectorAll('.vps-title');
+        if (!titles.length) return;
+        let maxLen = 0;
+        titles.forEach(t => {
+            maxLen = Math.max(maxLen, t.textContent.trim().length);
+        });
+        const width = Math.max(maxLen + 4, 20); // 额外留白
+        document.documentElement.style.setProperty('--card-width', `${width}ch`);
+    }
+    adjustCardWidth();
+
     function updatePingStatus() {
         document.querySelectorAll('.ping-status').forEach(el => {
             const ip = el.dataset.ip;
