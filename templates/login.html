@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登录</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
 </head>
 <body>
@@ -13,6 +14,7 @@
         <p><input type="password" name="password" placeholder="密码"></p>
         <p><button type="submit">登录</button></p>
     </form>
+    {% include 'footer.html' %}
 </body>
 </html>
 
