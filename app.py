@@ -80,6 +80,8 @@ def refresh_images():
     with Session(engine) as db:
         vps_list = db.query(VPS).all()
         for vps in vps_list:
+            if not vps.dynamic_svg:
+                continue
             data = calculate_remaining(vps)
             generate_svg(vps, data)
 
@@ -149,6 +151,40 @@ def manage_users():
     return render_template("admin_users.html", users=users)
 
 
+@app.route("/vps/new", methods=["GET", "POST"])
+@login_required
+def add_vps():
+    if request.method == "POST":
+        form = request.form
+        with Session(engine) as db:
+            vps = VPS(
+                name=form["name"],
+                transaction_date=date.fromisoformat(form["transaction_date"]),
+                expiry_date=date.fromisoformat(form["expiry_date"]),
+                renewal_days=int(form["renewal_days"]),
+                renewal_price=float(form["renewal_price"]),
+                currency=form["currency"],
+                exchange_rate=float(form["exchange_rate"]),
+                vendor_name=form.get("vendor_name"),
+                instance_config=form.get("instance_config"),
+                location=form.get("location"),
+                purpose=form.get("purpose"),
+                traffic_limit=form.get("traffic_limit"),
+                payment_method=form.get("payment_method"),
+                transaction_fee=float(form.get("transaction_fee") or 0.0),
+                exchange_rate_source=form.get("exchange_rate_source"),
+                update_cycle=int(form.get("update_cycle") or 7),
+                dynamic_svg=bool(form.get("dynamic_svg")),
+                status=form.get("status"),
+            )
+            db.add(vps)
+            db.commit()
+            data = calculate_remaining(vps)
+            generate_svg(vps, data)
+        return redirect(url_for("index"))
+    return render_template("add_vps.html")
+
+
 @app.route("/")
 def index():
     with Session(engine) as db:
@@ -160,7 +196,7 @@ def index():
 def get_vps_image(name: str):
     with Session(engine) as db:
         vps = db.query(VPS).filter(VPS.name == name).first()
-        if not vps:
+        if not vps or not vps.dynamic_svg:
             abort(404)
         data = calculate_remaining(vps)
         svg_path = generate_svg(vps, data)

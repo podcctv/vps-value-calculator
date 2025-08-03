@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add VPS</title>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+<div id="app">
+    <h1>Add VPS</h1>
+    <form method="post">
+        <div>
+            <label>Name: <input v-model="form.name" name="name" required></label>
+        </div>
+        <div>
+            <label>Transaction Date: <input type="date" v-model="form.transaction_date" name="transaction_date" required></label>
+        </div>
+        <div>
+            <label>Expiry Date: <input type="date" v-model="form.expiry_date" name="expiry_date" required></label>
+        </div>
+        <div>
+            <label>Renewal Days: <input type="number" v-model="form.renewal_days" name="renewal_days" required></label>
+        </div>
+        <div>
+            <label>Renewal Price: <input type="number" step="0.01" v-model="form.renewal_price" name="renewal_price" required></label>
+        </div>
+        <div>
+            <label>Currency: <input v-model="form.currency" name="currency" required></label>
+        </div>
+        <div>
+            <label>Exchange Rate: <input type="number" step="0.0001" v-model="form.exchange_rate" name="exchange_rate" required></label>
+        </div>
+        <div>
+            <label>Vendor Name: <input v-model="form.vendor_name" name="vendor_name"></label>
+        </div>
+        <div>
+            <label>Instance Config: <input v-model="form.instance_config" name="instance_config"></label>
+        </div>
+        <div>
+            <label>Location: <input v-model="form.location" name="location"></label>
+        </div>
+        <div>
+            <label>Purpose: <input v-model="form.purpose" name="purpose"></label>
+        </div>
+        <div>
+            <label>Traffic Limit: <input v-model="form.traffic_limit" name="traffic_limit"></label>
+        </div>
+        <div>
+            <label>Payment Method:
+                <select v-model="form.payment_method" name="payment_method">
+                    <option value="PayPal">PayPal</option>
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Crypto">Crypto</option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>Transaction Fee: <input type="number" step="0.01" v-model="form.transaction_fee" name="transaction_fee"></label>
+        </div>
+        <div>
+            <label>Exchange Rate Source:
+                <select v-model="form.exchange_rate_source" name="exchange_rate_source">
+                    <option value="system">系统自动</option>
+                    <option value="custom">自定义</option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>Update Cycle:
+                <select v-model="form.update_cycle" name="update_cycle">
+                    <option value="7">7</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>Dynamic SVG: <input type="checkbox" v-model="form.dynamic_svg" name="dynamic_svg"></label>
+        </div>
+        <div>
+            <label>Status:
+                <select v-model="form.status" name="status">
+                    <option value="active">Active</option>
+                    <option value="selling">出售中</option>
+                    <option value="sold">已转手</option>
+                </select>
+            </label>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+</div>
+<script>
+const { createApp } = Vue;
+createApp({
+    data() {
+        return {
+            form: {
+                name: '',
+                transaction_date: '',
+                expiry_date: '',
+                renewal_days: 30,
+                renewal_price: 0,
+                currency: 'USD',
+                exchange_rate: 1,
+                vendor_name: '',
+                instance_config: '',
+                location: '',
+                purpose: '',
+                traffic_limit: '',
+                payment_method: 'PayPal',
+                transaction_fee: 0,
+                exchange_rate_source: 'system',
+                update_cycle: 7,
+                dynamic_svg: true,
+                status: 'active'
+            }
+        }
+    }
+}).mount('#app');
+</script>
+</body>
+</html>
