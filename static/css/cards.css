@@ -1,3 +1,31 @@
+/* Banner */
+.banner {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid var(--font-blue);
+}
+
+.banner-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 2.2rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-weight: 700;
+  color: var(--font-blue);
+}
+
+.banner-subinfo {
+  margin-left: auto;
+  font-size: 1rem;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 /* 卡片容器布局 */
 .card-container {
   display: flex;
@@ -41,26 +69,22 @@
 .vps-card.inactive .vps-title,
 .vps-card.sold .vps-row span,
 .vps-card.inactive .vps-row span,
-.vps-card.sold .status-badge,
-.vps-card.inactive .status-badge {
+.vps-card.sold .card-status-tag,
+.vps-card.inactive .card-status-tag {
   color: #6b7280;
-  border-left-color: #6b7280;
 }
 
-/* 状态角标 */
-.status-badge {
+/* 状态标签 */
+.card-status-tag {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.7rem;
+  top: 10px;
+  right: 14px;
+  background: linear-gradient(to right, #34ff9a, #1be69c);
+  color: #000;
   font-weight: bold;
-  background-color: #21262d;
-  color: var(--highlight-green);
-  border-left: 4px solid var(--card-border);
-  border-bottom-right-radius: 0.5rem;
-  border-top-left-radius: 0.4rem;
-  box-shadow: 0 0 6px rgba(62, 255, 124, 0.4);
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
   z-index: 10;
 }
 

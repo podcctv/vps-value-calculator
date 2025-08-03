@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>管理 VPS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
 </head>
 <body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
-<nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
-    <div class="flex items-center gap-4">
-        <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
-            <a href="{{ url_for('vps_list') }}">⚡ VPS 剩余价值计算器</a>
-        </h1>
-        <span class="text-sm text-gray-300">在用主机: {{ site_stats.count }} 台 / 总价值: {{ site_stats.total_value }} 元</span>
+<nav class="banner">
+    <div class="banner-title">
+        ⚡ <span>VPS</span> <span>剩余价值计算器</span>
     </div>
-    <div class="flex gap-4 items-center">
+    <div class="banner-subinfo">
+        在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
         {% if current_user %}
-        <span class="text-sm text-gray-300">你好, {{ current_user.username }}</span>
+        <span>你好, {{ current_user.username }}</span>
         <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>
         <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_vps') }}">管理 VPS</a>
         {% if current_user.is_admin %}
