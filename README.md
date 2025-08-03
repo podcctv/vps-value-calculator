@@ -56,7 +56,7 @@ Another VPS value calculation
 ### 📦 快速启动
 
 ```bash
-git clone https://github.com/yourname/vps-value-calculator.git
+git clone https://github.com/podcctv/vps-value-calculator.git
 cd vps-value-calculator
 docker compose up -d
 ```
@@ -108,10 +108,4 @@ http://your-server-ip:8080/vps/xxxx.svg
 
 MIT License
 
----
 
-如需进一步个性化（如更换主题、接入第三方平台等），请查看项目中的 [`docs/customize.md`](./docs/customize.md)。
-
----
-
-如果你需要我帮你生成 `docker-compose.yml` 文件或项目结构，也可以继续提出。
