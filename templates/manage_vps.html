@@ -11,18 +11,20 @@
 <body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
 <nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
     <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
-        <a href="{{ url_for('vps_list') }}">⚡ VPS Value</a>
+        <a href="{{ url_for('vps_list') }}">⚡ VPS 价值</a>
     </h1>
     <div class="flex gap-4 items-center">
         {% if current_user %}
-        <span class="text-sm text-gray-300">Hi, {{ current_user.username }}</span>
-        <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('logout') }}">Logout</a>
+        <span class="text-sm text-gray-300">你好, {{ current_user.username }}</span>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_vps') }}">管理 VPS</a>
         {% if current_user.is_admin %}
-        <a class="text-sm border border-orange-400 px-3 py-1 rounded hover:bg-orange-700 transition" href="{{ url_for('manage_users') }}">Manage Users</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_users') }}">用户管理</a>
         {% endif %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('logout') }}">退出登录</a>
         {% else %}
-        <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('login') }}">Login</a>
-        <a class="text-sm border border-orange-400 px-3 py-1 rounded hover:bg-orange-700 transition" href="{{ url_for('register') }}">Register</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('login') }}">登录</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('register') }}">注册</a>
         {% endif %}
     </div>
 </nav>
@@ -45,10 +47,10 @@
         {% endfor %}
     </div>
     {% else %}
-    <p class="text-center">No VPS entries found.</p>
+    <p class="text-center">暂无 VPS 条目。</p>
     {% endif %}
 </div>
-<a href="{{ url_for('add_vps') }}" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold fixed bottom-5 right-5 w-14 h-14 flex items-center justify-center rounded-full shadow-lg shadow-cyan-300/50 transition text-3xl">+</a>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   document.querySelectorAll('[data-svg-url]').forEach(el => {

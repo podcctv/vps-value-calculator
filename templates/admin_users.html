@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Manage Users</title>
+    <title>用户管理</title>
 </head>
 <body>
-    <h1>User Management</h1>
+    <h1>用户管理</h1>
     <table border="1" cellpadding="5" cellspacing="0">
-        <tr><th>ID</th><th>Username</th><th>Admin</th><th>Actions</th></tr>
+        <tr><th>ID</th><th>用户名</th><th>管理员</th><th>操作</th></tr>
         {% for user in users %}
         <tr>
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
-            <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+            <td>{{ '是' if user.is_admin else '否' }}</td>
             <td>
                 <form method="post" style="display:inline;">
                     <input type="hidden" name="user_id" value="{{ user.id }}">
                     <button name="action" value="toggle_admin" type="submit">
-                        {% if user.is_admin %}Revoke Admin{% else %}Make Admin{% endif %}
+                        {% if user.is_admin %}取消管理员{% else %}设为管理员{% endif %}
                     </button>
                 </form>
-                <form method="post" style="display:inline;" onsubmit="return confirm('Delete user?');">
+                <form method="post" style="display:inline;" onsubmit="return confirm('删除该用户？');">
                     <input type="hidden" name="user_id" value="{{ user.id }}">
-                    <button name="action" value="delete" type="submit">Delete</button>
+                    <button name="action" value="delete" type="submit">删除</button>
                 </form>
             </td>
         </tr>
