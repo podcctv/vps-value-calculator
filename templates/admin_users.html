@@ -3,46 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <title>用户管理</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
 </head>
-<body>
-    <h1>用户管理</h1>
-    <h2>邀请码管理</h2>
-    <form method="post" style="margin-bottom:20px;">
-        <input type="hidden" name="action" value="set_invite_code">
-        <input name="invite_code" value="{{ invite_code }}" placeholder="邀请码">
-        <button type="submit">更新邀请码</button>
-    </form>
-    <h2>站点配置</h2>
-    <form method="post" style="margin-bottom:20px;">
-        <input type="hidden" name="action" value="set_site_config">
-        <input name="image_base_url" value="{{ config.image_base_url if config else '' }}" placeholder="图片基础URL">
-        <input name="noodseek_id" value="{{ config.noodseek_id if config else '' }}" placeholder="Nodeseek ID">
-        <input name="copyright" value="{{ config.copyright if config else '' }}" placeholder="版权信息">
-        <button type="submit">更新配置</button>
-    </form>
-    <table border="1" cellpadding="5" cellspacing="0">
-        <tr><th>ID</th><th>用户名</th><th>管理员</th><th>操作</th></tr>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ '是' if user.is_admin else '否' }}</td>
-            <td>
-                <form method="post" style="display:inline;">
-                    <input type="hidden" name="user_id" value="{{ user.id }}">
-                    <button name="action" value="toggle_admin" type="submit">
-                        {% if user.is_admin %}取消管理员{% else %}设为管理员{% endif %}
-                    </button>
-                </form>
-                <form method="post" style="display:inline;" onsubmit="return confirm('删除该用户？');">
-                    <input type="hidden" name="user_id" value="{{ user.id }}">
-                    <button name="action" value="delete" type="submit">删除</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <footer class="py-4 text-center text-xs text-gray-400">© {{ config.copyright if config else '' }}</footer>
+<body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
+<nav class="banner">
+    <div class="banner-title">
+        ⚡ <span>VPS</span> <span>剩余价值计算器</span>
+    </div>
+    <div class="banner-subinfo">
+        在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
+        {% if current_user %}
+        <span>你好, {{ current_user.username }}</span>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_vps') }}">管理 VPS</a>
+        {% if current_user.is_admin %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_users') }}">用户管理</a>
+        {% endif %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('logout') }}">退出登录</a>
+        {% else %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('login') }}">登录</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('register') }}">注册</a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">用户管理</h1>
+    <div class="grid gap-8 md:grid-cols-2 mb-8">
+        <div class="p-6 bg-[#111111] rounded-xl border border-cyan-400">
+            <h2 class="text-xl text-cyan-400 mb-4">邀请码管理</h2>
+            <form method="post" class="flex gap-2">
+                <input type="hidden" name="action" value="set_invite_code">
+                <input name="invite_code" value="{{ invite_code }}" placeholder="邀请码" class="flex-1 bg-black border border-cyan-500 rounded px-3 py-2 placeholder-gray-400">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded">更新邀请码</button>
+            </form>
+        </div>
+        <div class="p-6 bg-[#111111] rounded-xl border border-cyan-400">
+            <h2 class="text-xl text-cyan-400 mb-4">站点配置</h2>
+            <form method="post" class="space-y-4">
+                <input type="hidden" name="action" value="set_site_config">
+                <div class="flex flex-col">
+                    <label class="text-cyan-200 mb-1">网址</label>
+                    <input name="site_url" value="{{ config.site_url if config else '' }}" placeholder="https://example.com" class="bg-black border border-cyan-500 rounded px-3 py-2 placeholder-gray-400">
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-cyan-200 mb-1">用户名</label>
+                    <input name="username" value="{{ config.username if config else '' }}" placeholder="用户名" class="bg-black border border-cyan-500 rounded px-3 py-2 placeholder-gray-400">
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-cyan-200 mb-1">版权信息</label>
+                    <input name="copyright" value="{{ config.copyright if config else '' }}" placeholder="版权信息" class="bg-black border border-cyan-500 rounded px-3 py-2 placeholder-gray-400">
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded">更新配置</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="bg-[#111111] rounded-xl border border-cyan-400 p-6">
+        <h2 class="text-xl text-cyan-400 mb-4">用户列表</h2>
+        <table class="min-w-full text-sm">
+            <thead>
+                <tr class="text-left text-cyan-300 border-b border-cyan-400">
+                    <th class="py-2 px-3">ID</th>
+                    <th class="py-2 px-3">用户名</th>
+                    <th class="py-2 px-3">管理员</th>
+                    <th class="py-2 px-3">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr class="border-b border-gray-700">
+                    <td class="py-2 px-3">{{ user.id }}</td>
+                    <td class="py-2 px-3">{{ user.username }}</td>
+                    <td class="py-2 px-3">{{ '是' if user.is_admin else '否' }}</td>
+                    <td class="py-2 px-3 space-x-2">
+                        <form method="post" class="inline">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button name="action" value="toggle_admin" type="submit" class="text-sm px-2 py-1 bg-green-600 rounded hover:bg-green-500 text-white">
+                                {% if user.is_admin %}取消管理员{% else %}设为管理员{% endif %}
+                            </button>
+                        </form>
+                        <form method="post" class="inline" onsubmit="return confirm('删除该用户？');">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button name="action" value="delete" type="submit" class="text-sm px-2 py-1 bg-red-600 rounded hover:bg-red-500 text-white">删除</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer class="py-4 text-center text-xs text-gray-400">© {{ config.copyright if config else '' }}</footer>
 </body>
 </html>
 

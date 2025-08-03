@@ -70,6 +70,20 @@ def _run_migrations():
         if "copyright" not in columns:
             with engine.begin() as conn:
                 conn.execute(text("ALTER TABLE site_config ADD COLUMN copyright TEXT"))
+        if "site_url" not in columns:
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE site_config ADD COLUMN site_url TEXT"))
+                if "image_base_url" in columns:
+                    conn.execute(
+                        text("UPDATE site_config SET site_url = image_base_url"),
+                    )
+        if "username" not in columns:
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE site_config ADD COLUMN username TEXT"))
+                if "noodseek_id" in columns:
+                    conn.execute(
+                        text("UPDATE site_config SET username = noodseek_id"),
+                    )
 
 
 _run_migrations()

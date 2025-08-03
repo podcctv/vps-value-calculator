@@ -49,6 +49,6 @@ class SiteConfig(Base):
     __tablename__ = "site_config"
 
     id = Column(Integer, primary_key=True)
-    image_base_url = Column(String, default="")
-    noodseek_id = Column(String, default="@Flanker")
+    site_url = Column(String, default="")
+    username = Column(String, default="@Flanker")
     copyright = Column(String, default="xxx.com")

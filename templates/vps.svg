@@ -37,5 +37,5 @@
   <text x="30" y="240" class="label">剩余价值： {{ data.remaining_value }} 元</text>
 
   <text x="610" y="400" class="footer" text-anchor="end">更新时间: {{ today.strftime('%Y/%m/%d') }}</text>
-  <text x="610" y="420" class="footer" text-anchor="end">NodeSeek ID: {{ config.noodseek_id if config else '' }}</text>
+  <text x="610" y="420" class="footer" text-anchor="end">用户名: {{ config.username if config else '' }}</text>
 </svg>
