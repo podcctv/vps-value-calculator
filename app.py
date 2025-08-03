@@ -62,4 +62,4 @@ def get_vps_image(name: str):
 
 if __name__ == "__main__":
     refresh_images()
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8280)

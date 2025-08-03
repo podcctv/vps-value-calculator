@@ -3,7 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "8080:8080"
+      - "8280:8280"
     volumes:
       - "${PERSIST_DIR}/data:/app/data"
       - "${PERSIST_DIR}/static/images:/app/static/images"
