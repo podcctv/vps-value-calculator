@@ -16,10 +16,11 @@
     <div class="flex gap-4 items-center">
         {% if current_user %}
         <span class="text-sm text-gray-300">Hi, {{ current_user.username }}</span>
-        <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('logout') }}">Logout</a>
+        <a class="text-sm border border-yellow-400 px-3 py-1 rounded hover:bg-yellow-400 hover:text-black transition" href="{{ url_for('manage_vps') }}">管理 VPS</a>
         {% if current_user.is_admin %}
         <a class="text-sm border border-orange-400 px-3 py-1 rounded hover:bg-orange-700 transition" href="{{ url_for('manage_users') }}">Manage Users</a>
         {% endif %}
+        <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('logout') }}">Logout</a>
         {% else %}
         <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('login') }}">Login</a>
         <a class="text-sm border border-orange-400 px-3 py-1 rounded hover:bg-orange-700 transition" href="{{ url_for('register') }}">Register</a>

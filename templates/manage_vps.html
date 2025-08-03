@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>管理 VPS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
+</head>
+<body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
+<nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
+    <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
+        <a href="{{ url_for('vps_list') }}">⚡ VPS Value</a>
+    </h1>
+    <div class="flex gap-4 items-center">
+        {% if current_user %}
+        <span class="text-sm text-gray-300">Hi, {{ current_user.username }}</span>
+        <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('logout') }}">Logout</a>
+        {% if current_user.is_admin %}
+        <a class="text-sm border border-orange-400 px-3 py-1 rounded hover:bg-orange-700 transition" href="{{ url_for('manage_users') }}">Manage Users</a>
+        {% endif %}
+        {% else %}
+        <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('login') }}">Login</a>
+        <a class="text-sm border border-orange-400 px-3 py-1 rounded hover:bg-orange-700 transition" href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+    </div>
+</nav>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">管理 VPS</h1>
+    {% if vps_list %}
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {% for vps in vps_list %}
+        <div class="bg-[#111111] rounded-xl border border-cyan-400 p-6 relative">
+            <h2 class="text-xl text-cyan-400 mb-2">{{ vps.name }}</h2>
+            {% if vps.expiry_date %}<p class="text-gray-400">到期时间：{{ vps.expiry_date }}</p>{% endif %}
+            <div class="crt my-4 p-2 rounded overflow-x-auto" data-svg-url="{{ url_for('get_vps_image', name=vps.name) }}"></div>
+            <div class="flex justify-between gap-2 mt-4">
+                <a href="{{ url_for('edit_vps', vps_id=vps.id) }}" class="text-sm px-3 py-1 bg-blue-500 rounded hover:bg-blue-400 text-white">✏️ 编辑</a>
+                <form method="post" action="{{ url_for('delete_vps', vps_id=vps.id) }}" onsubmit="return confirm('确定要删除这个 VPS 吗？');">
+                    <button type="submit" class="text-sm px-3 py-1 bg-red-600 rounded hover:bg-red-500 text-white">🗑 删除</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">No VPS entries found.</p>
+    {% endif %}
+</div>
+<a href="{{ url_for('add_vps') }}" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold fixed bottom-5 right-5 w-14 h-14 flex items-center justify-center rounded-full shadow-lg shadow-cyan-300/50 transition text-3xl">+</a>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.querySelectorAll('[data-svg-url]').forEach(el => {
+    fetch(el.dataset.svgUrl)
+      .then(resp => resp.text())
+      .then(svg => el.innerHTML = svg);
+  });
+</script>
+</body>
+</html>

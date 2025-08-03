@@ -10,12 +10,15 @@
 </head>
 <body class="bg-gray-100">
   <div id="root"></div>
+  <script>
+    window.initialData = {{ vps_data|tojson|safe if vps_data else 'null' }};
+  </script>
   <script type="text/babel">
     const { useState, useEffect } = React;
 
     function AddVPSForm() {
       const today = new Date().toISOString().split('T')[0];
-      const [form, setForm] = useState({
+      const defaultData = {
         name: '',
         transaction_date: today,
         expiry_date: '',
@@ -34,7 +37,9 @@
         dynamic_svg: true,
         status: 'active',
         update_cycle: 1
-      });
+      };
+      const [form, setForm] = useState({ ...defaultData, ...(window.initialData || {}) });
+      const isEdit = Boolean(window.initialData);
 
       const fetchRate = () => {
         fetch('https://open.er-api.com/v6/latest/USD')
@@ -48,10 +53,10 @@
       };
 
       useEffect(() => {
-        if (form.exchange_rate_source === 'system') {
+        if (form.exchange_rate_source === 'system' && !isEdit) {
           fetchRate();
         }
-      }, [form.exchange_rate_source]);
+      }, [form.exchange_rate_source, isEdit]);
 
       const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -65,7 +70,7 @@
       return (
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="bg-white p-6 rounded-md shadow-md w-full max-w-xl">
-            <h1 className="text-2xl font-semibold mb-4 text-center">添加 VPS</h1>
+            <h1 className="text-2xl font-semibold mb-4 text-center">{isEdit ? '编辑 VPS' : '添加 VPS'}</h1>
             <form method="post" onSubmit={handleSubmit} className="space-y-4">
               <div className="flex flex-col">
                 <label className="mb-1">VPS 名称</label>
