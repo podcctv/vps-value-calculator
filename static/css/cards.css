@@ -1,30 +1,126 @@
+/* 卡片容器布局 */
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 2rem;
   justify-content: center;
   align-items: stretch;
+  padding: 2rem;
 }
 
+/* 单个卡片样式 */
 .vps-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 420px;
   width: 360px;
-  padding: 1rem;
-  background: #1a1a1a;
-  border-radius: 12px;
+  height: 460px;
+  padding: 1.5rem;
+  background: linear-gradient(145deg, #1f1f1f, #151515);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 255, 170, 0.08), 0 0 0 1px rgba(0, 255, 170, 0.15);
+  border: 1px solid rgba(0, 255, 170, 0.2);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+.vps-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 255, 170, 0.2), 0 0 0 1px rgba(0, 255, 170, 0.3);
+}
+
+/* 顶部状态角标 */
 .status-badge {
   position: absolute;
-  top: 0;
-  left: 0;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+  top: 0.8rem;
+  left: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
   font-weight: bold;
+  background-color: #00ffae;
   color: #000;
   border-bottom-right-radius: 0.5rem;
+  border-top-left-radius: 0.4rem;
+  box-shadow: 0 0 6px rgba(0, 255, 170, 0.4);
   z-index: 10;
+}
+
+/* 状态颜色分类 */
+.status-badge.active {
+  background-color: #00ffae;
+}
+.status-badge.transferred {
+  background-color: #ffa500;
+}
+.status-badge.disabled {
+  background-color: #ff4d4d;
+}
+
+/* 卡片标题 */
+.vps-card h3 {
+  color: #00eaff;
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+
+/* 子标题/备注 */
+.vps-card .subtitle {
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
+  margin-bottom: 1.2rem;
+}
+
+/* 内容主体：类似 CRT 风格文本框 */
+.vps-card .card-body {
+  background: radial-gradient(circle at top left, #000000 20%, #0f0f0f 100%);
+  border-radius: 10px;
+  padding: 1rem;
+  color: #00ff55;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  box-shadow: inset 0 0 10px #00ff55;
+  border: 1px solid rgba(0, 255, 170, 0.1);
+  min-height: 160px;
+}
+
+/* 底部按钮区域 */
+.vps-card .card-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+/* 按钮样式 */
+.vps-card button,
+.vps-card .btn {
+  flex: 1;
+  margin: 0 0.5rem;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  font-size: 0.95rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* SVG 按钮 */
+.vps-card .btn-svg {
+  background: linear-gradient(to right, #34e89e, #0f3443);
+  color: white;
+}
+
+/* Markdown 复制按钮 */
+.vps-card .btn-md {
+  background: linear-gradient(to right, #3a7bd5, #00d2ff);
+  color: white;
+}
+
+.vps-card .btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
 }
