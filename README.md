@@ -57,6 +57,8 @@ cd vps-value-calculator
 docker compose up -d
 ```
 
+默认数据和图片会存储在当前目录的 `data/` 与 `static/images/` 下。
+
 访问示例：
 
 ```
@@ -68,7 +70,8 @@ http://your-server-ip:8080/vps/xxxx.svg
 ## 💾 持久化与图片本地化
 
 * 所有 VPS 数据与图片均 **本地化存储**，安全可靠
-* 图片生成后保存在指定目录，无需重新生成
+* SQLite 数据库默认保存在 `data/` 目录
+* 自动生成的 SVG 图片保存在 `static/images/` 目录，可直接通过 URL 访问
 * 通过数据库管理 VPS 条目，可支持 Excel 导入导出、搜索筛选等功能扩展
 
 ---

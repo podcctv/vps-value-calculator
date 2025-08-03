@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200">
+  <style>
+    .title { font: bold 20px sans-serif; }
+    .text { font: 14px sans-serif; }
+  </style>
+  <text x="20" y="30" class="title">{{ vps.name }}</text>
+  <text x="20" y="60" class="text">Purchase Date: {{ vps.purchase_date }}</text>
+  <text x="20" y="80" class="text">Renewal Days: {{ vps.renewal_days }}</text>
+  <text x="20" y="100" class="text">Remaining Days: {{ data.remaining_days }}</text>
+  <text x="20" y="120" class="text">Remaining Value: {{ data.remaining_value }} {{ vps.currency }}</text>
+</svg>

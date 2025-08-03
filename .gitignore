@@ -1,0 +1,5 @@
+# Ignore generated database and image files
+data/*.db
+static/images/*.svg
+__pycache__/
+*.pyc
