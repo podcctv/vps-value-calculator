@@ -20,14 +20,14 @@
   color: #4afc90;
 }
 
-.vps-info-list {
+.vps-info-grid {
   display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 8px 16px;
+  grid-template-columns: max-content max-content 1fr;
+  column-gap: 8px;
+  row-gap: 8px;
 }
-.vps-info-list dt {
+.vps-info-grid .label {
   font-weight: bold;
-  text-align: right;
 }
 
 .vps-footer {
