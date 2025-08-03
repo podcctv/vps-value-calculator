@@ -90,6 +90,26 @@ chmod +x ./vps-value-calculator/deploy.sh
 
 ---
 
+## 🖥️ 命令行管理
+
+项目提供 `cli.py` 以便在终端快速管理 VPS 数据。
+
+### 列出当前 VPS
+
+```bash
+python cli.py list
+```
+
+### 新增 VPS 条目
+
+```bash
+python cli.py add
+```
+
+直接运行 `python cli.py` 将进入交互式菜单模式。
+
+---
+
 ## 💾 持久化与图片本地化
 
 * 所有 VPS 数据与图片均 **本地化存储**，安全可靠
