@@ -170,6 +170,7 @@ def add_vps():
                 location=form.get("location"),
                 description=form.get("description"),
                 traffic_limit=form.get("traffic_limit"),
+                ip_address=form.get("ip_address"),
                 payment_method=form.get("payment_method"),
                 transaction_fee=float(form.get("transaction_fee") or 0.0),
                 exchange_rate_source=form.get("exchange_rate_source"),
@@ -214,6 +215,7 @@ def edit_vps(vps_id: int):
             vps.location = form.get("location")
             vps.description = form.get("description")
             vps.traffic_limit = form.get("traffic_limit")
+            vps.ip_address = form.get("ip_address")
             vps.payment_method = form.get("payment_method")
             vps.transaction_fee = float(form.get("transaction_fee") or 0.0)
             vps.exchange_rate_source = form.get("exchange_rate_source")
@@ -237,6 +239,7 @@ def edit_vps(vps_id: int):
             "location": vps.location,
             "description": vps.description,
             "traffic_limit": vps.traffic_limit,
+            "ip_address": vps.ip_address,
             "payment_method": vps.payment_method,
             "transaction_fee": vps.transaction_fee,
             "exchange_rate_source": vps.exchange_rate_source,
@@ -267,7 +270,8 @@ def index():
 def vps_list():
     with Session(engine) as db:
         vps_list = db.query(VPS).all()
-    return render_template("vps.html", vps_list=vps_list)
+        vps_data = [(vps, calculate_remaining(vps)) for vps in vps_list]
+    return render_template("vps.html", vps_data=vps_data)
 
 
 @app.route("/vps/<string:name>")

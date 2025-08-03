@@ -32,10 +32,10 @@
 
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">VPS 列表</h1>
-    {% if vps_list %}
+    {% if vps_data %}
     <div class="card-container">
-        {% for vps in vps_list %}
-        <a class="vps-card relative shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300" href="{{ url_for('view_vps', name=vps.name) }}">
+        {% for vps, data in vps_data %}
+        <div class="vps-card relative shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300 cursor-pointer" data-svg="{{ url_for('get_vps_image', name=vps.name) }}" data-link="{{ url_for('get_vps_image', name=vps.name, _external=True) }}">
             {% if vps.status %}
             {% if vps.status == 'active' %}
             <span class="status-badge bg-green-500">在使用</span>
@@ -49,22 +49,49 @@
             {% if vps.vendor_name %}<h3 class="text-sm text-gray-400 text-center mb-2">{{ vps.vendor_name }}</h3>{% endif %}
             <div class="crt p-4 rounded overflow-x-auto min-h-[160px] mb-4">
                 <div class="grid grid-cols-2 gap-x-4 text-sm">
+                    {% if vps.vendor_name %}<span class="text-gray-400">商家</span><span>{{ vps.vendor_name }}</span>{% endif %}
                     <span class="text-gray-400">交易时间</span><span>{{ vps.transaction_date }}</span>
                     {% if vps.expiry_date %}<span class="text-gray-400">到期时间</span><span>{{ vps.expiry_date }}</span>{% endif %}
                     {% if vps.instance_config %}<span class="text-gray-400">配置</span><span>{{ vps.instance_config }}</span>{% endif %}
-                    {% if vps.location %}<span class="text-gray-400">地区</span><span>{{ vps.location }}</span>{% endif %}
                     {% if vps.traffic_limit %}<span class="text-gray-400">流量</span><span>{{ vps.traffic_limit }}</span>{% endif %}
-                    {% if vps.renewal_price %}<span class="text-gray-400">续费</span><span>{{ vps.renewal_price }} {{ vps.currency }}</span>{% endif %}
-                    {% if vps.payment_method %}<span class="text-gray-400">支付方式</span><span>{{ vps.payment_method }}</span>{% endif %}
-                    {% if vps.transaction_fee %}<span class="text-gray-400">手续费</span><span>{{ vps.transaction_fee }}</span>{% endif %}
+                    {% if vps.ip_address %}{% set parts = vps.ip_address.split('.') %}{% set masked = parts[:-1]|join('.') ~ '.***' %}<span class="text-gray-400">IP</span><span>{{ masked }}</span>{% endif %}
+                    <span class="text-gray-400">剩余天数</span><span class="text-green-400 font-bold">{{ data.remaining_days }}</span>
+                    <span class="text-gray-400">剩余价值</span><span class="text-green-400 font-bold">{{ data.remaining_value }} CNY</span>
                 </div>
             </div>
-        </a>
+        </div>
         {% endfor %}
     </div>
     {% else %}
     <p class="text-center">暂无 VPS 条目。</p>
     {% endif %}
 </div>
+
+<div id="svgModal" class="modal">
+  <div class="modal-content">
+    <button id="closeModal" class="mb-4 border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded">返回列表</button>
+    <img id="svgImage" src="" alt="SVG 展示图" class="max-w-full h-auto mb-4" />
+    <button id="copyLink" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded">复制链接</button>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.vps-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const svgUrl = card.dataset.svg;
+      const linkUrl = card.dataset.link;
+      document.getElementById('svgImage').src = svgUrl;
+      document.getElementById('copyLink').dataset.link = linkUrl;
+      document.getElementById('svgModal').style.display = 'flex';
+    });
+  });
+  document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('svgModal').style.display = 'none';
+  });
+  document.getElementById('copyLink').addEventListener('click', () => {
+    const link = document.getElementById('copyLink').dataset.link;
+    navigator.clipboard.writeText(link).then(() => alert('链接已复制')).catch(() => alert('复制失败，请手动复制'));
+  });
+</script>
 </body>
 </html>

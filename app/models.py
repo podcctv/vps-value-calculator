@@ -18,6 +18,7 @@ class VPS(Base):
     location = Column(String)
     description = Column(String)
     traffic_limit = Column(String)
+    ip_address = Column(String)
     payment_method = Column(String)
     transaction_fee = Column(Float, default=0.0)
     exchange_rate_source = Column(String, default="system")

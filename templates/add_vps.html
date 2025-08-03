@@ -8,6 +8,7 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
 </head>
 <body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
   <nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
@@ -56,7 +57,8 @@
         exchange_rate_source: 'system',
         dynamic_svg: true,
         status: 'active',
-        update_cycle: 1
+        update_cycle: 1,
+        ip_address: ''
       };
       const [form, setForm] = useState({ ...defaultData, ...(window.initialData || {}) });
       const isEdit = Boolean(window.initialData);
@@ -77,6 +79,16 @@
           fetchRate();
         }
       }, [form.currency, form.exchange_rate_source]);
+
+      useEffect(() => {
+        const map = { '30': 1, '90': 3, '365': 12, '1095': 36 };
+        if (form.transaction_date && map[form.renewal_days]) {
+          const start = new Date(form.transaction_date);
+          const end = new Date(start);
+          end.setMonth(start.getMonth() + map[form.renewal_days]);
+          setForm(f => ({ ...f, expiry_date: end.toISOString().split('T')[0] }));
+        }
+      }, [form.transaction_date, form.renewal_days]);
 
       const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -205,6 +217,10 @@
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">流量限制（月）</label>
                   <input name="traffic_limit" value={form.traffic_limit} onChange={handleChange} placeholder="如 3TB / 无限" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                </div>
+                <div className="flex flex-col mt-4">
+                  <label className="mb-1 text-cyan-200">IP 地址</label>
+                  <input name="ip_address" value={form.ip_address} onChange={handleChange} placeholder="如 1.2.3.4" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
               </fieldset>
 
