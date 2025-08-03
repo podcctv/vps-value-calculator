@@ -11,9 +11,12 @@
 </head>
 <body class="min-h-screen font-mono">
 <nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
-    <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
-        <a href="{{ url_for('vps_list') }}">⚡ VPS 价值</a>
-    </h1>
+    <div class="flex items-center gap-4">
+        <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
+            <a href="{{ url_for('vps_list') }}">⚡ VPS 剩余价值计算器</a>
+        </h1>
+        <span class="text-sm text-gray-300">在用主机: {{ site_stats.count }} 台 / 总价值: {{ site_stats.total_value }} 元</span>
+    </div>
     <div class="flex gap-4 items-center">
         {% if current_user %}
         <span class="text-sm text-gray-300">你好, {{ current_user.username }}</span>
@@ -73,6 +76,7 @@
         });
     });
 </script>
+<footer class="py-4 text-center text-xs text-gray-400">© {{ config.copyright }}</footer>
 
 </body>
 </html>

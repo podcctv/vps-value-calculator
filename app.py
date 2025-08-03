@@ -38,6 +38,21 @@ def get_current_user():
     return None
 
 
+def get_site_config():
+    with Session(engine) as db:
+        return db.query(SiteConfig).first()
+
+
+def get_site_stats():
+    with Session(engine) as db:
+        active_vps = db.query(VPS).filter(VPS.status == "active").all()
+        count = len(active_vps)
+        total = sum(
+            calculate_remaining(vps)["remaining_value"] for vps in active_vps
+        )
+    return {"count": count, "total_value": round(total, 2)}
+
+
 def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -60,8 +75,12 @@ def admin_required(f):
 
 
 @app.context_processor
-def inject_user():
-    return {"current_user": get_current_user()}
+def inject_globals():
+    return {
+        "current_user": get_current_user(),
+        "config": get_site_config(),
+        "site_stats": get_site_stats(),
+    }
 
 
 def init_sample():
@@ -79,7 +98,13 @@ def init_sample():
         if db.query(InviteCode).count() == 0:
             db.add(InviteCode(code="Flanker"))
         if db.query(SiteConfig).count() == 0:
-            db.add(SiteConfig(image_base_url="", noodseek_id="@Flanker"))
+            db.add(
+                SiteConfig(
+                    image_base_url="",
+                    noodseek_id="@Flanker",
+                    copyright="xxx.com",
+                )
+            )
         db.commit()
 
 
@@ -166,12 +191,20 @@ def manage_users():
             elif action == "set_site_config":
                 base_url = request.form.get("image_base_url", "")
                 noodseek_id = request.form.get("noodseek_id", "")
+                copyright = request.form.get("copyright", "")
                 cfg = db.query(SiteConfig).first()
                 if cfg:
                     cfg.image_base_url = base_url
                     cfg.noodseek_id = noodseek_id
+                    cfg.copyright = copyright
                 else:
-                    db.add(SiteConfig(image_base_url=base_url, noodseek_id=noodseek_id))
+                    db.add(
+                        SiteConfig(
+                            image_base_url=base_url,
+                            noodseek_id=noodseek_id,
+                            copyright=copyright,
+                        )
+                    )
                 db.commit()
             else:
                 user_id = int(request.form.get("user_id"))

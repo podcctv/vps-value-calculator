@@ -51,3 +51,4 @@ class SiteConfig(Base):
     id = Column(Integer, primary_key=True)
     image_base_url = Column(String, default="")
     noodseek_id = Column(String, default="@Flanker")
+    copyright = Column(String, default="xxx.com")

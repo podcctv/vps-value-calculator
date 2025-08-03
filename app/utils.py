@@ -108,9 +108,18 @@ def mask_ip(ip: str) -> str:
     return ip
 
 
+_ping_cache = {}
+
+
 def ping_ip(ip: str) -> str:
-    """Ping IP once and return Chinese status string."""
+    """Ping IP with simple caching and return emoji status."""
     import subprocess
+    import time
+
+    now = time.time()
+    cached = _ping_cache.get(ip)
+    if cached and now - cached[0] < 60:
+        return cached[1]
 
     try:
         res = subprocess.run(
@@ -118,9 +127,11 @@ def ping_ip(ip: str) -> str:
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
-        return "在线" if res.returncode == 0 else "离线"
+        status = "🟢 在线" if res.returncode == 0 else "🔴 离线"
     except Exception:
-        return "未知"
+        status = "⚪ 未知"
+    _ping_cache[ip] = (now, status)
+    return status
 
 
 def ip_to_flag(ip: str) -> str:
