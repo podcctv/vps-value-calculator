@@ -153,9 +153,20 @@ def ping_ip(ip: str) -> str:
 
 
 def ip_to_flag(ip: str) -> str:
-    """Return emoji flag for IP using ipapi.co."""
+    """Return emoji flag for IP using ipapi.co.
+
+    The input ``ip`` may contain stray emoji or comments. We extract the
+    first IPv4 address before querying the API so that a stored value like
+    "🏳️ 160.1.2.3" still resolves correctly.
+    """
     try:
-        resp = requests.get(f"https://ipapi.co/{ip}/country/", timeout=5)
+        import re
+
+        match = re.search(r"(?:\d{1,3}\.){3}\d{1,3}", ip)
+        if not match:
+            return "🏳️"
+        clean_ip = match.group(0)
+        resp = requests.get(f"https://ipapi.co/{clean_ip}/country/", timeout=5)
         code = resp.text.strip().upper()
         if len(code) == 2 and code.isalpha():
             return chr(ord(code[0]) + 127397) + chr(ord(code[1]) + 127397)
@@ -168,12 +179,19 @@ def generate_svg(vps, data, config=None):
     template = env.get_template("vps.svg")
     specs = parse_instance_config(vps.instance_config)
     today = date.today()
+    ip_raw = getattr(vps, "ip_address", "") or ""
+    ip_info = {
+        "ip_display": mask_ip(ip_raw) if ip_raw else "-",
+        "ping_status": ping_ip(ip_raw) if ip_raw else "未知",
+        "flag": ip_to_flag(ip_raw) if ip_raw else "🏳️",
+    }
     content = template.render(
         vps=vps,
         data=data,
         specs=specs,
         today=today,
         config=config,
+        ip_info=ip_info,
     )
     STATIC_DIR.mkdir(parents=True, exist_ok=True)
     out_file = STATIC_DIR / f"{vps.name}.svg"
