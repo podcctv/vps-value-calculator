@@ -44,9 +44,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  justify-content: space-between;
+  justify-content: center;
   align-items: stretch;
   padding: 1rem 0;
+  max-width: 1112px;
+  margin: 0 auto;
 }
 
 /* 单个卡片样式 */
