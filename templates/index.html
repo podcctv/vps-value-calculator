@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VPS Value Calculator</title>
+</head>
+<body>
+    <h1>VPS Value Calculator</h1>
+    {% if vps_list %}
+    <p>Available VPS images:</p>
+    <ul>
+    {% for vps in vps_list %}
+        <li><a href="{{ url_for('get_vps_image', name=vps.name) }}">{{ vps.name }}</a></li>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <p>No VPS entries found.</p>
+    {% endif %}
+</body>
+</html>

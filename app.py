@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, abort
+from flask import Flask, send_from_directory, abort, render_template
 from sqlalchemy.orm import Session
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import date
@@ -39,6 +39,13 @@ def refresh_images():
 scheduler = BackgroundScheduler(timezone="UTC")
 scheduler.add_job(refresh_images, "cron", hour=0, minute=0)
 scheduler.start()
+
+
+@app.route("/")
+def index():
+    with Session(engine) as db:
+        vps_list = db.query(VPS).all()
+    return render_template("index.html", vps_list=vps_list)
 
 
 @app.route("/vps/<string:name>.svg")
