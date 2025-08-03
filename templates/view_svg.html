@@ -34,14 +34,13 @@
         </div>
         <div class="flex gap-4 mt-4">
             <a href="{{ url_for('vps_list') }}" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition">返回列表</a>
-            <button id="copyLinkBtn" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition" data-link="{{ svg_abs_url }}">复制链接</button>
+            <button id="copyLinkBtn" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition">复制链接</button>
             <a href="{{ url_for('edit_vps', vps_id=vps_id) }}" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition">编辑此项</a>
         </div>
     </div>
     <script>
         document.getElementById('copyLinkBtn').addEventListener('click', function () {
-            const link = this.dataset.link;
-            navigator.clipboard.writeText(link).then(() => {
+            navigator.clipboard.writeText(window.location.href).then(() => {
                 alert('链接已复制');
             }).catch(() => {
                 alert('复制失败，请手动复制。');

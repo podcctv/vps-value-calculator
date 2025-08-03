@@ -16,7 +16,7 @@ from datetime import date, timedelta
 
 from app.db import engine, Base
 from app.models import VPS, User
-from app.utils import calculate_remaining, generate_svg
+from app.utils import calculate_remaining, generate_svg, parse_instance_config
 
 app = Flask(__name__)
 app.secret_key = "change-me"
@@ -273,7 +273,11 @@ def index():
 def vps_list():
     with Session(engine) as db:
         vps_list = db.query(VPS).all()
-        vps_data = [(vps, calculate_remaining(vps)) for vps in vps_list]
+        vps_data = []
+        for vps in vps_list:
+            data = calculate_remaining(vps)
+            specs = parse_instance_config(vps.instance_config)
+            vps_data.append((vps, data, specs))
     return render_template("vps.html", vps_data=vps_data)
 
 
