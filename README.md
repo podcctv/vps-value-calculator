@@ -2,6 +2,9 @@
 
 [![Docker Image CI](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml/badge.svg)](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml)
 
+![Built with Love](https://forthebadge.com/images/badges/built-with-love.svg)
+[![GitHub](static/images/github.svg)](https://github.com/podcctv/vps-value-calculator)
+
 Another VPS value calculation
 
 
