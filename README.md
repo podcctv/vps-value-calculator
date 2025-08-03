@@ -10,7 +10,9 @@ Another VPS value calculation
 
 The application now includes a simple user system. The first user to register
 is automatically granted administrator privileges and can manage subsequent
-accounts.
+accounts. After a fresh deployment, the default invitation code for
+registration is `Flanker`. The user management interface allows you to
+configure invitation codes and other settings.
 
 
 # 💰 VPS 剩余价值计算器
