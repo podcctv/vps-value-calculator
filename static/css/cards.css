@@ -153,6 +153,15 @@
   color: var(--font-color);
 }
 
+.ip-address {
+  display: inline-block;
+  white-space: nowrap;
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
+  width: fit-content;
+}
+
+
 @media (max-width: 768px) {
   .card-container {
     gap: 0.75rem;
