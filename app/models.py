@@ -7,9 +7,9 @@ class VPS(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
-    purchase_date = Column(Date)
+    transaction_date = Column(Date)
+    expiry_date = Column(Date)
     renewal_days = Column(Integer)
-    price = Column(Float)
     renewal_price = Column(Float)
     currency = Column(String, default="USD")
     exchange_rate = Column(Float, default=1.0)
