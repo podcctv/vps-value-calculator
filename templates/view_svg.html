@@ -51,7 +51,7 @@
         </dl>
         <div class="vps-footer">
             <p>更新时间: {{ today.strftime('%Y/%m/%d') }}</p>
-            <p>Nodeseek ID: {{ config.noodseek_id if config and config.noodseek_id else '' }}</p>
+            <p>用户名: {{ config.username if config and config.username else '' }}</p>
         </div>
         <div class="card-buttons">
             <a href="{{ url_for('vps_list') }}">返回列表</a>

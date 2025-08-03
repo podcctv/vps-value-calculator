@@ -100,8 +100,8 @@ def init_sample():
         if db.query(SiteConfig).count() == 0:
             db.add(
                 SiteConfig(
-                    image_base_url="",
-                    noodseek_id="@Flanker",
+                    site_url="",
+                    username="@Flanker",
                     copyright="xxx.com",
                 )
             )
@@ -189,19 +189,19 @@ def manage_users():
                     db.add(InviteCode(code=code))
                 db.commit()
             elif action == "set_site_config":
-                base_url = request.form.get("image_base_url", "")
-                noodseek_id = request.form.get("noodseek_id", "")
+                base_url = request.form.get("site_url", "")
+                username = request.form.get("username", "")
                 copyright = request.form.get("copyright", "")
                 cfg = db.query(SiteConfig).first()
                 if cfg:
-                    cfg.image_base_url = base_url
-                    cfg.noodseek_id = noodseek_id
+                    cfg.site_url = base_url
+                    cfg.username = username
                     cfg.copyright = copyright
                 else:
                     db.add(
                         SiteConfig(
-                            image_base_url=base_url,
-                            noodseek_id=noodseek_id,
+                            site_url=base_url,
+                            username=username,
                             copyright=copyright,
                         )
                     )
@@ -384,8 +384,8 @@ def view_vps(name: str):
             ip_info["flag"] = ip_to_flag(vps.ip_address)
         generate_svg(vps, data, config)
     svg_url = url_for("static", filename=f"images/{name}.svg")
-    if config and config.image_base_url:
-        svg_abs_url = f"{config.image_base_url.rstrip('/')}/{name}.svg"
+    if config and config.site_url:
+        svg_abs_url = f"{config.site_url.rstrip('/')}/{name}.svg"
     else:
         svg_abs_url = url_for("static", filename=f"images/{name}.svg", _external=True)
     return render_template(
