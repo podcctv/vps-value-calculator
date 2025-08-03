@@ -71,7 +71,7 @@ http://your-server-ip:8280/vps/xxxx.svg
 
 ### 🚀 使用部署脚本
 
-仓库提供 `deploy.sh` 脚本实现一键部署或更新：
+仓库提供 `deploy.sh` 脚本实现一键部署或更新。脚本会自动切换到自身所在目录，可在任意位置通过绝对路径执行：
 
 ```bash
 chmod +x deploy.sh
