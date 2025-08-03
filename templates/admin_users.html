@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users</title>
+</head>
+<body>
+    <h1>User Management</h1>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><th>ID</th><th>Username</th><th>Admin</th><th>Actions</th></tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ 'Yes' if user.is_admin else 'No' }}</td>
+            <td>
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <button name="action" value="toggle_admin" type="submit">
+                        {% if user.is_admin %}Revoke Admin{% else %}Make Admin{% endif %}
+                    </button>
+                </form>
+                <form method="post" style="display:inline;" onsubmit="return confirm('Delete user?');">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <button name="action" value="delete" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+

@@ -6,6 +6,13 @@ Another VPS value calculation
 
 
 
+## User Registration
+
+The application now includes a simple user system. The first user to register
+is automatically granted administrator privileges and can manage subsequent
+accounts.
+
+
 # 💰 VPS 剩余价值计算器
 
 一个专为 **VPS 交易** 场景设计的可视化剩余价值计算工具。通过自动计算、图片展示与链接分享，帮助你高效管理、展示、交易 VPS 资源。
