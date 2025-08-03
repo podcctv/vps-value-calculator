@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 
@@ -10,13 +10,13 @@ env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
 def calculate_remaining(vps):
     today = date.today()
-    cycle_end = vps.purchase_date + timedelta(days=vps.renewal_days)
-    remaining_days = max((cycle_end - today).days, 0)
-    remaining_value = vps.price * remaining_days / vps.renewal_days
+    remaining_days = max((vps.expiry_date - today).days, 0)
+    total_days = max((vps.expiry_date - vps.transaction_date).days, 1)
+    remaining_value = vps.renewal_price * vps.exchange_rate * remaining_days / total_days
     return {
         "remaining_days": remaining_days,
         "remaining_value": round(remaining_value, 2),
-        "cycle_end": cycle_end,
+        "cycle_end": vps.expiry_date,
     }
 
 

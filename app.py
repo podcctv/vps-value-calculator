@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy.orm import Session
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import date
+from datetime import date, timedelta
 
 from app.db import engine, Base
 from app.models import VPS, User
@@ -62,10 +62,12 @@ def init_sample():
         if db.query(VPS).count() == 0:
             sample = VPS(
                 name="demo",
-                purchase_date=date.today(),
+                transaction_date=date.today(),
+                expiry_date=date.today() + timedelta(days=30),
                 renewal_days=30,
-                price=10.0,
                 renewal_price=10.0,
+                currency="USD",
+                exchange_rate=1.0,
             )
             db.add(sample)
             db.commit()
