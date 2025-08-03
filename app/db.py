@@ -50,6 +50,7 @@ def _run_migrations():
             "location": "TEXT",
             "description": "TEXT",
             "traffic_limit": "TEXT",
+            "ip_address": "TEXT",
             "payment_method": "TEXT",
             "transaction_fee": "FLOAT DEFAULT 0.0",
             "exchange_rate_source": "TEXT",
