@@ -1,6 +1,6 @@
 # VPS-value-calculation
 Another VPS value calculation
-
+[![Docker Image CI](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml/badge.svg)](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml)
 
 # 💰 VPS 剩余价值计算器
 
