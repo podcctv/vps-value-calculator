@@ -47,12 +47,12 @@
 /* 卡片容器布局 */
 .card-container {
   display: grid;
-  grid-template-columns: repeat(4, var(--card-width));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, var(--card-width));
+  gap: 1rem;
   justify-content: center;
   align-items: stretch;
   padding: 1rem;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
