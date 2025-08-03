@@ -6,13 +6,6 @@ Another VPS value calculation
 
 
 
-## 用户注册
-
-已集成简单的用户系统。第一个注册的用户将自动获得管理员权限，可以管理后续的账户。全新部署后，默认的邀请码为`Flanker`。你可以在用户管理界面中配置邀请码及其他相关设置。
-<img width="3770" height="1614" alt="image" src="https://github.com/user-attachments/assets/0fa666c8-6c4f-42f7-953f-ae09cc60c306" />
-
-
-
 # 💰 VPS 剩余价值计算器
 
 一个专为 **VPS 交易** 场景设计的可视化剩余价值计算工具。通过自动计算、图片展示与链接分享，帮助你高效管理、展示、交易 VPS 资源。
@@ -92,6 +85,12 @@ chmod +x ./vps-value-calculator/deploy.sh
 脚本会自动设置持久化目录、拉取最新代码并通过 `docker compose` 重建并启动服务。
 
 ---
+
+## 用户注册
+
+已集成简单的用户系统。第一个注册的用户将自动获得管理员权限，可以管理后续的账户。全新部署后，默认的邀请码为`Flanker`。你可以在用户管理界面中配置邀请码及其他相关设置。
+<img width="3770" height="1614" alt="image" src="https://github.com/user-attachments/assets/0fa666c8-6c4f-42f7-953f-ae09cc60c306" />
+
 
 ## 🖥️ 命令行管理
 
