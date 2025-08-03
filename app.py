@@ -318,6 +318,7 @@ def view_vps(name: str):
             abort(404)
         config = db.query(SiteConfig).first()
         data = calculate_remaining(vps)
+        specs = parse_instance_config(vps.instance_config)
         generate_svg(vps, data, config)
     svg_url = url_for("static", filename=f"images/{name}.svg")
     if config and config.image_base_url:
@@ -325,7 +326,16 @@ def view_vps(name: str):
     else:
         svg_abs_url = url_for("static", filename=f"images/{name}.svg", _external=True)
     return render_template(
-        "view_svg.html", name=name, svg_url=svg_url, svg_abs_url=svg_abs_url, vps_id=vps.id
+        "view_svg.html",
+        name=name,
+        svg_url=svg_url,
+        svg_abs_url=svg_abs_url,
+        vps_id=vps.id,
+        vps=vps,
+        data=data,
+        specs=specs,
+        config=config,
+        today=date.today(),
     )
 
 
