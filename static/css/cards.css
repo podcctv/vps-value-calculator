@@ -16,19 +16,35 @@
   width: 360px;
   height: 520px;
   padding: 1rem;
-  background: linear-gradient(145deg, #1f1f1f, #151515);
-  border-radius: 12px;
-  box-shadow: 0 0 10px #00ff66;
-  border: 1px solid rgba(0, 255, 102, 0.3);
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--card-border);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   font-family: 'Courier New', monospace;
-  color: #00ff66;
+  color: var(--font-color);
   cursor: pointer;
 }
 
 .vps-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0 16px #00ff66;
+  box-shadow: 0 0 20px rgba(62, 255, 124, 0.3);
+}
+
+/* 灰色状态 */
+.vps-card.sold,
+.vps-card.inactive {
+  color: #6b7280;
+}
+
+.vps-card.sold .vps-title,
+.vps-card.inactive .vps-title,
+.vps-card.sold .vps-row span,
+.vps-card.inactive .vps-row span,
+.vps-card.sold .status-badge,
+.vps-card.inactive .status-badge {
+  color: #6b7280;
+  border-left-color: #6b7280;
 }
 
 /* 状态角标 */
@@ -39,11 +55,12 @@
   padding: 0.2rem 0.5rem;
   font-size: 0.7rem;
   font-weight: bold;
-  background-color: #00ffae;
-  color: #000;
+  background-color: #21262d;
+  color: var(--highlight-green);
+  border-left: 4px solid var(--card-border);
   border-bottom-right-radius: 0.5rem;
   border-top-left-radius: 0.4rem;
-  box-shadow: 0 0 6px rgba(0, 255, 170, 0.4);
+  box-shadow: 0 0 6px rgba(62, 255, 124, 0.4);
   z-index: 10;
 }
 
@@ -51,10 +68,11 @@
 .vps-title {
   font-size: 1.5rem;
   text-align: center;
-  color: #00ff00;
+  color: var(--font-blue);
   font-weight: bold;
 }
 
+/* 内容 */
 .vps-content {
   margin-top: 1rem;
   display: flex;
@@ -66,6 +84,15 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.25rem;
-  border-bottom: 1px solid rgba(0, 255, 102, 0.2);
+  border-bottom: 1px solid rgba(62, 255, 124, 0.2);
   padding-bottom: 0.25rem;
+}
+
+.vps-row span:first-child {
+  color: var(--font-green);
+  font-weight: 500;
+}
+
+.vps-row span:last-child {
+  color: var(--font-color);
 }
