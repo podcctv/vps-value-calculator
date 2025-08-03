@@ -11,14 +11,14 @@
 </head>
 <body class="min-h-screen font-mono">
 <nav class="banner">
-    <div class="banner-left">
+    <a href="{{ url_for('vps_list') }}" class="banner-home">
         <div class="banner-title">
             ⚡ <span>VPS</span> <span>剩余价值计算器</span>
         </div>
         <div class="banner-stats">
             在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
         </div>
-    </div>
+    </a>
     <div class="banner-subinfo">
         {% if current_user %}
         <span>你好, {{ current_user.username }}</span>

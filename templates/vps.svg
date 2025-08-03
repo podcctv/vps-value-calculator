@@ -1,4 +1,4 @@
-<svg width="640" height="480" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480" style="min-width:500px;">
   <style>
     .title {
       fill: #50d0ff;

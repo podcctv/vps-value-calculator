@@ -11,11 +11,15 @@
 </head>
 <body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
 <nav class="banner">
-    <div class="banner-title">
-        ⚡ <span>VPS</span> <span>剩余价值计算器</span>
-    </div>
+    <a href="{{ url_for('vps_list') }}" class="banner-home">
+        <div class="banner-title">
+            ⚡ <span>VPS</span> <span>剩余价值计算器</span>
+        </div>
+        <div class="banner-stats">
+            在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
+        </div>
+    </a>
     <div class="banner-subinfo">
-        在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
         {% if current_user %}
         <span>你好, {{ current_user.username }}</span>
         <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>

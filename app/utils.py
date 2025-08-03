@@ -115,21 +115,39 @@ def ping_ip(ip: str) -> str:
     """Ping IP with simple caching and return emoji status."""
     import subprocess
     import time
+    import platform
+    import socket
+    import shutil
 
     now = time.time()
     cached = _ping_cache.get(ip)
     if cached and now - cached[0] < 60:
         return cached[1]
 
-    try:
-        res = subprocess.run(
-            ["ping", "-c", "1", "-W", "1", ip],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        status = "🟢 在线" if res.returncode == 0 else "🔴 离线"
-    except Exception:
-        status = "⚪ 未知"
+    status = "🔴 离线"
+    ping_exec = shutil.which("ping")
+    if ping_exec:
+        system = platform.system().lower()
+        count_arg = "-n" if system.startswith("win") else "-c"
+        timeout_arg = "-w" if system.startswith("win") else "-W"
+        try:
+            res = subprocess.run(
+                [ping_exec, count_arg, "1", timeout_arg, "1", ip],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            if res.returncode == 0:
+                status = "🟢 在线"
+        except Exception:
+            pass
+
+    if status == "🔴 离线":
+        try:
+            socket.create_connection((ip, 80), timeout=1).close()
+            status = "🟢 在线"
+        except Exception:
+            pass
+
     _ping_cache[ip] = (now, status)
     return status
 
