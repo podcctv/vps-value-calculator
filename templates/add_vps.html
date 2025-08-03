@@ -3,13 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>添加 VPS</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 </head>
-<body class="bg-[#1a1a1a] text-white" style="font-family: 'Share Tech Mono', monospace;">
+<body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
+  <nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
+    <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
+        <a href="{{ url_for('vps_list') }}">⚡ VPS 价值</a>
+    </h1>
+    <div class="flex gap-4 items-center">
+        {% if current_user %}
+        <span class="text-sm text-gray-300">你好, {{ current_user.username }}</span>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_vps') }}">管理 VPS</a>
+        {% if current_user.is_admin %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_users') }}">用户管理</a>
+        {% endif %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('logout') }}">退出登录</a>
+        {% else %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('login') }}">登录</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('register') }}">注册</a>
+        {% endif %}
+    </div>
+  </nav>
   <div id="root"></div>
   <script>
     window.initialData = {{ vps_data|tojson|safe if vps_data else 'null' }};
@@ -69,46 +88,46 @@
       };
 
       return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="bg-slate-800 p-6 rounded-md shadow-md w-full max-w-xl">
-            <h1 className="text-2xl font-semibold mb-4 text-center">{isEdit ? '编辑 VPS' : '添加 VPS'}</h1>
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto p-8 rounded-xl bg-[#1c1c1c]/70 shadow-[0_0_30px_rgba(0,255,255,0.1)] border border-cyan-500">
+            <h1 className="text-3xl font-bold text-cyan-300 mb-6 text-center">{isEdit ? '编辑 VPS' : '添加 VPS'}</h1>
             <form method="post" onSubmit={handleSubmit} className="space-y-6">
-              <fieldset className="border-b border-slate-600 pb-4 mb-4">
-                <legend className="text-lg mb-2">基础信息</legend>
+              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
+                <legend className="text-lg mb-2 text-cyan-300">基础信息</legend>
                 <div className="flex flex-col">
-                  <label className="mb-1">VPS 名称</label>
-                  <input name="name" value={form.name} onChange={handleChange} placeholder="请输入 VPS 名称，如 racknerd-lax-01" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" required />
+                  <label className="mb-1 text-cyan-200">VPS 名称</label>
+                  <input name="name" value={form.name} onChange={handleChange} placeholder="请输入 VPS 名称，如 racknerd-lax-01" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">供应商</label>
-                  <input name="vendor_name" value={form.vendor_name} onChange={handleChange} placeholder="请输入厂商名称" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">供应商</label>
+                  <input name="vendor_name" value={form.vendor_name} onChange={handleChange} placeholder="请输入厂商名称" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">用途</label>
-                  <input name="purpose" value={form.purpose} onChange={handleChange} placeholder="例如 科学上网/建站" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">用途</label>
+                  <input name="purpose" value={form.purpose} onChange={handleChange} placeholder="例如 科学上网/建站" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">VPS 状态</label>
-                  <select name="status" value={form.status} onChange={handleChange} className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white">
+                  <label className="mb-1 text-cyan-200">VPS 状态</label>
+                  <select name="status" value={form.status} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
                     <option value="active">使用中</option>
                     <option value="sold">已转手</option>
                   </select>
                 </div>
               </fieldset>
 
-              <fieldset className="border-b border-slate-600 pb-4 mb-4">
-                <legend className="text-lg mb-2">续费信息</legend>
+              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
+                <legend className="text-lg mb-2 text-cyan-300">续费信息</legend>
                 <div className="flex flex-col">
-                  <label className="mb-1">续费周期（天）</label>
-                  <input type="number" name="renewal_days" value={form.renewal_days} onChange={handleChange} placeholder="例如 30" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">续费周期（天）</label>
+                  <input type="number" name="renewal_days" value={form.renewal_days} onChange={handleChange} placeholder="例如 30" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">续费金额</label>
-                  <input type="number" step="0.01" name="renewal_price" value={form.renewal_price} onChange={handleChange} placeholder="例如 5.99" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">续费金额</label>
+                  <input type="number" step="0.01" name="renewal_price" value={form.renewal_price} onChange={handleChange} placeholder="例如 5.99" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">币种</label>
-                  <select name="currency" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" value={form.currency} onChange={handleChange}>
+                  <label className="mb-1 text-cyan-200">币种</label>
+                  <select name="currency" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400" value={form.currency} onChange={handleChange}>
                     <option value="USD">美元（USD）</option>
                     <option value="CNY">人民币（CNY）</option>
                     <option value="EUR">欧元（EUR）</option>
@@ -117,13 +136,13 @@
                   </select>
                 </div>
                 <div className="flex flex-col mt-4 relative">
-                  <label className="mb-1">实时汇率 (→ CNY)</label>
-                  <input type="number" step="0.0001" name="exchange_rate" value={form.exchange_rate} onChange={handleChange} readOnly={form.exchange_rate_source === 'system'} className={`border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white ${form.exchange_rate_source === 'system' ? 'opacity-75' : ''}`} />
+                  <label className="mb-1 text-cyan-200">实时汇率 (→ CNY)</label>
+                  <input type="number" step="0.0001" name="exchange_rate" value={form.exchange_rate} onChange={handleChange} readOnly={form.exchange_rate_source === 'system'} className={`w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none ${form.exchange_rate_source === 'system' ? 'opacity-75' : ''}`} />
                   {form.exchange_rate_source === 'system' && <span className="absolute right-2 top-8">🔄</span>}
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">支付方式</label>
-                  <select name="payment_method" value={form.payment_method} onChange={handleChange} className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white">
+                  <label className="mb-1 text-cyan-200">支付方式</label>
+                  <select name="payment_method" value={form.payment_method} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
                     <option>PayPal</option>
                     <option>信用卡</option>
                     <option>支付宝</option>
@@ -133,57 +152,57 @@
                   </select>
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">支付手续费（USD）</label>
-                  <input type="number" step="0.01" name="transaction_fee" value={form.transaction_fee} onChange={handleChange} placeholder="如：0.5，单位 USD" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">支付手续费（USD）</label>
+                  <input type="number" step="0.01" name="transaction_fee" value={form.transaction_fee} onChange={handleChange} placeholder="如：0.5，单位 USD" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">汇率来源</label>
-                  <select name="exchange_rate_source" value={form.exchange_rate_source} onChange={handleChange} className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white">
+                  <label className="mb-1 text-cyan-200">汇率来源</label>
+                  <select name="exchange_rate_source" value={form.exchange_rate_source} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
                     <option value="system">系统自动</option>
                     <option value="custom">自定义</option>
                   </select>
                 </div>
               </fieldset>
 
-              <fieldset className="border-b border-slate-600 pb-4 mb-4">
-                <legend className="text-lg mb-2">时间信息</legend>
+              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
+                <legend className="text-lg mb-2 text-cyan-300">时间信息</legend>
                 <div className="flex flex-col">
-                  <label className="mb-1">交易日期</label>
-                  <input type="date" name="transaction_date" value={form.transaction_date} onChange={handleChange} placeholder="请选择交易时间" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" required />
+                  <label className="mb-1 text-cyan-200">交易日期</label>
+                  <input type="date" name="transaction_date" value={form.transaction_date} onChange={handleChange} placeholder="请选择交易时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">到期日期</label>
-                  <input type="date" name="expiry_date" value={form.expiry_date} onChange={handleChange} placeholder="请选择到期时间" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">到期日期</label>
+                  <input type="date" name="expiry_date" value={form.expiry_date} onChange={handleChange} placeholder="请选择到期时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
               </fieldset>
 
-              <fieldset className="border-b border-slate-600 pb-4 mb-4">
-                <legend className="text-lg mb-2">系统信息</legend>
+              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
+                <legend className="text-lg mb-2 text-cyan-300">系统信息</legend>
                 <div className="flex flex-col">
-                  <label className="mb-1">实例配置</label>
-                  <input name="instance_config" value={form.instance_config} onChange={handleChange} placeholder="如 2核2G/30G SSD" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">实例配置</label>
+                  <input name="instance_config" value={form.instance_config} onChange={handleChange} placeholder="如 2核2G/30G SSD" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">所在机房</label>
-                  <input name="location" value={form.location} onChange={handleChange} placeholder="例如：洛杉矶 / 香港" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">所在机房</label>
+                  <input name="location" value={form.location} onChange={handleChange} placeholder="例如：洛杉矶 / 香港" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1">流量限制（月）</label>
-                  <input name="traffic_limit" value={form.traffic_limit} onChange={handleChange} placeholder="例如：3TB / 无限" className="border border-slate-600 bg-slate-900 rounded-md shadow-sm p-2 text-white" />
+                  <label className="mb-1 text-cyan-200">流量限制（月）</label>
+                  <input name="traffic_limit" value={form.traffic_limit} onChange={handleChange} placeholder="例如：3TB / 无限" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
               </fieldset>
 
-              <fieldset className="border-b border-slate-600 pb-4 mb-4">
-                <legend className="text-lg mb-2">设置项</legend>
+              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
+                <legend className="text-lg mb-2 text-cyan-300">设置项</legend>
                 <div className="flex items-center">
-                  <label className="mr-2">动态 SVG</label>
+                  <label className="mr-2 text-cyan-200">动态 SVG</label>
                   <input type="checkbox" name="dynamic_svg" checked={form.dynamic_svg} onChange={handleChange} className="h-5 w-5" />
                 </div>
               </fieldset>
 
               <input type="hidden" name="update_cycle" value={form.update_cycle} />
 
-              <button type="submit" className="w-full py-2 px-4 bg-cyan-600 hover:bg-cyan-500 text-white rounded-md shadow-lg">保存</button>
+              <button type="submit" className="w-full mt-6 bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-4 rounded-full transition shadow-lg hover:shadow-green-300">保存</button>
             </form>
           </div>
         </div>
