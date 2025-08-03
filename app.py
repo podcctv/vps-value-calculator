@@ -13,6 +13,7 @@ from functools import wraps
 from sqlalchemy.orm import Session
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import date
+from markupsafe import Markup
 
 from app.db import engine, Base
 from app.models import VPS, User, InviteCode, SiteConfig
@@ -27,6 +28,26 @@ from app.utils import (
 
 app = Flask(__name__)
 app.secret_key = "change-me"
+TWEMOJI_BASE = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg"
+
+
+@app.template_filter("twemoji")
+def twemoji_filter(emoji: str) -> str:
+    """Return an HTML img tag rendering the emoji via Twemoji."""
+    code_points = "-".join(f"{ord(c):x}" for c in emoji)
+    url = f"{TWEMOJI_BASE}/{code_points}.svg"
+    return Markup(
+        f'<img src="{url}" alt="{emoji}" class="twemoji" '
+        'style="display:inline-block;height:1em;width:1em;vertical-align:-0.1em;">'
+    )
+
+
+@app.template_filter("twemoji_url")
+def twemoji_url_filter(emoji: str) -> str:
+    """Return a Twemoji CDN URL for the given emoji."""
+    code_points = "-".join(f"{ord(c):x}" for c in emoji)
+    return f"{TWEMOJI_BASE}/{code_points}.svg"
+
 Base.metadata.create_all(bind=engine)
 
 

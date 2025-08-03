@@ -30,7 +30,9 @@
 
   <text x="30" y="90" class="label">商家： {{ vps.vendor_name or '-' }}</text>
   <text x="30" y="115" class="label">配置： {{ specs.cpu }} / {{ specs.memory }} / {{ specs.storage }}</text>
-  <text x="30" y="140" class="label">IP 地址： {{ ip_info.flag }} {{ ip_info.ip_display }}</text>
+  <text x="30" y="140" class="label">IP 地址：</text>
+  <image x="110" y="125" width="20" height="20" href="{{ ip_info.flag|twemoji_url }}" />
+  <text x="140" y="140" class="label">{{ ip_info.ip_display }}</text>
   <text x="30" y="165" class="label">在线状态： {{ ip_info.ping_status }}</text>
   <text x="30" y="190" class="label">续费金额： {{ vps.renewal_price }} {{ vps.currency }}</text>
   <text x="30" y="215" class="label">续费周期： {% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</text>
