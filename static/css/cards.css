@@ -13,7 +13,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 360px;
   height: 460px;
   padding: 1.5rem;
@@ -22,6 +22,8 @@
   box-shadow: 0 4px 12px rgba(0, 255, 170, 0.08), 0 0 0 1px rgba(0, 255, 170, 0.15);
   border: 1px solid rgba(0, 255, 170, 0.2);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  color: inherit;
+  text-decoration: none;
 }
 
 .vps-card:hover {
@@ -85,42 +87,4 @@
   box-shadow: inset 0 0 10px #00ff55;
   border: 1px solid rgba(0, 255, 170, 0.1);
   min-height: 160px;
-}
-
-/* 底部按钮区域 */
-.vps-card .card-footer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1.5rem;
-}
-
-/* 按钮样式 */
-.vps-card button,
-.vps-card .btn {
-  flex: 1;
-  margin: 0 0.5rem;
-  padding: 0.6rem 1rem;
-  font-weight: bold;
-  font-size: 0.95rem;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-/* SVG 按钮 */
-.vps-card .btn-svg {
-  background: linear-gradient(to right, #34e89e, #0f3443);
-  color: white;
-}
-
-/* Markdown 复制按钮 */
-.vps-card .btn-md {
-  background: linear-gradient(to right, #3a7bd5, #00d2ff);
-  color: white;
-}
-
-.vps-card .btn:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
 }

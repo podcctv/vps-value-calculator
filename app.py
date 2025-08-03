@@ -270,6 +270,17 @@ def vps_list():
     return render_template("vps.html", vps_list=vps_list)
 
 
+@app.route("/vps/<string:name>")
+def view_vps(name: str):
+    with Session(engine) as db:
+        vps = db.query(VPS).filter(VPS.name == name).first()
+        if not vps or not vps.dynamic_svg:
+            abort(404)
+    svg_url = url_for("get_vps_image", name=name)
+    svg_abs_url = url_for("get_vps_image", name=name, _external=True)
+    return render_template("view_svg.html", name=name, svg_url=svg_url, svg_abs_url=svg_abs_url)
+
+
 @app.route("/vps/<string:name>.svg")
 def get_vps_image(name: str):
     with Session(engine) as db:
