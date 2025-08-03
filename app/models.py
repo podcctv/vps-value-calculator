@@ -16,7 +16,7 @@ class VPS(Base):
     vendor_name = Column(String)
     instance_config = Column(String)
     location = Column(String)
-    purpose = Column(String)
+    description = Column(String)
     traffic_limit = Column(String)
     payment_method = Column(String)
     transaction_fee = Column(Float, default=0.0)

@@ -42,14 +42,14 @@
         name: '',
         transaction_date: today,
         expiry_date: '',
-        renewal_days: '',
+        renewal_days: '30',
         renewal_price: '',
         currency: 'USD',
         exchange_rate: '',
         vendor_name: '',
         instance_config: '',
         location: '',
-        purpose: '',
+        description: '',
         traffic_limit: '',
         payment_method: 'PayPal',
         transaction_fee: '0',
@@ -103,8 +103,15 @@
                   <input name="vendor_name" value={form.vendor_name} onChange={handleChange} placeholder="请输入厂商名称" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">用途</label>
-                  <input name="purpose" value={form.purpose} onChange={handleChange} placeholder="例如 科学上网/建站" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                  <label className="mb-1 text-cyan-200">描述</label>
+                  <textarea
+                    name="description"
+                    value={form.description}
+                    onChange={handleChange}
+                    placeholder="如 科学上网 / 建站 / 测试使用"
+                    className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none resize-none"
+                    rows={2}
+                  />
                 </div>
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">VPS 状态</label>
@@ -118,12 +125,18 @@
               <fieldset className="border-b border-cyan-500 pb-4 mb-4">
                 <legend className="text-lg mb-2 text-cyan-300">续费信息</legend>
                 <div className="flex flex-col">
-                  <label className="mb-1 text-cyan-200">续费周期（天）</label>
-                  <input type="number" name="renewal_days" value={form.renewal_days} onChange={handleChange} placeholder="例如 30" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                  <label className="mb-1 text-cyan-200">续费周期</label>
+                  <select name="renewal_days" value={form.renewal_days} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
+                    <option value="30">每月</option>
+                    <option value="90">每季度</option>
+                    <option value="365">每年</option>
+                    <option value="1095">三年</option>
+                    <option value="0">一次性</option>
+                  </select>
                 </div>
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">续费金额</label>
-                  <input type="number" step="0.01" name="renewal_price" value={form.renewal_price} onChange={handleChange} placeholder="例如 5.99" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                  <input type="number" step="0.01" name="renewal_price" value={form.renewal_price} onChange={handleChange} placeholder="如 5.99" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">币种</label>
@@ -135,10 +148,9 @@
                     <option value="HKD">港币（HKD）</option>
                   </select>
                 </div>
-                <div className="flex flex-col mt-4 relative">
-                  <label className="mb-1 text-cyan-200">实时汇率 (→ CNY)</label>
-                  <input type="number" step="0.0001" name="exchange_rate" value={form.exchange_rate} onChange={handleChange} readOnly={form.exchange_rate_source === 'system'} className={`w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none ${form.exchange_rate_source === 'system' ? 'opacity-75' : ''}`} />
-                  {form.exchange_rate_source === 'system' && <span className="absolute right-2 top-8">🔄</span>}
+                <div className="flex flex-col mt-4">
+                  <label className="mb-1 text-cyan-200">支付手续费（USD）</label>
+                  <input type="number" step="0.01" name="transaction_fee" value={form.transaction_fee} onChange={handleChange} placeholder="如 0.5，单位 USD" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">支付方式</label>
@@ -152,15 +164,19 @@
                   </select>
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">支付手续费（USD）</label>
-                  <input type="number" step="0.01" name="transaction_fee" value={form.transaction_fee} onChange={handleChange} placeholder="如：0.5，单位 USD" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">汇率来源</label>
+                  <div className="flex items-center gap-2">
+                    <label className="mb-1 text-cyan-200">汇率来源</label>
+                    <span className="text-gray-400 cursor-help" title="系统自动将通过汇率 API 获取最新汇率">❓</span>
+                  </div>
                   <select name="exchange_rate_source" value={form.exchange_rate_source} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
                     <option value="system">系统自动</option>
                     <option value="custom">自定义</option>
                   </select>
+                </div>
+                <div className="flex flex-col mt-4 relative">
+                  <label className="mb-1 text-cyan-200">实时汇率 (→ CNY)</label>
+                  <input type="number" step="0.0001" name="exchange_rate" value={form.exchange_rate} onChange={handleChange} readOnly={form.exchange_rate_source === 'system'} className={`w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none ${form.exchange_rate_source === 'system' ? 'opacity-75' : ''}`} />
+                  {form.exchange_rate_source === 'system' && <span className="absolute right-2 top-8">🔄</span>}
                 </div>
               </fieldset>
 
@@ -184,25 +200,25 @@
                 </div>
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">所在机房</label>
-                  <input name="location" value={form.location} onChange={handleChange} placeholder="例如：洛杉矶 / 香港" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                  <input name="location" value={form.location} onChange={handleChange} placeholder="如 洛杉矶 / 香港" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">流量限制（月）</label>
-                  <input name="traffic_limit" value={form.traffic_limit} onChange={handleChange} placeholder="例如：3TB / 无限" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                  <input name="traffic_limit" value={form.traffic_limit} onChange={handleChange} placeholder="如 3TB / 无限" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
               </fieldset>
 
               <fieldset className="border-b border-cyan-500 pb-4 mb-4">
                 <legend className="text-lg mb-2 text-cyan-300">设置项</legend>
-                <div className="flex items-center">
-                  <label className="mr-2 text-cyan-200">动态 SVG</label>
+                <div className="flex items-center gap-2">
                   <input type="checkbox" name="dynamic_svg" checked={form.dynamic_svg} onChange={handleChange} className="h-5 w-5" />
+                  <label className="text-cyan-200">启用动态 SVG（每天自动更新剩余价值）</label>
                 </div>
               </fieldset>
 
               <input type="hidden" name="update_cycle" value={form.update_cycle} />
 
-              <button type="submit" className="w-full mt-6 bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-4 rounded-full transition shadow-lg hover:shadow-green-300">保存</button>
+              <button type="submit" className="w-full mt-6 bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-4 rounded-full transition shadow-lg hover:shadow-green-300">💾 保存</button>
             </form>
           </div>
         </div>
