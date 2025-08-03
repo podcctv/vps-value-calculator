@@ -41,9 +41,9 @@ body {
   }
 
   .card-container {
+    grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0 1rem;
-    justify-content: center;
   }
 
   .vps-card {
