@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
 </head>
 <body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
 <nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
@@ -32,9 +33,9 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">VPS 列表</h1>
     {% if vps_list %}
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="card-container">
         {% for vps in vps_list %}
-        <div class="relative p-6 rounded-xl shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300">
+        <div class="vps-card relative shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300">
             <h2 class="text-2xl font-bold text-cyan-300 text-center mb-1">{{ vps.name }}</h2>
             {% if vps.vendor_name %}<h3 class="text-sm text-gray-400 text-center mb-2">{{ vps.vendor_name }}</h3>{% endif %}
             <div class="crt p-4 rounded overflow-x-auto min-h-[160px] mb-4">
@@ -57,8 +58,8 @@
                         data-name="{{ vps.name }}" data-vendor="{{ vps.vendor_name }}" data-expiry="{{ vps.expiry_date }}">
                     查看 SVG
                 </button>
-                <button class="flex-1 bg-blue-500 hover:bg-blue-400 text-black font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-blue-400 transition copy-md-btn"
-                        data-md="![{{ vps.name }}]({{ url_for('get_vps_image', name=vps.name, _external=True) }})">
+                <button class="flex-1 bg-blue-500 hover:bg-blue-400 text-black font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-blue-400 transition"
+                        onclick="copyMarkdown('{{ vps.name }}', '{{ url_for('get_vps_image', name=vps.name, _external=True) }}')">
                     复制 Markdown
                 </button>
             </div>
@@ -115,11 +116,17 @@
     };
   });
 
-  document.querySelectorAll('.copy-md-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(btn.dataset.md);
-    });
-  });
+  function copyMarkdown(vpsName, imageUrl) {
+    const markdown = `![${vpsName}](${imageUrl})`;
+    navigator.clipboard.writeText(markdown)
+      .then(() => {
+        alert('\u2705 Markdown \u5df2\u590d\u5236\u5230\u526a\u8d34\u677f');
+      })
+      .catch(err => {
+        alert('\u274c \u590d\u5236\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u6743\u9650');
+        console.error(err);
+      });
+  }
 </script>
 </body>
 </html>
