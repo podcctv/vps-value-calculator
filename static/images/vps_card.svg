@@ -62,6 +62,6 @@
     <tspan x="30" dy="25">剩余价值： 72.04 元</tspan>
   </text>
 
-  <text x="30" y="250" class="footer">更新时间：2025/08/03</text>
-  <text x="30" y="270" class="footer">Noodseek ID：@Flanker</text>
+  <text x="370" y="180" class="footer" text-anchor="end">更新时间：2025/08/03</text>
+  <text x="370" y="205" class="footer" text-anchor="end">Noodseek ID：@Flanker</text>
 </svg>
