@@ -15,7 +15,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import date
 
 from app.db import engine, Base
-from app.models import VPS, User, InviteCode
+from app.models import VPS, User, InviteCode, SiteConfig
 from app.utils import calculate_remaining, generate_svg, parse_instance_config
 
 app = Flask(__name__)
@@ -71,6 +71,8 @@ def init_sample():
             db.add(sample)
         if db.query(InviteCode).count() == 0:
             db.add(InviteCode(code="Flanker"))
+        if db.query(SiteConfig).count() == 0:
+            db.add(SiteConfig(image_base_url="", noodseek_id="@Flanker"))
         db.commit()
 
 
@@ -79,12 +81,13 @@ init_sample()
 
 def refresh_images():
     with Session(engine) as db:
+        config = db.query(SiteConfig).first()
         vps_list = db.query(VPS).all()
         for vps in vps_list:
             if not vps.dynamic_svg:
                 continue
             data = calculate_remaining(vps)
-            generate_svg(vps, data)
+            generate_svg(vps, data, config)
 
 
 scheduler = BackgroundScheduler(timezone="UTC")
@@ -153,6 +156,16 @@ def manage_users():
                 else:
                     db.add(InviteCode(code=code))
                 db.commit()
+            elif action == "set_site_config":
+                base_url = request.form.get("image_base_url", "")
+                noodseek_id = request.form.get("noodseek_id", "")
+                cfg = db.query(SiteConfig).first()
+                if cfg:
+                    cfg.image_base_url = base_url
+                    cfg.noodseek_id = noodseek_id
+                else:
+                    db.add(SiteConfig(image_base_url=base_url, noodseek_id=noodseek_id))
+                db.commit()
             else:
                 user_id = int(request.form.get("user_id"))
                 user = db.get(User, user_id)
@@ -165,7 +178,10 @@ def manage_users():
         users = db.query(User).all()
         invite_obj = db.query(InviteCode).first()
         invite_code = invite_obj.code if invite_obj else ""
-    return render_template("admin_users.html", users=users, invite_code=invite_code)
+        config = db.query(SiteConfig).first()
+    return render_template(
+        "admin_users.html", users=users, invite_code=invite_code, config=config
+    )
 
 
 @app.route("/vps/new", methods=["GET", "POST"])
@@ -196,8 +212,9 @@ def add_vps():
             )
             db.add(vps)
             db.commit()
+            config = db.query(SiteConfig).first()
             data = calculate_remaining(vps)
-            generate_svg(vps, data)
+            generate_svg(vps, data, config)
         return redirect(url_for("index"))
     return render_template("add_vps.html")
 
@@ -238,8 +255,9 @@ def edit_vps(vps_id: int):
             vps.dynamic_svg = bool(form.get("dynamic_svg"))
             vps.status = form.get("status")
             db.commit()
+            config = db.query(SiteConfig).first()
             data = calculate_remaining(vps)
-            generate_svg(vps, data)
+            generate_svg(vps, data, config)
             return redirect(url_for("manage_vps"))
         vps_data = {
             "name": vps.name,
@@ -298,8 +316,14 @@ def view_vps(name: str):
         vps = db.query(VPS).filter(VPS.name == name).first()
         if not vps or not vps.dynamic_svg:
             abort(404)
-    svg_url = url_for("get_vps_image", name=name)
-    svg_abs_url = url_for("get_vps_image", name=name, _external=True)
+        config = db.query(SiteConfig).first()
+        data = calculate_remaining(vps)
+        generate_svg(vps, data, config)
+    svg_url = url_for("static", filename=f"images/{name}.svg")
+    if config and config.image_base_url:
+        svg_abs_url = f"{config.image_base_url.rstrip('/')}/{name}.svg"
+    else:
+        svg_abs_url = url_for("static", filename=f"images/{name}.svg", _external=True)
     return render_template(
         "view_svg.html", name=name, svg_url=svg_url, svg_abs_url=svg_abs_url, vps_id=vps.id
     )
@@ -311,8 +335,9 @@ def get_vps_image(name: str):
         vps = db.query(VPS).filter(VPS.name == name).first()
         if not vps or not vps.dynamic_svg:
             abort(404)
+        config = db.query(SiteConfig).first()
         data = calculate_remaining(vps)
-        svg_path = generate_svg(vps, data)
+        svg_path = generate_svg(vps, data, config)
         directory = svg_path.parent
         return send_from_directory(directory, svg_path.name, mimetype="image/svg+xml")
 

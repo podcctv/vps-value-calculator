@@ -89,10 +89,17 @@ def parse_instance_config(config: str):
     return {"cpu": cpu, "memory": memory, "storage": storage}
 
 
-def generate_svg(vps, data):
+def generate_svg(vps, data, config=None):
     template = env.get_template("vps.svg")
     specs = parse_instance_config(vps.instance_config)
-    content = template.render(vps=vps, data=data, specs=specs)
+    today = date.today()
+    content = template.render(
+        vps=vps,
+        data=data,
+        specs=specs,
+        today=today,
+        config=config,
+    )
     STATIC_DIR.mkdir(parents=True, exist_ok=True)
     out_file = STATIC_DIR / f"{vps.name}.svg"
     out_file.write_text(content, encoding="utf-8")
