@@ -46,7 +46,7 @@
   gap: 1.5rem;
   justify-content: space-between;
   align-items: stretch;
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 /* 单个卡片样式 */

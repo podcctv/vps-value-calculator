@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 
 !static/images/vps_card.svg
+node_modules/
