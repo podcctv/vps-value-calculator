@@ -144,7 +144,7 @@ def refresh_images():
             generate_svg(vps, data, config)
 
 
-scheduler = BackgroundScheduler(timezone="UTC")
+scheduler = BackgroundScheduler(timezone="Asia/Shanghai")
 scheduler.add_job(refresh_images, "cron", hour=0, minute=0)
 scheduler.start()
 
