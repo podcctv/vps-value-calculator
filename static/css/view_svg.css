@@ -30,11 +30,23 @@
   font-weight: bold;
 }
 
-.vps-footer {
+.vps-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-top: 1.5rem;
-  text-align: right;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.vps-card-footer .left-info,
+.vps-card-footer .right-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: #68f8bc;
 }
 
 .card-buttons {

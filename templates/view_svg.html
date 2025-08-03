@@ -48,13 +48,17 @@
             <div class="label">在线状态</div><div>：</div><div><span class="ping-status" data-ip="{{ vps.ip_address }}">{{ ip_info.ping_status }}</span></div>
             <div class="label">到期时间</div><div>：</div><div>{{ data.cycle_end.strftime('%Y/%m/%d') if data.cycle_end else '-' }}</div>
             <div class="label">续费金额</div><div>：</div><div>{{ vps.renewal_price or '-' }} {{ vps.currency }}</div>
-            <div class="label">剩余天数</div><div>：</div><div>{{ data.remaining_days }} 天</div>
-            <div class="label">剩余价值</div><div>：</div><div>{{ data.remaining_value }} 元</div>
             <div class="label">描述说明</div><div>：</div><div>{{ vps.description or '-' }}</div>
         </div>
-        <div class="vps-footer">
-            <p>更新时间: {{ today.strftime('%Y/%m/%d') }}</p>
-            <p>用户名: {{ config.username if config and config.username else '' }}</p>
+        <div class="vps-card-footer">
+            <div class="left-info">
+                <div>剩余天数：{{ data.remaining_days }} 天</div>
+                <div>剩余价值：{{ data.remaining_value }} 元</div>
+            </div>
+            <div class="right-info">
+                <div>更新时间：{{ today.strftime('%Y/%m/%d') }}</div>
+                <div>用户名：{{ config.username if config and config.username else '' }}</div>
+            </div>
         </div>
         <div class="card-buttons">
             <a href="{{ url_for('vps_list') }}">返回列表</a>
