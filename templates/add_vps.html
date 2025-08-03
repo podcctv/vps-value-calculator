@@ -130,6 +130,10 @@
               <fieldset className="border-b border-cyan-500 pb-4 mb-4">
                 <legend className="text-lg mb-2 text-cyan-300">续费信息</legend>
                 <div className="flex flex-col">
+                  <label className="mb-1 text-cyan-200">续费日期</label>
+                  <input type="date" name="transaction_date" value={form.transaction_date} onChange={handleChange} placeholder="请选择续费时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
+                </div>
+                <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">续费周期</label>
                   <select name="renewal_days" value={form.renewal_days} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
                     <option value="30">每月</option>
@@ -182,14 +186,6 @@
                   <label className="mb-1 text-cyan-200">实时汇率 (→ CNY)</label>
                   <input type="number" step="0.0001" name="exchange_rate" value={form.exchange_rate} onChange={handleChange} readOnly={form.exchange_rate_source === 'system'} className={`w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none ${form.exchange_rate_source === 'system' ? 'opacity-75' : ''}`} />
                   {form.exchange_rate_source === 'system' && <span className="absolute right-2 top-8">🔄</span>}
-                </div>
-              </fieldset>
-
-              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
-                <legend className="text-lg mb-2 text-cyan-300">时间信息</legend>
-                <div className="flex flex-col">
-                  <label className="mb-1 text-cyan-200">交易日期</label>
-                  <input type="date" name="transaction_date" value={form.transaction_date} onChange={handleChange} placeholder="请选择交易时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
                 </div>
               </fieldset>
 
