@@ -65,6 +65,7 @@
   font-family: 'Courier New', monospace;
   color: var(--font-color);
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .vps-card:hover {
@@ -139,4 +140,20 @@
 
 .vps-row span:last-child {
   color: var(--font-color);
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .vps-card {
+    width: calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .vps-card {
+    width: 100%;
+  }
 }
