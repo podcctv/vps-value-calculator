@@ -43,6 +43,25 @@ def _run_migrations():
                     )
                 )
 
+        # Add any new optional columns introduced after initial release
+        optional_columns = {
+            "vendor_name": "TEXT",
+            "instance_config": "TEXT",
+            "location": "TEXT",
+            "purpose": "TEXT",
+            "traffic_limit": "TEXT",
+            "payment_method": "TEXT",
+            "transaction_fee": "FLOAT DEFAULT 0.0",
+            "exchange_rate_source": "TEXT",
+            "update_cycle": "INTEGER DEFAULT 7",
+            "dynamic_svg": "BOOLEAN DEFAULT 1",
+            "status": "TEXT DEFAULT 'active'",
+        }
+        for column, definition in optional_columns.items():
+            if column not in columns:
+                with engine.begin() as conn:
+                    conn.execute(text(f"ALTER TABLE vps ADD COLUMN {column} {definition}"))
+
 
 _run_migrations()
 
