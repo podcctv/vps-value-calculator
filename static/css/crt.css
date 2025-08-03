@@ -1,26 +1,26 @@
 /* Theme variables */
 :root {
-  --bg-color: #0d1117;
+  --bg-color: #0c0f17;
   --card-bg: #161b22;
-  --card-border: #3eff7c;
+  --card-border: #3cffb5;
   --font-color: #c9d1d9;
-  --font-green: #a6e22e;
-  --font-blue: #58a6ff;
-  --highlight-green: #8aff80;
+  --font-green: #3af27c;
+  --font-blue: #50d0ff;
+  --highlight-green: #4afc90;
   --border-radius: 12px;
-  --box-shadow: 0 0 15px rgba(62, 255, 124, 0.2);
+  --box-shadow: 0 0 10px rgba(60, 255, 181, 0.5);
 }
 
 body {
   background-color: var(--bg-color);
   color: var(--font-color);
-  font-family: 'Fira Code', 'Courier New', monospace;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
 }
 
 .crt {
   background-color: var(--bg-color);
   color: var(--highlight-green);
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
   box-shadow: 0 0 4px var(--highlight-green), 0 0 10px var(--highlight-green);
   background-image: repeating-linear-gradient(
     to bottom,
