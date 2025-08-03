@@ -41,10 +41,10 @@
 
 /* 卡片容器布局 */
 .card-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 2rem;
-  justify-content: center;
+  justify-items: center;
   align-items: stretch;
   padding: 2rem;
 }
@@ -54,8 +54,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 360px;
-  height: 520px;
+  width: 100%;
+  min-height: 520px;
+  height: auto;
   padding: 1rem;
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
