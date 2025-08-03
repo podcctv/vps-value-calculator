@@ -74,8 +74,9 @@ http://your-server-ip:8280/vps/xxxx.svg
 仓库提供 `deploy.sh` 脚本实现一键部署或更新。脚本会自动切换到自身所在目录，可在任意位置通过绝对路径执行：
 
 ```bash
-chmod +x deploy.sh
-./deploy.sh
+git clone https://github.com/podcctv/vps-value-calculator.git
+chmod +x vps-value-calculator
+/vps-value-calculator/deploy.sh
 ```
 
 脚本会自动设置持久化目录、拉取最新代码并通过 `docker compose` 重建并启动服务。
