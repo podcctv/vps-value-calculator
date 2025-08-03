@@ -41,10 +41,10 @@
 
 /* 卡片容器布局 */
 .card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
-  justify-items: center;
+  justify-content: center;
   align-items: stretch;
   padding: 2rem;
 }
@@ -54,7 +54,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 260px;
+  max-width: 100%;
   min-height: 520px;
   height: auto;
   padding: 1rem;
@@ -147,14 +148,5 @@
   .card-container {
     gap: 1rem;
     padding: 1rem;
-  }
-  .vps-card {
-    width: calc(50% - 0.5rem);
-  }
-}
-
-@media (max-width: 480px) {
-  .vps-card {
-    width: 100%;
   }
 }
