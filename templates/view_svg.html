@@ -8,18 +8,40 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
 </head>
-<body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono flex flex-col items-center justify-center p-4">
-    <div class="w-full max-w-4xl">
-        <div class="crt p-4 rounded overflow-auto">
+<body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
+<nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
+    <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
+        <a href="{{ url_for('vps_list') }}">⚡ VPS 价值</a>
+    </h1>
+    <div class="flex gap-4 items-center">
+        {% if current_user %}
+        <span class="text-sm text-gray-300">你好, {{ current_user.username }}</span>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_vps') }}">管理 VPS</a>
+        {% if current_user.is_admin %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_users') }}">用户管理</a>
+        {% endif %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('logout') }}">退出登录</a>
+        {% else %}
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('login') }}">登录</a>
+        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('register') }}">注册</a>
+        {% endif %}
+    </div>
+</nav>
+    <div class="container mx-auto px-4 py-8 flex flex-col items-center">
+        <div class="w-full max-w-4xl crt p-4 rounded overflow-auto">
             <img src="{{ svg_url }}" alt="{{ name }}" class="mx-auto">
         </div>
-        <div class="text-center mt-4">
-            <button id="copyLinkBtn" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition">复制链接</button>
+        <div class="flex gap-4 mt-4">
+            <a href="{{ url_for('vps_list') }}" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition">返回列表</a>
+            <button id="copyLinkBtn" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition" data-link="{{ svg_abs_url }}">复制链接</button>
+            <a href="{{ url_for('edit_vps', vps_id=vps_id) }}" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition">编辑此项</a>
         </div>
     </div>
     <script>
         document.getElementById('copyLinkBtn').addEventListener('click', function () {
-            navigator.clipboard.writeText('{{ svg_abs_url }}').then(() => {
+            const link = this.dataset.link;
+            navigator.clipboard.writeText(link).then(() => {
                 alert('链接已复制');
             }).catch(() => {
                 alert('复制失败，请手动复制。');

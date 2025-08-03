@@ -10,14 +10,15 @@ env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
 def calculate_remaining(vps):
     today = date.today()
-    if not vps.expiry_date or not vps.transaction_date:
+    start_date = vps.cycle_base_date or vps.transaction_date
+    if not vps.expiry_date or not start_date:
         return {
             "remaining_days": 0,
             "remaining_value": 0.0,
             "cycle_end": vps.expiry_date,
         }
     remaining_days = max((vps.expiry_date - today).days, 0)
-    total_days = max((vps.expiry_date - vps.transaction_date).days, 1)
+    total_days = max((vps.expiry_date - start_date).days, 1)
     remaining_value = vps.renewal_price * vps.exchange_rate * remaining_days / total_days
     return {
         "remaining_days": remaining_days,
