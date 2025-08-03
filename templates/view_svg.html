@@ -40,7 +40,7 @@
     </div>
     <script>
         document.getElementById('copyLinkBtn').addEventListener('click', function () {
-            const text = `![image]({{ svg_abs_url }})`;
+            const text = {{ svg_abs_url|tojson }};
             navigator.clipboard.writeText(text).then(() => {
                 alert('链接已复制');
             }).catch(() => {

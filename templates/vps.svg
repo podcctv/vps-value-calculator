@@ -12,7 +12,7 @@
       font-family: 'Courier New', monospace;
     }
     .footer {
-      fill: #8aff80;
+      fill: #6b7280;
       font-size: 12px;
       font-family: 'Courier New', monospace;
     }

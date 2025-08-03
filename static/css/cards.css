@@ -18,7 +18,7 @@
   padding: 1rem;
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  box-shadow: 0 0 15px rgba(62, 255, 124, 0.4);
   border: 1px solid var(--card-border);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   font-family: 'Courier New', monospace;
@@ -28,7 +28,7 @@
 
 .vps-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0 20px rgba(62, 255, 124, 0.3);
+  box-shadow: 0 0 25px rgba(62, 255, 124, 0.6);
 }
 
 /* 灰色状态 */
@@ -70,6 +70,7 @@
   text-align: center;
   color: var(--font-blue);
   font-weight: bold;
+  margin-top: 1.5rem;
 }
 
 /* 内容 */
