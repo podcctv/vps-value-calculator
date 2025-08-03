@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="400" height="200">
   <style>
-    .terminal { fill: #00ff00; font: 14px "Courier New", monospace; }
+    .terminal { fill: #00ff00; font: 14px "Noto Sans Mono CJK SC", "Courier New", monospace; }
     .title { font-weight: bold; }
   </style>
   <rect width="100%" height="100%" fill="#000" />
   <text x="20" y="30" class="terminal title">{{ vps.name }}</text>
-  <text x="20" y="60" class="terminal">Transaction Date: {{ vps.transaction_date }}</text>
-  <text x="20" y="80" class="terminal">Expiry Date: {{ vps.expiry_date }}</text>
-  <text x="20" y="100" class="terminal">Remaining Days: {{ data.remaining_days }}</text>
-  <text x="20" y="120" class="terminal">Remaining Value: {{ data.remaining_value }} CNY</text>
+  <text x="20" y="60" class="terminal">交易时间: {{ vps.transaction_date }}</text>
+  <text x="20" y="80" class="terminal">到期时间: {{ vps.expiry_date }}</text>
+  <text x="20" y="100" class="terminal">剩余天数: {{ data.remaining_days }}</text>
+  <text x="20" y="120" class="terminal">剩余价值: {{ data.remaining_value }} 元</text>
 </svg>
