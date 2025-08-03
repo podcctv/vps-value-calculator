@@ -39,6 +39,7 @@ def twemoji_filter(emoji: str) -> str:
     return Markup(
         f'<img src="{url}" alt="{emoji}" class="twemoji" '
         'style="display:inline-block;height:1em;width:1em;vertical-align:-0.1em;">'
+
     )
 
 
