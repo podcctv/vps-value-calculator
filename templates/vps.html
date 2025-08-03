@@ -34,7 +34,7 @@
     <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">VPS 列表</h1>
     {% if vps_data %}
     <div class="card-container">
-        {% for vps, data, specs in vps_data %}
+        {% for vps, data, specs, ip_info in vps_data %}
         <div class="vps-card relative {% if vps.status == 'sold' %}sold{% elif vps.status == 'inactive' %}inactive{% endif %}" data-href="{{ url_for('view_vps', name=vps.name) }}">
             {% if vps.status == 'active' %}
             <span class="status-badge">在使用</span>
@@ -50,8 +50,7 @@
                 <div class="vps-row"><span>内存：</span><span>{{ specs.memory }}</span></div>
                 <div class="vps-row"><span>存储：</span><span>{{ specs.storage }}</span></div>
                 <div class="vps-row"><span>月流量：</span><span>{{ vps.traffic_limit or '-' }}</span></div>
-                {% set ip_display = '-' %}{% if vps.ip_address %}{% set parts = vps.ip_address.split('.') %}{% set ip_display = parts[:-1]|join('.') ~ '.**' %}{% endif %}
-                <div class="vps-row"><span>IP 地址：</span><span>{{ ip_display }}</span></div>
+                <div class="vps-row"><span>IP 地址：</span><span>{{ ip_info.flag }} {{ ip_info.ip_display }} ({{ ip_info.ping_status }})</span></div>
                 <div class="vps-row"><span>续费金额：</span><span>{{ vps.renewal_price or '-' }} {{ vps.currency }}</span></div>
                 <div class="vps-row"><span>购买日期：</span><span>{{ vps.purchase_date.strftime('%Y-%m-%d') if vps.purchase_date and vps.status == 'active' else '-' }}</span></div>
                 <div class="vps-row"><span>续费周期：</span><span>{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</span></div>

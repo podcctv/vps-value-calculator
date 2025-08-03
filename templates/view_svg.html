@@ -36,8 +36,7 @@
             <div><dt>商家：</dt><dd>{{ vps.vendor_name or '-' }}</dd></div>
             <div><dt>配置：</dt><dd>{{ specs.cpu }} / {{ specs.memory }} / {{ specs.storage }}</dd></div>
             <div><dt>月流量：</dt><dd>{{ vps.traffic_limit or '-' }}</dd></div>
-            {% set ip_display = '-' %}{% if vps.ip_address %}{% set parts = vps.ip_address.split('.') %}{% set ip_display = parts[:-1]|join('.') ~ '.**' %}{% endif %}
-            <div><dt>IP 地址：</dt><dd>{{ ip_display }}</dd></div>
+            <div><dt>IP 地址：</dt><dd>{{ ip_info.flag }} {{ ip_info.ip_display }} ({{ ip_info.ping_status }})</dd></div>
             <div><dt>到期时间：</dt><dd>{{ data.cycle_end.strftime('%Y/%m/%d') if data.cycle_end else '-' }}</dd></div>
             <div><dt>续费金额：</dt><dd>{{ vps.renewal_price or '-' }} {{ vps.currency }}</dd></div>
             <div><dt>剩余天数：</dt><dd>{{ data.remaining_days }} 天</dd></div>

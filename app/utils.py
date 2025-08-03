@@ -79,14 +79,60 @@ def parse_instance_config(config: str):
         unit = unit.lower()
         if unit.startswith("c") and cpu == "-":
             cpu = f"{value}C"
-        elif unit.startswith("g") and memory == "-":
-            memory = f"{value}G"
-        elif unit.startswith("g") and memory != "-" and storage == "-":
-            storage = f"{value}G"
-        elif unit.startswith("t") and storage == "-":
-            storage = f"{value}T"
+            continue
+
+        unit_map = {
+            "g": "G",
+            "gb": "GB",
+            "m": "M",
+            "mb": "MB",
+            "t": "T",
+            "tb": "TB",
+        }
+
+        if unit in unit_map:
+            pretty = unit_map[unit]
+            if memory == "-":
+                memory = f"{value}{pretty}"
+            elif storage == "-":
+                storage = f"{value}{pretty}"
 
     return {"cpu": cpu, "memory": memory, "storage": storage}
+
+
+def mask_ip(ip: str) -> str:
+    """Mask the middle two octets of an IPv4 address."""
+    parts = ip.split(".")
+    if len(parts) == 4:
+        return f"{parts[0]}.**.**.{parts[3]}"
+    return ip
+
+
+def ping_ip(ip: str) -> str:
+    """Ping IP once and return Chinese status string."""
+    import subprocess
+
+    try:
+        res = subprocess.run(
+            ["ping", "-c", "1", "-W", "1", ip],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        return "在线" if res.returncode == 0 else "离线"
+    except Exception:
+        return "未知"
+
+
+def ip_to_flag(ip: str) -> str:
+    """Return emoji flag for IP using ipapi.co."""
+    try:
+        resp = requests.get(f"https://ipapi.co/{ip}/country/", timeout=5)
+        code = resp.text.strip().upper()
+        if len(code) == 2 and code.isalpha():
+            return chr(ord(code[0]) + 127397) + chr(ord(code[1]) + 127397)
+    except Exception:
+        pass
+    return "🏳️"
 
 
 def generate_svg(vps, data, config=None):

@@ -16,7 +16,14 @@ from datetime import date
 
 from app.db import engine, Base
 from app.models import VPS, User, InviteCode, SiteConfig
-from app.utils import calculate_remaining, generate_svg, parse_instance_config
+from app.utils import (
+    calculate_remaining,
+    generate_svg,
+    parse_instance_config,
+    mask_ip,
+    ping_ip,
+    ip_to_flag,
+)
 
 app = Flask(__name__)
 app.secret_key = "change-me"
@@ -306,7 +313,16 @@ def vps_list():
         for vps in vps_list:
             data = calculate_remaining(vps)
             specs = parse_instance_config(vps.instance_config)
-            vps_data.append((vps, data, specs))
+            ip_info = {
+                "ip_display": "-",
+                "ping_status": "",
+                "flag": "",
+            }
+            if vps.ip_address:
+                ip_info["ip_display"] = mask_ip(vps.ip_address)
+                ip_info["ping_status"] = ping_ip(vps.ip_address)
+                ip_info["flag"] = ip_to_flag(vps.ip_address)
+            vps_data.append((vps, data, specs, ip_info))
     return render_template("vps.html", vps_data=vps_data)
 
 
@@ -319,6 +335,15 @@ def view_vps(name: str):
         config = db.query(SiteConfig).first()
         data = calculate_remaining(vps)
         specs = parse_instance_config(vps.instance_config)
+        ip_info = {
+            "ip_display": "-",
+            "ping_status": "",
+            "flag": "",
+        }
+        if vps.ip_address:
+            ip_info["ip_display"] = mask_ip(vps.ip_address)
+            ip_info["ping_status"] = ping_ip(vps.ip_address)
+            ip_info["flag"] = ip_to_flag(vps.ip_address)
         generate_svg(vps, data, config)
     svg_url = url_for("static", filename=f"images/{name}.svg")
     if config and config.image_base_url:
@@ -334,6 +359,7 @@ def view_vps(name: str):
         vps=vps,
         data=data,
         specs=specs,
+        ip_info=ip_info,
         config=config,
         today=date.today(),
     )
