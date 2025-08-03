@@ -5,6 +5,6 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./data:/app/data
-      - ./static/images:/app/static/images
+      - "${PERSIST_DIR}/data:/app/data"
+      - "${PERSIST_DIR}/static/images:/app/static/images"
     restart: unless-stopped
