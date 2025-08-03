@@ -166,9 +166,21 @@ def ip_to_flag(ip: str) -> str:
         if not match:
             return "🏳️"
         clean_ip = match.group(0)
-        resp = requests.get(f"https://ipapi.co/{clean_ip}/country/", timeout=5)
-        code = resp.text.strip().upper()
-        if len(code) == 2 and code.isalpha():
+
+        # ipapi may return a JSON payload even for the /country/ endpoint
+        # (e.g. when rate limited).  To be more robust we explicitly request
+        # JSON and then look for a country code key.
+        resp = requests.get(f"https://ipapi.co/{clean_ip}/json/", timeout=5)
+        code = None
+        try:
+            data = resp.json()
+            code = data.get("country_code") or data.get("country")
+        except Exception:
+            text = resp.text.strip().upper()
+            if len(text) == 2 and text.isalpha():
+                code = text
+
+        if code and len(code) == 2 and code.isalpha():
             return chr(ord(code[0]) + 127397) + chr(ord(code[1]) + 127397)
     except Exception:
         pass
