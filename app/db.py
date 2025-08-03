@@ -29,6 +29,19 @@ def _run_migrations():
                         """
                     )
                 )
+        if "expiry_date" not in columns:
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE vps ADD COLUMN expiry_date DATE"))
+                # Infer the expiry date from transaction_date and renewal_days
+                conn.execute(
+                    text(
+                        """
+                        UPDATE vps
+                        SET expiry_date = DATE(transaction_date, '+' || renewal_days || ' day')
+                        WHERE expiry_date IS NULL AND transaction_date IS NOT NULL AND renewal_days IS NOT NULL
+                        """
+                    )
+                )
 
 
 _run_migrations()
