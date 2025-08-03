@@ -356,6 +356,13 @@ def vps_list():
                 ip_info["ping_status"] = ping_ip(vps.ip_address)
                 ip_info["flag"] = ip_to_flag(vps.ip_address)
             vps_data.append((vps, data, specs, ip_info))
+        status_order = {"active": 0, "sold": 1, "inactive": 2}
+        vps_data.sort(
+            key=lambda item: (
+                status_order.get(item[0].status, 3),
+                -item[1]["remaining_value"],
+            )
+        )
     return render_template("vps.html", vps_data=vps_data)
 
 
