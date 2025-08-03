@@ -12,6 +12,13 @@
         <input name="invite_code" value="{{ invite_code }}" placeholder="邀请码">
         <button type="submit">更新邀请码</button>
     </form>
+    <h2>站点配置</h2>
+    <form method="post" style="margin-bottom:20px;">
+        <input type="hidden" name="action" value="set_site_config">
+        <input name="image_base_url" value="{{ config.image_base_url if config else '' }}" placeholder="图片基础URL">
+        <input name="noodseek_id" value="{{ config.noodseek_id if config else '' }}" placeholder="Noodseek ID">
+        <button type="submit">更新配置</button>
+    </form>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr><th>ID</th><th>用户名</th><th>管理员</th><th>操作</th></tr>
         {% for user in users %}

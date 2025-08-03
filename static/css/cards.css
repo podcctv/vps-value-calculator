@@ -49,9 +49,10 @@
 
 /* 标题 */
 .vps-title {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   text-align: center;
-  color: #00eaff;
+  color: #00ff00;
+  font-weight: bold;
 }
 
 .vps-content {

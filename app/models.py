@@ -42,3 +42,11 @@ class InviteCode(Base):
 
     id = Column(Integer, primary_key=True)
     code = Column(String, default="Flanker")
+
+
+class SiteConfig(Base):
+    __tablename__ = "site_config"
+
+    id = Column(Integer, primary_key=True)
+    image_base_url = Column(String, default="")
+    noodseek_id = Column(String, default="@Flanker")

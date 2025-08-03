@@ -35,7 +35,7 @@
         {% for vps in vps_list %}
         <div class="bg-[#111111] rounded-xl border border-cyan-400 p-6 relative">
             <h2 class="text-xl text-cyan-400 mb-2">{{ vps.name }}</h2>
-            <div class="crt my-4 p-2 rounded overflow-x-auto" data-svg-url="{{ url_for('get_vps_image', name=vps.name) }}"></div>
+            <div class="crt my-4 p-2 rounded overflow-x-auto" data-svg-url="{{ url_for('static', filename='images/' ~ vps.name ~ '.svg') }}"></div>
             <div class="flex justify-between gap-2 mt-4">
                 <a href="{{ url_for('edit_vps', vps_id=vps.id) }}" class="text-sm px-3 py-1 bg-blue-500 rounded hover:bg-blue-400 text-white">✏️ 编辑</a>
                 <form method="post" action="{{ url_for('delete_vps', vps_id=vps.id) }}" onsubmit="return confirm('确定要删除这个 VPS 吗？');">
