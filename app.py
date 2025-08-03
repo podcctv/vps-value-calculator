@@ -185,6 +185,79 @@ def add_vps():
     return render_template("add_vps.html")
 
 
+@app.route("/manage")
+@login_required
+def manage_vps():
+    with Session(engine) as db:
+        vps_list = db.query(VPS).all()
+    return render_template("manage_vps.html", vps_list=vps_list)
+
+
+@app.route("/vps/<int:vps_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_vps(vps_id: int):
+    with Session(engine) as db:
+        vps = db.get(VPS, vps_id)
+        if not vps:
+            abort(404)
+        if request.method == "POST":
+            form = request.form
+            vps.name = form["name"]
+            vps.transaction_date = date.fromisoformat(form["transaction_date"])
+            vps.expiry_date = date.fromisoformat(form["expiry_date"]) if form["expiry_date"] else None
+            vps.renewal_days = int(form["renewal_days"] or 0)
+            vps.renewal_price = float(form["renewal_price"] or 0.0)
+            vps.currency = form["currency"]
+            vps.exchange_rate = float(form["exchange_rate"] or 1.0)
+            vps.vendor_name = form.get("vendor_name")
+            vps.instance_config = form.get("instance_config")
+            vps.location = form.get("location")
+            vps.purpose = form.get("purpose")
+            vps.traffic_limit = form.get("traffic_limit")
+            vps.payment_method = form.get("payment_method")
+            vps.transaction_fee = float(form.get("transaction_fee") or 0.0)
+            vps.exchange_rate_source = form.get("exchange_rate_source")
+            vps.update_cycle = int(form.get("update_cycle") or 7)
+            vps.dynamic_svg = bool(form.get("dynamic_svg"))
+            vps.status = form.get("status")
+            db.commit()
+            data = calculate_remaining(vps)
+            generate_svg(vps, data)
+            return redirect(url_for("manage_vps"))
+        vps_data = {
+            "name": vps.name,
+            "transaction_date": vps.transaction_date.isoformat(),
+            "expiry_date": vps.expiry_date.isoformat() if vps.expiry_date else "",
+            "renewal_days": vps.renewal_days,
+            "renewal_price": vps.renewal_price,
+            "currency": vps.currency,
+            "exchange_rate": vps.exchange_rate,
+            "vendor_name": vps.vendor_name,
+            "instance_config": vps.instance_config,
+            "location": vps.location,
+            "purpose": vps.purpose,
+            "traffic_limit": vps.traffic_limit,
+            "payment_method": vps.payment_method,
+            "transaction_fee": vps.transaction_fee,
+            "exchange_rate_source": vps.exchange_rate_source,
+            "dynamic_svg": vps.dynamic_svg,
+            "status": vps.status,
+            "update_cycle": vps.update_cycle,
+        }
+        return render_template("add_vps.html", vps_data=vps_data)
+
+
+@app.route("/vps/<int:vps_id>/delete", methods=["POST"])
+@login_required
+def delete_vps(vps_id: int):
+    with Session(engine) as db:
+        vps = db.get(VPS, vps_id)
+        if vps:
+            db.delete(vps)
+            db.commit()
+    return redirect(url_for("manage_vps"))
+
+
 @app.route("/")
 def index():
     return redirect(url_for("vps_list"))
