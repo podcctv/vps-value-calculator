@@ -46,8 +46,8 @@
 
 /* 卡片容器布局 */
 .card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, var(--card-width));
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
   align-items: stretch;
