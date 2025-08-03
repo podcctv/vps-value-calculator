@@ -74,14 +74,40 @@
     setInterval(updatePingStatus, 60000);
 
     document.getElementById('copyLinkBtn').addEventListener('click', function () {
-        const url = {{ svg_abs_url|tojson }};
+        const rawUrl = {{ svg_abs_url|tojson }};
+        const url = encodeURI(rawUrl);
         const text = `![image](${url})`;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('链接已复制');
-        }).catch(() => {
-            alert('复制失败，请手动复制。');
-        });
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('链接已复制');
+            }).catch(() => {
+                fallbackCopyText(text);
+            });
+        } else {
+            fallbackCopyText(text);
+        }
     });
+
+    function fallbackCopyText(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            if (document.execCommand('copy')) {
+                alert('链接已复制');
+            } else {
+                throw new Error('copy failed');
+            }
+        } catch (err) {
+            alert('复制失败，请手动复制。');
+        }
+        document.body.removeChild(textArea);
+    }
 </script>
 <footer class="py-4 text-center text-xs text-gray-400">© {{ config.copyright }}</footer>
 </body>
