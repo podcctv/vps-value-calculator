@@ -37,14 +37,31 @@
         <div class="relative p-6 rounded-xl shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300">
             <h2 class="text-2xl font-bold text-cyan-300 text-center mb-1">{{ vps.name }}</h2>
             {% if vps.vendor_name %}<h3 class="text-sm text-gray-400 text-center mb-2">{{ vps.vendor_name }}</h3>{% endif %}
-            {% if vps.expiry_date %}<p class="text-gray-400 text-center mb-4">到期时间: {{ vps.expiry_date }}</p>{% endif %}
-            <div class="crt p-4 rounded overflow-x-auto min-h-[160px] mb-4" data-svg-url="{{ url_for('get_vps_image', name=vps.name) }}"></div>
-            <button class="w-full bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-green-400 transition"
-                    data-bs-toggle="modal" data-bs-target="#svgModal"
-                    data-svg="{{ url_for('get_vps_image', name=vps.name) }}"
-                    data-name="{{ vps.name }}" data-vendor="{{ vps.vendor_name }}" data-expiry="{{ vps.expiry_date }}">
-                查看 SVG
-            </button>
+            <div class="crt p-4 rounded overflow-x-auto min-h-[160px] mb-4">
+                <div class="grid grid-cols-2 gap-x-4 text-sm">
+                    <span class="text-gray-400">交易时间</span><span>{{ vps.transaction_date }}</span>
+                    {% if vps.expiry_date %}<span class="text-gray-400">到期时间</span><span>{{ vps.expiry_date }}</span>{% endif %}
+                    {% if vps.instance_config %}<span class="text-gray-400">配置</span><span>{{ vps.instance_config }}</span>{% endif %}
+                    {% if vps.location %}<span class="text-gray-400">地区</span><span>{{ vps.location }}</span>{% endif %}
+                    {% if vps.traffic_limit %}<span class="text-gray-400">流量</span><span>{{ vps.traffic_limit }}</span>{% endif %}
+                    {% if vps.renewal_price %}<span class="text-gray-400">续费</span><span>{{ vps.renewal_price }} {{ vps.currency }}</span>{% endif %}
+                    {% if vps.payment_method %}<span class="text-gray-400">支付方式</span><span>{{ vps.payment_method }}</span>{% endif %}
+                    {% if vps.transaction_fee %}<span class="text-gray-400">手续费</span><span>{{ vps.transaction_fee }}</span>{% endif %}
+                    {% if vps.status %}<span class="text-gray-400">状态</span><span>{{ vps.status }}</span>{% endif %}
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button class="flex-1 bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-green-400 transition"
+                        data-bs-toggle="modal" data-bs-target="#svgModal"
+                        data-svg="{{ url_for('get_vps_image', name=vps.name) }}"
+                        data-name="{{ vps.name }}" data-vendor="{{ vps.vendor_name }}" data-expiry="{{ vps.expiry_date }}">
+                    查看 SVG
+                </button>
+                <button class="flex-1 bg-blue-500 hover:bg-blue-400 text-black font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-blue-400 transition copy-md-btn"
+                        data-md="![{{ vps.name }}]({{ url_for('get_vps_image', name=vps.name, _external=True) }})">
+                    复制 Markdown
+                </button>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -76,12 +93,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  document.querySelectorAll('[data-svg-url]').forEach(el => {
-    fetch(el.dataset.svgUrl)
-      .then(resp => resp.text())
-      .then(svg => el.innerHTML = svg);
-  });
-
   const svgModal = document.getElementById('svgModal');
   svgModal.addEventListener('show.bs.modal', event => {
     const button = event.relatedTarget;
@@ -102,6 +113,12 @@
     document.getElementById('copyLinkBtn').onclick = () => {
       navigator.clipboard.writeText(svgUrl);
     };
+  });
+
+  document.querySelectorAll('.copy-md-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(btn.dataset.md);
+    });
   });
 </script>
 </body>
