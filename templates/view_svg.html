@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }} - SVG 展示</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
+</head>
+<body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono flex flex-col items-center justify-center p-4">
+    <div class="w-full max-w-4xl">
+        <div class="crt p-4 rounded overflow-auto">
+            <img src="{{ svg_url }}" alt="{{ name }}" class="mx-auto">
+        </div>
+        <div class="text-center mt-4">
+            <button id="copyLinkBtn" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-4 py-2 rounded transition">复制链接</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById('copyLinkBtn').addEventListener('click', function () {
+            navigator.clipboard.writeText('{{ svg_abs_url }}').then(() => {
+                alert('链接已复制');
+            }).catch(() => {
+                alert('复制失败，请手动复制。');
+            });
+        });
+    </script>
+</body>
+</html>
+
