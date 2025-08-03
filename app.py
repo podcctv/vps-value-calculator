@@ -62,7 +62,7 @@ def init_sample():
         if db.query(VPS).count() == 0:
             sample = VPS(
                 name="demo",
-                transaction_date=date.today(),
+                purchase_date=date.today(),
                 renewal_days=30,
                 renewal_price=10.0,
                 currency="USD",
@@ -192,7 +192,7 @@ def add_vps():
         with Session(engine) as db:
             vps = VPS(
                 name=form["name"],
-                transaction_date=date.fromisoformat(form["transaction_date"]),
+                purchase_date=date.fromisoformat(form["purchase_date"]),
                 renewal_days=int(form.get("renewal_days") or 0),
                 renewal_price=float(form.get("renewal_price") or 0.0),
                 currency=form["currency"],
@@ -237,7 +237,7 @@ def edit_vps(vps_id: int):
         if request.method == "POST":
             form = request.form
             vps.name = form["name"]
-            vps.transaction_date = date.fromisoformat(form["transaction_date"])
+            vps.purchase_date = date.fromisoformat(form["purchase_date"])
             vps.renewal_days = int(form["renewal_days"] or 0)
             vps.renewal_price = float(form["renewal_price"] or 0.0)
             vps.currency = form["currency"]
@@ -261,7 +261,7 @@ def edit_vps(vps_id: int):
             return redirect(url_for("manage_vps"))
         vps_data = {
             "name": vps.name,
-            "transaction_date": vps.transaction_date.isoformat(),
+            "purchase_date": vps.purchase_date.isoformat(),
             "renewal_days": vps.renewal_days,
             "renewal_price": vps.renewal_price,
             "currency": vps.currency,

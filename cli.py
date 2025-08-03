@@ -50,12 +50,12 @@ def add_vps():
     currency = input("Currency (e.g., USD, CNY, EUR): ").strip().upper() or "USD"
     price = float(input("Renewal price: ").strip())
     cycle_days = choose_cycle()
-    transaction_date = prompt_date("Transaction date (YYYY-MM-DD, default today): ", date.today())
+    purchase_date = prompt_date("Purchase date (YYYY-MM-DD, default today): ", date.today())
     rate = fetch_rate(currency)
     with Session(engine) as db:
         vps = VPS(
             name=name,
-            transaction_date=transaction_date,
+            purchase_date=purchase_date,
             renewal_days=cycle_days,
             renewal_price=price,
             currency=currency,

@@ -29,7 +29,7 @@ def test_add_vps_with_optional_fields(client):
     vps_name = f"vps_{uuid.uuid4().hex}"
     data = {
         'name': vps_name,
-        'transaction_date': '2024-01-01',
+        'purchase_date': '2024-01-01',
         'renewal_days': '',
         'renewal_price': '',
         'currency': 'USD',

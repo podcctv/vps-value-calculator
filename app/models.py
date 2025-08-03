@@ -7,7 +7,8 @@ class VPS(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
-    transaction_date = Column(Date)
+    # purchase_date stored in 'transaction_date' column for backward compatibility
+    purchase_date = Column("transaction_date", Date)
     cycle_base_date = Column(Date)
     expiry_date = Column(Date)
     renewal_days = Column(Integer)

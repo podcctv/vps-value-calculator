@@ -41,7 +41,7 @@
       const today = new Date().toISOString().split('T')[0];
       const defaultData = {
         name: '',
-        transaction_date: today,
+        purchase_date: today,
         renewal_days: '30',
         renewal_price: '',
         currency: 'USD',
@@ -130,8 +130,8 @@
               <fieldset className="border-b border-cyan-500 pb-4 mb-4">
                 <legend className="text-lg mb-2 text-cyan-300">续费信息</legend>
                 <div className="flex flex-col">
-                  <label className="mb-1 text-cyan-200">续费日期</label>
-                  <input type="date" name="transaction_date" value={form.transaction_date} onChange={handleChange} placeholder="请选择续费时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
+                  <label className="mb-1 text-cyan-200">购买日期</label>
+                  <input type="date" name="purchase_date" value={form.purchase_date} onChange={handleChange} placeholder="请选择购买时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
                 </div>
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">续费周期</label>
@@ -193,7 +193,7 @@
                 <legend className="text-lg mb-2 text-cyan-300">系统信息</legend>
                 <div className="flex flex-col">
                   <label className="mb-1 text-cyan-200">实例配置</label>
-                  <input name="instance_config" value={form.instance_config} onChange={handleChange} placeholder="如 2核2G/30G SSD" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                  <input name="instance_config" value={form.instance_config} onChange={handleChange} placeholder="如 8C/0.5G/41G 或 8C 0.5G 41G" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
                   <label className="mb-1 text-cyan-200">所在机房</label>
