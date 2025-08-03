@@ -48,7 +48,7 @@ def _run_migrations():
             "vendor_name": "TEXT",
             "instance_config": "TEXT",
             "location": "TEXT",
-            "purpose": "TEXT",
+            "description": "TEXT",
             "traffic_limit": "TEXT",
             "payment_method": "TEXT",
             "transaction_fee": "FLOAT DEFAULT 0.0",

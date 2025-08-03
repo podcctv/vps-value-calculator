@@ -168,7 +168,7 @@ def add_vps():
                 vendor_name=form.get("vendor_name"),
                 instance_config=form.get("instance_config"),
                 location=form.get("location"),
-                purpose=form.get("purpose"),
+                description=form.get("description"),
                 traffic_limit=form.get("traffic_limit"),
                 payment_method=form.get("payment_method"),
                 transaction_fee=float(form.get("transaction_fee") or 0.0),
@@ -212,7 +212,7 @@ def edit_vps(vps_id: int):
             vps.vendor_name = form.get("vendor_name")
             vps.instance_config = form.get("instance_config")
             vps.location = form.get("location")
-            vps.purpose = form.get("purpose")
+            vps.description = form.get("description")
             vps.traffic_limit = form.get("traffic_limit")
             vps.payment_method = form.get("payment_method")
             vps.transaction_fee = float(form.get("transaction_fee") or 0.0)
@@ -235,7 +235,7 @@ def edit_vps(vps_id: int):
             "vendor_name": vps.vendor_name,
             "instance_config": vps.instance_config,
             "location": vps.location,
-            "purpose": vps.purpose,
+            "description": vps.description,
             "traffic_limit": vps.traffic_limit,
             "payment_method": vps.payment_method,
             "transaction_fee": vps.transaction_fee,
