@@ -75,8 +75,8 @@ http://your-server-ip:8280/vps/xxxx.svg
 
 ```bash
 git clone https://github.com/podcctv/vps-value-calculator.git
-chmod +x vps-value-calculator
-/vps-value-calculator/deploy.sh
+chmod +x ./vps-value-calculator/deploy.sh
+./vps-value-calculator/deploy.sh
 ```
 
 脚本会自动设置持久化目录、拉取最新代码并通过 `docker compose` 重建并启动服务。
