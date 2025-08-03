@@ -66,8 +66,19 @@ docker compose up -d
 访问示例：
 
 ```
-http://your-server-ip:8080/vps/xxxx.svg
+http://your-server-ip:8280/vps/xxxx.svg
 ```
+
+### 🚀 使用部署脚本
+
+仓库提供 `deploy.sh` 脚本实现一键部署或更新：
+
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
+脚本会自动设置持久化目录、拉取最新代码并通过 `docker compose` 重建并启动服务。
 
 ---
 
