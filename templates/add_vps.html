@@ -42,8 +42,6 @@
       const defaultData = {
         name: '',
         transaction_date: today,
-        cycle_base_date: today,
-        expiry_date: '',
         renewal_days: '30',
         renewal_price: '',
         currency: 'USD',
@@ -62,7 +60,6 @@
         ip_address: ''
       };
       const initial = { ...defaultData, ...(window.initialData || {}) };
-      if (!initial.cycle_base_date) initial.cycle_base_date = initial.transaction_date;
       const [form, setForm] = useState(initial);
       const isEdit = Boolean(window.initialData);
 
@@ -83,15 +80,7 @@
         }
       }, [form.currency, form.exchange_rate_source]);
 
-      useEffect(() => {
-        const map = { '30': 1, '90': 3, '365': 12, '1095': 36 };
-        if (form.cycle_base_date && map[form.renewal_days]) {
-          const start = new Date(form.cycle_base_date);
-          const end = new Date(start);
-          end.setMonth(start.getMonth() + map[form.renewal_days]);
-          setForm(f => ({ ...f, expiry_date: end.toISOString().split('T')[0] }));
-        }
-      }, [form.cycle_base_date, form.renewal_days]);
+      // no cycle base or expiry date fields; cycle is computed server-side
 
       const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -133,6 +122,7 @@
                   <select name="status" value={form.status} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
                     <option value="active">使用中</option>
                     <option value="sold">已转手</option>
+                    <option value="inactive">已停用</option>
                   </select>
                 </div>
               </fieldset>
@@ -200,14 +190,6 @@
                 <div className="flex flex-col">
                   <label className="mb-1 text-cyan-200">交易日期</label>
                   <input type="date" name="transaction_date" value={form.transaction_date} onChange={handleChange} placeholder="请选择交易时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">基准日期</label>
-                  <input type="date" name="cycle_base_date" value={form.cycle_base_date} onChange={handleChange} placeholder="请选择基准日" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">到期日期</label>
-                  <input type="date" name="expiry_date" value={form.expiry_date} onChange={handleChange} placeholder="请选择到期时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
               </fieldset>
 
