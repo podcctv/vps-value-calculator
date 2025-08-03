@@ -1,0 +1,30 @@
+.crt {
+  background-color: #000;
+  color: #00ff00;
+  font-family: 'Share Tech Mono', monospace;
+  box-shadow: 0 0 4px #0f0, 0 0 10px #0f0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 0, 0.05),
+    rgba(0, 255, 0, 0.05) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  animation: scanlines 1s linear infinite;
+  line-height: 1.4;
+}
+
+@keyframes scanlines {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+}
+
+.crt svg {
+  width: 100%;
+  height: auto;
+  fill: #00ff00;
+}

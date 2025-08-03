@@ -3,68 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>VPS Gallery</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cyborg/bootstrap.min.css">
-    <style>
-        body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
 </head>
-<body class="text-light">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('vps_list') }}">VPS Value</a>
-        <div class="d-flex align-items-center">
-            {% if current_user %}
-            <span class="navbar-text me-3">Hi, {{ current_user.username }}</span>
-            <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('logout') }}">Logout</a>
-            {% if current_user.is_admin %}
-            <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('manage_users') }}">Manage Users</a>
-            {% endif %}
-            {% else %}
-            <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('login') }}">Login</a>
-            <a class="btn btn-outline-light btn-sm" href="{{ url_for('register') }}">Register</a>
-            {% endif %}
-        </div>
+<body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
+<nav class="flex justify-between items-center px-6 py-4 bg-black/80 backdrop-blur shadow-lg border-b border-cyan-400">
+    <h1 class="text-3xl font-extrabold text-cyan-300 tracking-widest">
+        <a href="{{ url_for('vps_list') }}">⚡ VPS Value</a>
+    </h1>
+    <div class="flex gap-4 items-center">
+        {% if current_user %}
+        <span class="text-sm text-gray-300">Hi, {{ current_user.username }}</span>
+        <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('logout') }}">Logout</a>
+        {% if current_user.is_admin %}
+        <a class="text-sm border border-orange-400 px-3 py-1 rounded hover:bg-orange-700 transition" href="{{ url_for('manage_users') }}">Manage Users</a>
+        {% endif %}
+        {% else %}
+        <a class="text-sm border border-cyan-400 px-3 py-1 rounded hover:bg-cyan-700 transition" href="{{ url_for('login') }}">Login</a>
+        <a class="text-sm border border-orange-400 px-3 py-1 rounded hover:bg-orange-700 transition" href="{{ url_for('register') }}">Register</a>
+        {% endif %}
     </div>
 </nav>
 
-<div class="container mt-4">
-    <h1 class="mb-4 text-center">VPS Gallery</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">VPS Gallery</h1>
     {% if vps_list %}
-    <div class="row g-4">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {% for vps in vps_list %}
-        <div class="col-12 col-sm-6 col-md-4">
-            <div class="card bg-secondary text-white h-100 shadow-lg rounded-3">
-                <div class="card-body d-flex flex-column align-items-center text-center">
-                    <h5 class="card-title">{{ vps.name }}</h5>
-                    {% if vps.vendor_name %}<h6 class="card-subtitle mb-2 text-muted">{{ vps.vendor_name }}</h6>{% endif %}
-                    {% if vps.expiry_date %}<p class="card-text">Expires: {{ vps.expiry_date }}</p>{% endif %}
-                    <img src="{{ url_for('get_vps_image', name=vps.name) }}" alt="{{ vps.name }} preview" class="img-fluid mt-2 bg-light rounded p-2" style="max-height:150px;">
-                    <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#svgModal" data-svg="{{ url_for('get_vps_image', name=vps.name) }}" data-name="{{ vps.name }}" data-vendor="{{ vps.vendor_name }}" data-expiry="{{ vps.expiry_date }}">View SVG</button>
-                </div>
-            </div>
+        <div class="relative p-6 rounded-xl shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300">
+            <h2 class="text-2xl font-bold text-cyan-300 text-center mb-1">{{ vps.name }}</h2>
+            {% if vps.vendor_name %}<h3 class="text-sm text-gray-400 text-center mb-2">{{ vps.vendor_name }}</h3>{% endif %}
+            {% if vps.expiry_date %}<p class="text-gray-400 text-center mb-4">到期时间: {{ vps.expiry_date }}</p>{% endif %}
+            <div class="crt p-4 rounded overflow-x-auto min-h-[160px] mb-4" data-svg-url="{{ url_for('get_vps_image', name=vps.name) }}"></div>
+            <button class="w-full bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-green-400 transition"
+                    data-bs-toggle="modal" data-bs-target="#svgModal"
+                    data-svg="{{ url_for('get_vps_image', name=vps.name) }}"
+                    data-name="{{ vps.name }}" data-vendor="{{ vps.vendor_name }}" data-expiry="{{ vps.expiry_date }}">
+                查看 SVG
+            </button>
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <p>No VPS entries found.</p>
+    <p class="text-center">No VPS entries found.</p>
     {% endif %}
 </div>
 
-<a href="{{ url_for('add_vps') }}" class="btn btn-success rounded-circle position-fixed" style="width:60px;height:60px;font-size:30px;bottom:20px;right:20px;line-height:44px;">+</a>
+<a href="{{ url_for('add_vps') }}" class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold fixed bottom-5 right-5 w-14 h-14 flex items-center justify-center rounded-full shadow-lg shadow-cyan-300/50 transition text-3xl">+</a>
 
 <div class="modal fade" id="svgModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content bg-dark text-white">
+    <div class="modal-content bg-[#1a1a1a] text-white border border-cyan-400">
       <div class="modal-header">
         <h5 class="modal-title" id="svgModalLabel"></h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body text-center">
-        <img id="svgImage" src="" alt="SVG Preview" class="img-fluid">
-        <p class="mt-3" id="svgInfo"></p>
+      <div class="modal-body">
+        <div id="svgDisplay" class="crt p-4 rounded overflow-auto"></div>
+        <p class="mt-3 text-center" id="svgInfo"></p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="copyLinkBtn">Copy Link</button>
@@ -76,6 +74,12 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+  document.querySelectorAll('[data-svg-url]').forEach(el => {
+    fetch(el.dataset.svgUrl)
+      .then(resp => resp.text())
+      .then(svg => el.innerHTML = svg);
+  });
+
   const svgModal = document.getElementById('svgModal');
   svgModal.addEventListener('show.bs.modal', event => {
     const button = event.relatedTarget;
@@ -84,12 +88,14 @@
     const vendor = button.getAttribute('data-vendor') || '';
     const expiry = button.getAttribute('data-expiry') || '';
     const modalTitle = svgModal.querySelector('.modal-title');
-    const svgImage = document.getElementById('svgImage');
+    const svgDisplay = document.getElementById('svgDisplay');
     const info = document.getElementById('svgInfo');
     const downloadLink = document.getElementById('downloadLink');
     modalTitle.textContent = name;
-    svgImage.src = svgUrl;
-    info.textContent = `${vendor}${expiry ? ' - Expires: ' + expiry : ''}`;
+    fetch(svgUrl).then(res => res.text()).then(svg => {
+      svgDisplay.innerHTML = svg;
+    });
+    info.textContent = vendor + (expiry ? ' - Expires: ' + expiry : '');
     downloadLink.href = svgUrl;
     document.getElementById('copyLinkBtn').onclick = () => {
       navigator.clipboard.writeText(svgUrl);
