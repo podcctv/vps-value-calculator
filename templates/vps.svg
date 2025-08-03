@@ -7,8 +7,8 @@
   <text x="20" y="30" class="terminal title">{{ vps.name }}</text>
   <text x="20" y="60" class="terminal">商家: {{ vps.vendor_name or '-' }}</text>
   <text x="20" y="80" class="terminal">配置: {{ specs.cpu }}/{{ specs.memory }}/{{ specs.storage }}</text>
-  <text x="20" y="100" class="terminal">续费周期: {{ data.cycle_start }} - {{ data.cycle_end }}</text>
-  <text x="20" y="120" class="terminal">续费金额: {{ vps.renewal_price }} {{ vps.currency }} / {% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</text>
+  <text x="20" y="100" class="terminal">续费周期: {% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</text>
+  <text x="20" y="120" class="terminal">续费金额: {{ vps.renewal_price }} {{ vps.currency }}</text>
   <text x="20" y="140" class="terminal">剩余天数: {{ data.remaining_days }}</text>
   <text x="20" y="160" class="terminal">剩余价值: {{ data.remaining_value }} 元</text>
 </svg>

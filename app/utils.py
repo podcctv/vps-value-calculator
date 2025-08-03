@@ -3,6 +3,7 @@ from calendar import monthrange
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 import re
+import requests
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static" / "images"
@@ -45,8 +46,18 @@ def calculate_remaining(vps):
 
     remaining_days = max((end - today).days, 0)
     total_days = max((end - start).days, 1)
-    remaining_value = vps.renewal_price * vps.exchange_rate * remaining_days / total_days
-    total_value = vps.renewal_price * vps.exchange_rate
+    rate = vps.exchange_rate or 1.0
+    if getattr(vps, "exchange_rate_source", "") == "system":
+        try:
+            resp = requests.get(
+                f"https://open.er-api.com/v6/latest/{vps.currency}", timeout=10
+            )
+            data = resp.json()
+            rate = data.get("rates", {}).get("CNY", rate)
+        except Exception:
+            pass
+    remaining_value = vps.renewal_price * rate * remaining_days / total_days
+    total_value = vps.renewal_price * rate
     return {
         "remaining_days": remaining_days,
         "remaining_value": round(remaining_value, 2),

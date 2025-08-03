@@ -6,6 +6,12 @@
 </head>
 <body>
     <h1>用户管理</h1>
+    <h2>邀请码管理</h2>
+    <form method="post" style="margin-bottom:20px;">
+        <input type="hidden" name="action" value="set_invite_code">
+        <input name="invite_code" value="{{ invite_code }}" placeholder="邀请码">
+        <button type="submit">更新邀请码</button>
+    </form>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr><th>ID</th><th>用户名</th><th>管理员</th><th>操作</th></tr>
         {% for user in users %}

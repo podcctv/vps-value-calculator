@@ -15,7 +15,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import date
 
 from app.db import engine, Base
-from app.models import VPS, User
+from app.models import VPS, User, InviteCode
 from app.utils import calculate_remaining, generate_svg, parse_instance_config
 
 app = Flask(__name__)
@@ -69,7 +69,9 @@ def init_sample():
                 exchange_rate=1.0,
             )
             db.add(sample)
-            db.commit()
+        if db.query(InviteCode).count() == 0:
+            db.add(InviteCode(code="Flanker"))
+        db.commit()
 
 
 init_sample()
@@ -95,10 +97,16 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        invite = request.form.get("invite_code", "")
         with Session(engine) as db:
             if db.query(User).filter(User.username == username).first():
                 return "User already exists", 400
-            is_admin = db.query(User).count() == 0
+            user_count = db.query(User).count()
+            if user_count > 0:
+                code_obj = db.query(InviteCode).first()
+                if not code_obj or invite != code_obj.code:
+                    return "Invalid invitation code", 400
+            is_admin = user_count == 0
             user = User(
                 username=username,
                 password_hash=generate_password_hash(password),
@@ -137,17 +145,27 @@ def manage_users():
     with Session(engine) as db:
         if request.method == "POST":
             action = request.form.get("action")
-            user_id = int(request.form.get("user_id"))
-            user = db.get(User, user_id)
-            if user:
-                if action == "delete":
-                    db.delete(user)
-                    db.commit()
-                elif action == "toggle_admin":
-                    user.is_admin = not user.is_admin
+            if action == "set_invite_code":
+                code = request.form.get("invite_code", "")
+                obj = db.query(InviteCode).first()
+                if obj:
+                    obj.code = code
+                else:
+                    db.add(InviteCode(code=code))
+                db.commit()
+            else:
+                user_id = int(request.form.get("user_id"))
+                user = db.get(User, user_id)
+                if user:
+                    if action == "delete":
+                        db.delete(user)
+                    elif action == "toggle_admin":
+                        user.is_admin = not user.is_admin
                     db.commit()
         users = db.query(User).all()
-    return render_template("admin_users.html", users=users)
+        invite_obj = db.query(InviteCode).first()
+        invite_code = invite_obj.code if invite_obj else ""
+    return render_template("admin_users.html", users=users, invite_code=invite_code)
 
 
 @app.route("/vps/new", methods=["GET", "POST"])
