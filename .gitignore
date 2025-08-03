@@ -3,3 +3,5 @@ data/*.db
 static/images/*.svg
 __pycache__/
 *.pyc
+
+!static/images/vps_card.svg
