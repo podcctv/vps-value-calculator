@@ -9,6 +9,16 @@ TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static" / "images"
 
 env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
+TWEMOJI_BASE = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg"
+
+
+def twemoji_url(emoji: str) -> str:
+    """Return a Twemoji CDN URL for the given emoji."""
+    code_points = "-".join(f"{ord(c):x}" for c in emoji)
+    return f"{TWEMOJI_BASE}/{code_points}.svg"
+
+
+env.filters["twemoji_url"] = twemoji_url
 
 
 def add_months(dt: date, months: int) -> date:
