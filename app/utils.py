@@ -22,7 +22,7 @@ def add_months(dt: date, months: int) -> date:
 
 def calculate_remaining(vps):
     today = date.today()
-    if not vps.transaction_date or not vps.renewal_days:
+    if not vps.purchase_date or not vps.renewal_days:
         return {
             "remaining_days": 0,
             "remaining_value": 0.0,
@@ -32,7 +32,7 @@ def calculate_remaining(vps):
         }
 
     months_map = {30: 1, 90: 3, 365: 12, 1095: 36}
-    start = vps.transaction_date
+    start = vps.purchase_date
     if vps.renewal_days in months_map:
         months = months_map[vps.renewal_days]
         while add_months(start, months) <= today:
@@ -68,13 +68,13 @@ def calculate_remaining(vps):
 
 
 def parse_instance_config(config: str):
-    """Parse instance configuration like '2C2G120G' into cpu/memory/storage."""
+    """Parse instance configuration like '2C2G120G' or '8C/0.5G/41G' into cpu/memory/storage."""
     cpu = memory = storage = "-"
     if not config:
         return {"cpu": cpu, "memory": memory, "storage": storage}
 
     # Normalize and find all numbers followed by letters
-    matches = re.findall(r"(\d+)\s*([A-Za-z]+)", config)
+    matches = re.findall(r"(\d+(?:\.\d+)?)\s*([A-Za-z]+)", config)
     for value, unit in matches:
         unit = unit.lower()
         if unit.startswith("c") and cpu == "-":

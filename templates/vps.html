@@ -53,7 +53,7 @@
                 {% set ip_display = '-' %}{% if vps.ip_address %}{% set parts = vps.ip_address.split('.') %}{% set ip_display = parts[:-1]|join('.') ~ '.**' %}{% endif %}
                 <div class="vps-row"><span>IP 地址：</span><span>{{ ip_display }}</span></div>
                 <div class="vps-row"><span>续费金额：</span><span>{{ vps.renewal_price or '-' }} {{ vps.currency }}</span></div>
-                <div class="vps-row"><span>续费日期：</span><span>{{ vps.transaction_date.strftime('%Y-%m-%d') if vps.transaction_date else '-' }}</span></div>
+                <div class="vps-row"><span>购买日期：</span><span>{{ vps.purchase_date.strftime('%Y-%m-%d') if vps.purchase_date else '-' }}</span></div>
                 <div class="vps-row"><span>续费周期：</span><span>{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</span></div>
                 <div class="vps-row"><span>剩余天数：</span><span>{{ data.remaining_days }} 天</span></div>
                 <div class="vps-row"><span>剩余价值：</span><span>{{ data.remaining_value }} CNY</span></div>
