@@ -1,11 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="400" height="200">
   <style>
-    .title { font: bold 20px sans-serif; }
-    .text { font: 14px sans-serif; }
+    .terminal { fill: #00ff00; font: 14px "Courier New", monospace; }
+    .title { font-weight: bold; }
   </style>
-  <text x="20" y="30" class="title">{{ vps.name }}</text>
-  <text x="20" y="60" class="text">Transaction Date: {{ vps.transaction_date }}</text>
-  <text x="20" y="80" class="text">Expiry Date: {{ vps.expiry_date }}</text>
-  <text x="20" y="100" class="text">Remaining Days: {{ data.remaining_days }}</text>
-  <text x="20" y="120" class="text">Remaining Value: {{ data.remaining_value }} CNY</text>
+  <rect width="100%" height="100%" fill="#000" />
+  <text x="20" y="30" class="terminal title">{{ vps.name }}</text>
+  <text x="20" y="60" class="terminal">Transaction Date: {{ vps.transaction_date }}</text>
+  <text x="20" y="80" class="terminal">Expiry Date: {{ vps.expiry_date }}</text>
+  <text x="20" y="100" class="terminal">Remaining Days: {{ data.remaining_days }}</text>
+  <text x="20" y="120" class="terminal">Remaining Value: {{ data.remaining_value }} CNY</text>
 </svg>
