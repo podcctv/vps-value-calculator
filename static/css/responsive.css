@@ -41,15 +41,12 @@ body {
   }
 
   .card-container {
-    display: grid;
-    grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0 1rem;
+    justify-content: center;
   }
 
   .vps-card {
-    width: 100%;
-    max-width: 95%;
     margin: 0 auto;
     padding: 1rem;
     border-radius: 12px;
