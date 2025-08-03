@@ -13,31 +13,30 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   width: 360px;
-  height: 620px;
-  overflow-y: auto;
-  padding: 1.5rem;
+  height: 520px;
+  padding: 1rem;
   background: linear-gradient(145deg, #1f1f1f, #151515);
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 255, 170, 0.08), 0 0 0 1px rgba(0, 255, 170, 0.15);
-  border: 1px solid rgba(0, 255, 170, 0.2);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  color: inherit;
-  text-decoration: none;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #00ff66;
+  border: 1px solid rgba(0, 255, 102, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Courier New', monospace;
+  color: #00ff66;
+  cursor: pointer;
 }
 
 .vps-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 20px rgba(0, 255, 170, 0.2), 0 0 0 1px rgba(0, 255, 170, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 0 0 16px #00ff66;
 }
 
-/* 顶部状态角标 */
+/* 状态角标 */
 .status-badge {
   position: absolute;
-  top: 0.8rem;
-  left: 0.8rem;
-  padding: 0.3rem 0.6rem;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.2rem 0.5rem;
   font-size: 0.7rem;
   font-weight: bold;
   background-color: #00ffae;
@@ -48,45 +47,24 @@
   z-index: 10;
 }
 
-/* 状态颜色分类 */
-.status-badge.active {
-  background-color: #00ffae;
-}
-.status-badge.transferred {
-  background-color: #ffa500;
-}
-.status-badge.disabled {
-  background-color: #ff4d4d;
-}
-
-/* 卡片标题 */
-.vps-card h3 {
+/* 标题 */
+.vps-title {
+  font-size: 1.2rem;
+  text-align: center;
   color: #00eaff;
-  text-align: center;
-  font-size: 1.4rem;
-  margin-bottom: 0.8rem;
-  letter-spacing: 1px;
 }
 
-/* 子标题/备注 */
-.vps-card .subtitle {
-  text-align: center;
-  color: #999;
-  font-size: 0.9rem;
-  margin-bottom: 1.2rem;
+.vps-content {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-/* 内容主体：类似 CRT 风格文本框 */
-.vps-card .card-body {
-  background: radial-gradient(circle at top left, #000000 20%, #0f0f0f 100%);
-  border-radius: 10px;
-  padding: 1rem;
-  color: #00ff55;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  box-shadow: inset 0 0 10px #00ff55;
-  border: 1px solid rgba(0, 255, 170, 0.1);
-  min-height: 160px;
+.vps-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.2);
+  padding-bottom: 0.25rem;
 }
-

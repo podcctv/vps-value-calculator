@@ -1,6 +1,7 @@
 from datetime import date
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
+import re
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static" / "images"
@@ -20,11 +21,35 @@ def calculate_remaining(vps):
     remaining_days = max((vps.expiry_date - today).days, 0)
     total_days = max((vps.expiry_date - start_date).days, 1)
     remaining_value = vps.renewal_price * vps.exchange_rate * remaining_days / total_days
+    total_value = vps.renewal_price * vps.exchange_rate
     return {
         "remaining_days": remaining_days,
         "remaining_value": round(remaining_value, 2),
+        "total_value": round(total_value, 2),
         "cycle_end": vps.expiry_date,
     }
+
+
+def parse_instance_config(config: str):
+    """Parse instance configuration like '2C2G120G' into cpu/memory/storage."""
+    cpu = memory = storage = "-"
+    if not config:
+        return {"cpu": cpu, "memory": memory, "storage": storage}
+
+    # Normalize and find all numbers followed by letters
+    matches = re.findall(r"(\d+)\s*([A-Za-z]+)", config)
+    for value, unit in matches:
+        unit = unit.lower()
+        if unit.startswith("c") and cpu == "-":
+            cpu = f"{value}C"
+        elif unit.startswith("g") and memory == "-":
+            memory = f"{value}G"
+        elif unit.startswith("g") and memory != "-" and storage == "-":
+            storage = f"{value}G"
+        elif unit.startswith("t") and storage == "-":
+            storage = f"{value}T"
+
+    return {"cpu": cpu, "memory": memory, "storage": storage}
 
 
 def generate_svg(vps, data):
