@@ -1,0 +1,18 @@
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.vps-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 420px;
+  width: 360px;
+  padding: 1rem;
+  background: #1a1a1a;
+  border-radius: 12px;
+}
