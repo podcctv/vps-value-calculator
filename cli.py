@@ -1,4 +1,4 @@
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 import argparse
 import requests
 from sqlalchemy.orm import Session
@@ -51,13 +51,11 @@ def add_vps():
     price = float(input("Renewal price: ").strip())
     cycle_days = choose_cycle()
     transaction_date = prompt_date("Transaction date (YYYY-MM-DD, default today): ", date.today())
-    expiry_date = prompt_date("Expiry date (YYYY-MM-DD, blank to auto): ", transaction_date + timedelta(days=cycle_days))
     rate = fetch_rate(currency)
     with Session(engine) as db:
         vps = VPS(
             name=name,
             transaction_date=transaction_date,
-            expiry_date=expiry_date,
             renewal_days=cycle_days,
             renewal_price=price,
             currency=currency,

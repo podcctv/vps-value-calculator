@@ -30,7 +30,6 @@ def test_add_vps_with_optional_fields(client):
     data = {
         'name': vps_name,
         'transaction_date': '2024-01-01',
-        'expiry_date': '',
         'renewal_days': '',
         'renewal_price': '',
         'currency': 'USD',

@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import date, timedelta
+from calendar import monthrange
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 import re
@@ -9,24 +10,49 @@ STATIC_DIR = Path(__file__).resolve().parent.parent / "static" / "images"
 env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
 
+def add_months(dt: date, months: int) -> date:
+    """Return a date with ``months`` added, keeping day if possible."""
+    month = dt.month - 1 + months
+    year = dt.year + month // 12
+    month = month % 12 + 1
+    day = min(dt.day, monthrange(year, month)[1])
+    return date(year, month, day)
+
+
 def calculate_remaining(vps):
     today = date.today()
-    start_date = vps.cycle_base_date or vps.transaction_date
-    if not vps.expiry_date or not start_date:
+    if not vps.transaction_date or not vps.renewal_days:
         return {
             "remaining_days": 0,
             "remaining_value": 0.0,
-            "cycle_end": vps.expiry_date,
+            "total_value": 0.0,
+            "cycle_start": None,
+            "cycle_end": None,
         }
-    remaining_days = max((vps.expiry_date - today).days, 0)
-    total_days = max((vps.expiry_date - start_date).days, 1)
+
+    months_map = {30: 1, 90: 3, 365: 12, 1095: 36}
+    start = vps.transaction_date
+    if vps.renewal_days in months_map:
+        months = months_map[vps.renewal_days]
+        while add_months(start, months) <= today:
+            start = add_months(start, months)
+        end = add_months(start, months)
+    else:
+        delta = timedelta(days=vps.renewal_days)
+        while start + delta <= today:
+            start += delta
+        end = start + delta
+
+    remaining_days = max((end - today).days, 0)
+    total_days = max((end - start).days, 1)
     remaining_value = vps.renewal_price * vps.exchange_rate * remaining_days / total_days
     total_value = vps.renewal_price * vps.exchange_rate
     return {
         "remaining_days": remaining_days,
         "remaining_value": round(remaining_value, 2),
         "total_value": round(total_value, 2),
-        "cycle_end": vps.expiry_date,
+        "cycle_start": start,
+        "cycle_end": end,
     }
 
 
@@ -54,7 +80,8 @@ def parse_instance_config(config: str):
 
 def generate_svg(vps, data):
     template = env.get_template("vps.svg")
-    content = template.render(vps=vps, data=data)
+    specs = parse_instance_config(vps.instance_config)
+    content = template.render(vps=vps, data=data, specs=specs)
     STATIC_DIR.mkdir(parents=True, exist_ok=True)
     out_file = STATIC_DIR / f"{vps.name}.svg"
     out_file.write_text(content, encoding="utf-8")

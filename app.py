@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy.orm import Session
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import date, timedelta
+from datetime import date
 
 from app.db import engine, Base
 from app.models import VPS, User
@@ -63,7 +63,6 @@ def init_sample():
             sample = VPS(
                 name="demo",
                 transaction_date=date.today(),
-                expiry_date=date.today() + timedelta(days=30),
                 renewal_days=30,
                 renewal_price=10.0,
                 currency="USD",
@@ -160,8 +159,6 @@ def add_vps():
             vps = VPS(
                 name=form["name"],
                 transaction_date=date.fromisoformat(form["transaction_date"]),
-                cycle_base_date=date.fromisoformat(form["cycle_base_date"]) if form.get("cycle_base_date") else None,
-                expiry_date=date.fromisoformat(form["expiry_date"]) if form.get("expiry_date") else None,
                 renewal_days=int(form.get("renewal_days") or 0),
                 renewal_price=float(form.get("renewal_price") or 0.0),
                 currency=form["currency"],
@@ -206,8 +203,6 @@ def edit_vps(vps_id: int):
             form = request.form
             vps.name = form["name"]
             vps.transaction_date = date.fromisoformat(form["transaction_date"])
-            vps.cycle_base_date = date.fromisoformat(form["cycle_base_date"]) if form.get("cycle_base_date") else None
-            vps.expiry_date = date.fromisoformat(form["expiry_date"]) if form["expiry_date"] else None
             vps.renewal_days = int(form["renewal_days"] or 0)
             vps.renewal_price = float(form["renewal_price"] or 0.0)
             vps.currency = form["currency"]
@@ -231,8 +226,6 @@ def edit_vps(vps_id: int):
         vps_data = {
             "name": vps.name,
             "transaction_date": vps.transaction_date.isoformat(),
-            "cycle_base_date": vps.cycle_base_date.isoformat() if vps.cycle_base_date else "",
-            "expiry_date": vps.expiry_date.isoformat() if vps.expiry_date else "",
             "renewal_days": vps.renewal_days,
             "renewal_price": vps.renewal_price,
             "currency": vps.currency,
