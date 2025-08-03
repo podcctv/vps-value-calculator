@@ -187,9 +187,14 @@ def add_vps():
 
 @app.route("/")
 def index():
+    return redirect(url_for("vps_list"))
+
+
+@app.route("/vps")
+def vps_list():
     with Session(engine) as db:
         vps_list = db.query(VPS).all()
-    return render_template("index.html", vps_list=vps_list)
+    return render_template("vps.html", vps_list=vps_list)
 
 
 @app.route("/vps/<string:name>.svg")

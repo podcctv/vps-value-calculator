@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VPS Gallery</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cyborg/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('vps_list') }}">VPS Value</a>
+        <div class="d-flex">
+            {% if current_user %}
+            <span class="navbar-text me-3">Hi, {{ current_user.username }}</span>
+            <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('logout') }}">Logout</a>
+            {% if current_user.is_admin %}
+            <a class="btn btn-outline-warning btn-sm me-2" href="{{ url_for('manage_users') }}">Manage Users</a>
+            {% endif %}
+            <a class="btn btn-success btn-sm" href="{{ url_for('add_vps') }}">Add VPS</a>
+            {% else %}
+            <a class="btn btn-outline-light btn-sm me-2" href="{{ url_for('login') }}">Login</a>
+            <a class="btn btn-outline-light btn-sm" href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h1 class="mb-4">VPS Gallery</h1>
+    {% if vps_list %}
+    <div class="row">
+        {% for vps in vps_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card bg-secondary text-white h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ vps.name }}</h5>
+                    {% if vps.vendor_name %}<h6 class="card-subtitle mb-2 text-muted">{{ vps.vendor_name }}</h6>{% endif %}
+                    {% if vps.expiry_date %}<p class="card-text">Expires: {{ vps.expiry_date }}</p>{% endif %}
+                    <a href="{{ url_for('get_vps_image', name=vps.name) }}" class="btn btn-outline-light" target="_blank">View SVG</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No VPS entries found.</p>
+    {% endif %}
+</div>
+</body>
+</html>
