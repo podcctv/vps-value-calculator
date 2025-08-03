@@ -35,3 +35,10 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     password_hash = Column(String)
     is_admin = Column(Boolean, default=False)
+
+
+class InviteCode(Base):
+    __tablename__ = "invite_code"
+
+    id = Column(Integer, primary_key=True)
+    code = Column(String, default="Flanker")
