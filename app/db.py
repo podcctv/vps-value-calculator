@@ -64,6 +64,13 @@ def _run_migrations():
                 with engine.begin() as conn:
                     conn.execute(text(f"ALTER TABLE vps ADD COLUMN {column} {definition}"))
 
+    # Ensure new fields in site_config table are present
+    if "site_config" in inspector.get_table_names():
+        columns = [col["name"] for col in inspector.get_columns("site_config")]
+        if "copyright" not in columns:
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE site_config ADD COLUMN copyright TEXT"))
+
 
 _run_migrations()
 
