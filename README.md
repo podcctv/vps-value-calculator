@@ -18,6 +18,9 @@ configure invitation codes and other settings.
 # 💰 VPS 剩余价值计算器
 
 一个专为 **VPS 交易** 场景设计的可视化剩余价值计算工具。通过自动计算、图片展示与链接分享，帮助你高效管理、展示、交易 VPS 资源。
+<img width="3819" height="1589" alt="image" src="https://github.com/user-attachments/assets/6e749447-0aa8-47ff-a381-7cbe044f33b1" />
+
+
 
 ---
 
