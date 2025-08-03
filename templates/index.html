@@ -17,6 +17,9 @@
     {% endif %}
 
     <h1>VPS Value Calculator</h1>
+    {% if current_user %}
+    <p><a href="{{ url_for('add_vps') }}">Add VPS</a></p>
+    {% endif %}
     {% if vps_list %}
     <p>Available VPS images:</p>
     <ul>
