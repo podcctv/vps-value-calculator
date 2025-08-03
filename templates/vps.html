@@ -36,6 +36,15 @@
     <div class="card-container">
         {% for vps in vps_list %}
         <div class="vps-card relative shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300">
+            {% if vps.status %}
+            {% if vps.status == 'active' %}
+            <span class="status-badge bg-green-500">在使用</span>
+            {% elif vps.status == 'sold' %}
+            <span class="status-badge bg-yellow-500">已转让</span>
+            {% else %}
+            <span class="status-badge bg-gray-500">已停用</span>
+            {% endif %}
+            {% endif %}
             <h2 class="text-2xl font-bold text-cyan-300 text-center mb-1">{{ vps.name }}</h2>
             {% if vps.vendor_name %}<h3 class="text-sm text-gray-400 text-center mb-2">{{ vps.vendor_name }}</h3>{% endif %}
             <div class="crt p-4 rounded overflow-x-auto min-h-[160px] mb-4">
@@ -48,7 +57,6 @@
                     {% if vps.renewal_price %}<span class="text-gray-400">续费</span><span>{{ vps.renewal_price }} {{ vps.currency }}</span>{% endif %}
                     {% if vps.payment_method %}<span class="text-gray-400">支付方式</span><span>{{ vps.payment_method }}</span>{% endif %}
                     {% if vps.transaction_fee %}<span class="text-gray-400">手续费</span><span>{{ vps.transaction_fee }}</span>{% endif %}
-                    {% if vps.status %}<span class="text-gray-400">状态</span><span>{{ vps.status }}</span>{% endif %}
                 </div>
             </div>
             <div class="flex gap-2">
@@ -59,7 +67,7 @@
                     查看 SVG
                 </button>
                 <button class="flex-1 bg-blue-500 hover:bg-blue-400 text-black font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-blue-400 transition"
-                        onclick="copyMarkdown('{{ vps.name }}', '{{ url_for('get_vps_image', name=vps.name, _external=True) }}')">
+                        onclick="copyToClipboard('![{{ vps.name }}]({{ url_for('get_vps_image', name=vps.name, _external=True) }})')">
                     复制 Markdown
                 </button>
             </div>
@@ -112,20 +120,16 @@
     info.textContent = vendor + (expiry ? ' - 到期时间: ' + expiry : '');
     downloadLink.href = svgUrl;
     document.getElementById('copyLinkBtn').onclick = () => {
-      navigator.clipboard.writeText(svgUrl);
+      copyToClipboard(svgUrl);
     };
   });
 
-  function copyMarkdown(vpsName, imageUrl) {
-    const markdown = `![${vpsName}](${imageUrl})`;
-    navigator.clipboard.writeText(markdown)
-      .then(() => {
-        alert('\u2705 Markdown \u5df2\u590d\u5236\u5230\u526a\u8d34\u677f');
-      })
-      .catch(err => {
-        alert('\u274c \u590d\u5236\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u6743\u9650');
-        console.error(err);
-      });
+  function copyToClipboard(content) {
+    navigator.clipboard.writeText(content).then(() => {
+      alert("\u590d\u5236\u6210\u529f\uff01");
+    }).catch(() => {
+      alert("\u590d\u5236\u5931\u8d25\uff0c\u8bf7\u624b\u52a8\u590d\u5236\u3002");
+    });
   }
 </script>
 </body>
