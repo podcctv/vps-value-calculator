@@ -35,7 +35,7 @@
     {% if vps_data %}
     <div class="card-container">
         {% for vps, data in vps_data %}
-        <div class="vps-card relative shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300 cursor-pointer" data-svg="{{ url_for('get_vps_image', name=vps.name) }}" data-link="{{ url_for('get_vps_image', name=vps.name, _external=True) }}">
+        <a href="{{ url_for('view_vps', name=vps.name) }}" class="vps-card relative shadow-2xl bg-[#1a1a1a] border border-cyan-400 transition transform hover:scale-105 hover:shadow-cyan-400/40 duration-300 block">
             {% if vps.status %}
             {% if vps.status == 'active' %}
             <span class="status-badge bg-green-500">在使用</span>
@@ -46,20 +46,27 @@
             {% endif %}
             {% endif %}
             <h2 class="text-2xl font-bold text-cyan-300 text-center mb-1">{{ vps.name }}</h2>
-            {% if vps.vendor_name %}<h3 class="text-sm text-gray-400 text-center mb-2">{{ vps.vendor_name }}</h3>{% endif %}
-            <div class="crt p-4 rounded overflow-x-auto min-h-[160px] mb-4">
-                <div class="grid grid-cols-2 gap-x-4 text-sm">
-                    {% if vps.vendor_name %}<span class="text-gray-400">商家</span><span>{{ vps.vendor_name }}</span>{% endif %}
-                    <span class="text-gray-400">交易时间</span><span>{{ vps.transaction_date }}</span>
-                    {% if vps.expiry_date %}<span class="text-gray-400">到期时间</span><span>{{ vps.expiry_date }}</span>{% endif %}
-                    {% if vps.instance_config %}<span class="text-gray-400">配置</span><span>{{ vps.instance_config }}</span>{% endif %}
-                    {% if vps.traffic_limit %}<span class="text-gray-400">流量</span><span>{{ vps.traffic_limit }}</span>{% endif %}
-                    {% if vps.ip_address %}{% set parts = vps.ip_address.split('.') %}{% set masked = parts[:-1]|join('.') ~ '.***' %}<span class="text-gray-400">IP</span><span>{{ masked }}</span>{% endif %}
+            <div class="crt p-4 rounded overflow-x-auto mb-4">
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                    <span class="text-gray-400">供应商</span><span>{{ vps.vendor_name or '-' }}</span>
+                    <span class="text-gray-400">配置</span><span>{{ vps.instance_config or '-' }}</span>
+                    <span class="text-gray-400">位置</span><span>{{ vps.location or '-' }}</span>
+                    <span class="text-gray-400">流量限制</span><span>{{ vps.traffic_limit or '-' }}</span>
+                    {% set ip_display = '-' %}{% if vps.ip_address %}{% set parts = vps.ip_address.split('.') %}{% set ip_display = parts[:-1]|join('.') ~ '.**' %}{% endif %}
+                    <span class="text-gray-400">IP 地址</span><span>{{ ip_display }}</span>
+                    <span class="text-gray-400">交易时间</span><span>{{ vps.transaction_date or '-' }}</span>
+                    <span class="text-gray-400">到期时间</span><span>{{ vps.expiry_date or '-' }}</span>
+                    <span class="text-gray-400">续费金额</span><span>{{ vps.renewal_price or '-' }} {{ vps.currency }}</span>
+                    <span class="text-gray-400">支付方式</span><span>{{ vps.payment_method or '-' }}</span>
+                    <span class="text-gray-400">手续费</span><span>{{ vps.transaction_fee or '-' }} {{ vps.currency }}</span>
+                    <span class="text-gray-400">币种</span><span>{{ vps.currency or '-' }}</span>
+                    <span class="text-gray-400">续费周期</span><span>{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</span>
+                    <span class="text-gray-400">实时汇率</span><span>{{ vps.exchange_rate }}</span>
                     <span class="text-gray-400">剩余天数</span><span class="text-green-400 font-bold">{{ data.remaining_days }}</span>
                     <span class="text-gray-400">剩余价值</span><span class="text-green-400 font-bold">{{ data.remaining_value }} CNY</span>
                 </div>
             </div>
-        </div>
+        </a>
         {% endfor %}
     </div>
     {% else %}
@@ -67,31 +74,5 @@
     {% endif %}
 </div>
 
-<div id="svgModal" class="modal">
-  <div class="modal-content">
-    <button id="closeModal" class="mb-4 border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded">返回列表</button>
-    <img id="svgImage" src="" alt="SVG 展示图" class="max-w-full h-auto mb-4" />
-    <button id="copyLink" class="border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded">复制链接</button>
-  </div>
-</div>
-
-<script>
-  document.querySelectorAll('.vps-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const svgUrl = card.dataset.svg;
-      const linkUrl = card.dataset.link;
-      document.getElementById('svgImage').src = svgUrl;
-      document.getElementById('copyLink').dataset.link = linkUrl;
-      document.getElementById('svgModal').style.display = 'flex';
-    });
-  });
-  document.getElementById('closeModal').addEventListener('click', () => {
-    document.getElementById('svgModal').style.display = 'none';
-  });
-  document.getElementById('copyLink').addEventListener('click', () => {
-    const link = document.getElementById('copyLink').dataset.link;
-    navigator.clipboard.writeText(link).then(() => alert('链接已复制')).catch(() => alert('复制失败，请手动复制'));
-  });
-</script>
 </body>
 </html>

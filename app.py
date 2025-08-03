@@ -160,6 +160,7 @@ def add_vps():
             vps = VPS(
                 name=form["name"],
                 transaction_date=date.fromisoformat(form["transaction_date"]),
+                cycle_base_date=date.fromisoformat(form["cycle_base_date"]) if form.get("cycle_base_date") else None,
                 expiry_date=date.fromisoformat(form["expiry_date"]) if form.get("expiry_date") else None,
                 renewal_days=int(form.get("renewal_days") or 0),
                 renewal_price=float(form.get("renewal_price") or 0.0),
@@ -205,6 +206,7 @@ def edit_vps(vps_id: int):
             form = request.form
             vps.name = form["name"]
             vps.transaction_date = date.fromisoformat(form["transaction_date"])
+            vps.cycle_base_date = date.fromisoformat(form["cycle_base_date"]) if form.get("cycle_base_date") else None
             vps.expiry_date = date.fromisoformat(form["expiry_date"]) if form["expiry_date"] else None
             vps.renewal_days = int(form["renewal_days"] or 0)
             vps.renewal_price = float(form["renewal_price"] or 0.0)
@@ -229,6 +231,7 @@ def edit_vps(vps_id: int):
         vps_data = {
             "name": vps.name,
             "transaction_date": vps.transaction_date.isoformat(),
+            "cycle_base_date": vps.cycle_base_date.isoformat() if vps.cycle_base_date else "",
             "expiry_date": vps.expiry_date.isoformat() if vps.expiry_date else "",
             "renewal_days": vps.renewal_days,
             "renewal_price": vps.renewal_price,
@@ -282,7 +285,9 @@ def view_vps(name: str):
             abort(404)
     svg_url = url_for("get_vps_image", name=name)
     svg_abs_url = url_for("get_vps_image", name=name, _external=True)
-    return render_template("view_svg.html", name=name, svg_url=svg_url, svg_abs_url=svg_abs_url)
+    return render_template(
+        "view_svg.html", name=name, svg_url=svg_url, svg_abs_url=svg_abs_url, vps_id=vps.id
+    )
 
 
 @app.route("/vps/<string:name>.svg")

@@ -57,6 +57,7 @@ def _run_migrations():
             "update_cycle": "INTEGER DEFAULT 7",
             "dynamic_svg": "BOOLEAN DEFAULT 1",
             "status": "TEXT DEFAULT 'active'",
+            "cycle_base_date": "DATE",
         }
         for column, definition in optional_columns.items():
             if column not in columns:
