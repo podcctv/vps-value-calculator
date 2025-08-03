@@ -30,11 +30,12 @@
 
   <text x="30" y="80" class="label">商家： {{ vps.vendor_name or '-' }}</text>
   <text x="30" y="105" class="label">配置： {{ specs.cpu }} / {{ specs.memory }} / {{ specs.storage }}</text>
-  <text x="30" y="130" class="label">续费周期： {% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</text>
-  <text x="30" y="155" class="label">续费金额： {{ vps.renewal_price }} {{ vps.currency }}</text>
-  <text x="30" y="180" class="label">剩余天数： {{ data.remaining_days }}</text>
-  <text x="30" y="205" class="label">剩余价值： {{ data.remaining_value }} 元</text>
+  <text x="30" y="130" class="label">续费日期： {{ vps.transaction_date.strftime('%Y/%m/%d') if vps.transaction_date else '-' }}</text>
+  <text x="30" y="155" class="label">续费周期： {% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</text>
+  <text x="30" y="180" class="label">续费金额： {{ vps.renewal_price }} {{ vps.currency }}</text>
+  <text x="30" y="205" class="label">剩余天数： {{ data.remaining_days }}</text>
+  <text x="30" y="230" class="label">剩余价值： {{ data.remaining_value }} 元</text>
 
-  <text x="30" y="250" class="footer">更新时间：{{ today.strftime('%Y/%m/%d') }}</text>
-  <text x="30" y="270" class="footer">Noodseek ID：{{ config.noodseek_id if config else '' }}</text>
+  <text x="30" y="275" class="footer">更新时间：{{ today.strftime('%Y/%m/%d') }}</text>
+  <text x="30" y="295" class="footer">Noodseek ID：{{ config.noodseek_id if config else '' }}</text>
 </svg>
