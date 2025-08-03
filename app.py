@@ -355,8 +355,13 @@ def vps_list():
                 ip_info["ip_display"] = mask_ip(vps.ip_address)
                 ip_info["ping_status"] = ping_ip(vps.ip_address)
                 ip_info["flag"] = ip_to_flag(vps.ip_address)
-            vps_data.append((vps, data, specs, ip_info))
+        vps_data.append((vps, data, specs, ip_info))
     return render_template("vps.html", vps_data=vps_data)
+
+
+@app.route("/ping/<path:ip>")
+def ping_status(ip: str):
+    return ping_ip(ip)
 
 
 @app.route("/vps/<string:name>")

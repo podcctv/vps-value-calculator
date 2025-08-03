@@ -12,11 +12,15 @@
 </head>
 <body class="min-h-screen font-mono">
 <nav class="banner">
-    <div class="banner-title">
-        ⚡ <span>VPS</span> <span>剩余价值计算器</span>
+    <div class="banner-left">
+        <div class="banner-title">
+            ⚡ <span>VPS</span> <span>剩余价值计算器</span>
+        </div>
+        <div class="banner-stats">
+            在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
+        </div>
     </div>
     <div class="banner-subinfo">
-        在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
         {% if current_user %}
         <span>你好, {{ current_user.username }}</span>
         <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>
@@ -35,15 +39,15 @@
     <div class="svg-card">
         <h2 class="text-center text-cyan-300 text-xl mb-4 font-bold">{{ vps.name }}</h2>
         <dl class="vps-info-list">
-            <div><dt>商家：</dt><dd>{{ vps.vendor_name or '-' }}</dd></div>
-            <div><dt>配置：</dt><dd>{{ specs.cpu }} / {{ specs.memory }} / {{ specs.storage }}</dd></div>
-            <div><dt>月流量：</dt><dd>{{ vps.traffic_limit or '-' }}</dd></div>
-            <div><dt>IP 地址：</dt><dd>{{ ip_info.flag }} {{ ip_info.ip_display }} ({{ ip_info.ping_status }})</dd></div>
-            <div><dt>到期时间：</dt><dd>{{ data.cycle_end.strftime('%Y/%m/%d') if data.cycle_end else '-' }}</dd></div>
-            <div><dt>续费金额：</dt><dd>{{ vps.renewal_price or '-' }} {{ vps.currency }}</dd></div>
-            <div><dt>剩余天数：</dt><dd>{{ data.remaining_days }} 天</dd></div>
-            <div><dt>剩余价值：</dt><dd>{{ data.remaining_value }} 元</dd></div>
-            <div><dt>描述说明：</dt><dd>{{ vps.description or '-' }}</dd></div>
+            <dt>商家：</dt><dd>{{ vps.vendor_name or '-' }}</dd>
+            <dt>配置：</dt><dd>{{ specs.cpu }} / {{ specs.memory }} / {{ specs.storage }}</dd>
+            <dt>月流量：</dt><dd>{{ vps.traffic_limit or '-' }}</dd>
+            <dt>IP 地址：</dt><dd>{{ ip_info.flag }} {{ ip_info.ip_display }} (<span class="ping-status" data-ip="{{ vps.ip_address }}">{{ ip_info.ping_status }}</span>)</dd>
+            <dt>到期时间：</dt><dd>{{ data.cycle_end.strftime('%Y/%m/%d') if data.cycle_end else '-' }}</dd>
+            <dt>续费金额：</dt><dd>{{ vps.renewal_price or '-' }} {{ vps.currency }}</dd>
+            <dt>剩余天数：</dt><dd>{{ data.remaining_days }} 天</dd>
+            <dt>剩余价值：</dt><dd>{{ data.remaining_value }} 元</dd>
+            <dt>描述说明：</dt><dd>{{ vps.description or '-' }}</dd>
         </dl>
         <div class="vps-footer">
             <p>更新时间: {{ today.strftime('%Y/%m/%d') }}</p>
@@ -57,13 +61,25 @@
     </div>
 </div>
 <script>
+    function updatePingStatus() {
+        document.querySelectorAll('.ping-status').forEach(el => {
+            const ip = el.dataset.ip;
+            fetch(`/ping/${ip}`).then(r => r.text()).then(t => {
+                el.textContent = t;
+            });
+        });
+    }
+    updatePingStatus();
+    setInterval(updatePingStatus, 60000);
+
     document.getElementById('copyLinkBtn').addEventListener('click', function () {
-        const text = {{ svg_abs_url|tojson }};
+        const url = {{ svg_abs_url|tojson }};
+        const text = `![image](${url})`;
         navigator.clipboard.writeText(text).then(() => {
             alert('链接已复制');
         }).catch(() => {
             alert('复制失败，请手动复制。');
-    });
+        });
     });
 </script>
 <footer class="py-4 text-center text-xs text-gray-400">© {{ config.copyright }}</footer>
