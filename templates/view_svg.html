@@ -89,7 +89,7 @@
     setInterval(updatePingStatus, 60000);
 
     document.getElementById('copyLinkBtn').addEventListener('click', function () {
-        const rawUrl = {{ svg_abs_url|tojson }};
+        const rawUrl = encodeURI({{ svg_abs_url|tojson }});
         const vendor = {{ (vps.vendor_name or '-')|tojson }};
         const machineName = {{ vps.name|tojson }};
         const status = {{ vps.status|tojson }};
@@ -120,9 +120,9 @@
         const transferPremium = info['转让溢价'] || '1';
 
         const lines = [];
-        lines.push(`**${finalPrice} 元** 出售 **${info['商家']} ${info['配置']}** 的 **${machineName}** 机器`);
+        lines.push(`**${finalPrice}** 出售 **${info['商家']} ${info['配置']}** 的 **${machineName}** 机器`);
         lines.push('');
-        lines.push(`最终价格 = （${fixedPremium} + ${remainingValue} + ${fixedPremium} + ${pushFee} ） * ${transferPremium}`);
+        lines.push(`最终价格 = （${fixedPremium} + ${remainingValue} + ${fixedPremium} + ${pushFee} ） * ${transferPremium} = ${finalPrice}`);
         lines.push('');
 
         lines.push(`## 🟦 [${machineName}] ${vendor} - 出售信息\n`);
