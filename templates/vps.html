@@ -90,20 +90,12 @@
     });
 
     const cardWrapper = document.querySelector('.card-wrapper');
-    let scale = 0.9;
-    function applyScale() {
+    if (cardWrapper) {
+        const scale = 0.9;
         cardWrapper.style.transform = `scale(${scale})`;
         cardWrapper.style.transformOrigin = 'top left';
         cardWrapper.style.width = `${100 / scale}%`;
     }
-    applyScale();
-
-    cardWrapper.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? -0.1 : 0.1;
-        scale = Math.min(Math.max(scale + delta, 0.9), 1);
-        applyScale();
-    });
 
     function getTextWidth(text, font) {
         const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement('canvas'));
