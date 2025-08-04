@@ -66,7 +66,9 @@
         dynamic_svg: true,
         status: 'active',
         update_cycle: 1,
-        ip_address: ''
+        ip_address: '',
+        sale_percent: '0',
+        sale_fixed: '0'
       };
       const initial = { ...defaultData, ...(window.initialData || {}) };
       const [form, setForm] = useState(initial);
@@ -130,9 +132,32 @@
                   <label className="mb-1 text-cyan-200">VPS 状态</label>
                   <select name="status" value={form.status} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
                     <option value="active">使用中</option>
+                    <option value="forsale">待出售</option>
                     <option value="sold">已转手</option>
                     <option value="inactive">已停用</option>
                   </select>
+                  {form.status === 'forsale' && (
+                    <>
+                      <div className="flex flex-col mt-4">
+                        <label className="mb-1 text-cyan-200">转让溢价 (%)</label>
+                        <select name="sale_percent" value={form.sale_percent} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
+                          <option value="-50">-50%</option>
+                          <option value="-25">-25%</option>
+                          <option value="-10">-10%</option>
+                          <option value="-5">-5%</option>
+                          <option value="0">0%</option>
+                          <option value="5">+5%</option>
+                          <option value="10">+10%</option>
+                          <option value="25">+25%</option>
+                          <option value="50">+50%</option>
+                        </select>
+                      </div>
+                      <div className="flex flex-col mt-4">
+                        <label className="mb-1 text-cyan-200">固定溢价 (RMB)</label>
+                        <input type="number" step="0.01" name="sale_fixed" value={form.sale_fixed} onChange={handleChange} placeholder="如 10" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                      </div>
+                    </>
+                  )}
                 </div>
               </fieldset>
 
