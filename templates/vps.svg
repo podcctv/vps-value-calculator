@@ -26,6 +26,12 @@
   </style>
 
   <rect width="100%" height="100%" />
+  {% if vps.status == 'forsale' %}
+  <g>
+    <rect x="450" y="20" rx="6" ry="6" width="160" height="32" fill="#facc15" />
+    <text x="460" y="42" font-size="16" font-family="'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace" fill="white" font-weight="bold">待出售{% if vps.sale_method %} - {{ vps.sale_method }}{% endif %}</text>
+  </g>
+  {% endif %}
   <text x="30" y="50" class="title">{{ vps.name }}</text>
 
   <text x="30" y="90" class="label">商家</text>
