@@ -2,6 +2,8 @@ from datetime import date, timedelta
 from calendar import monthrange
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
+import base64
+from functools import lru_cache
 import re
 import requests
 
@@ -12,10 +14,23 @@ env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 TWEMOJI_BASE = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg"
 
 
+@lru_cache()
 def twemoji_url(emoji: str) -> str:
-    """Return a Twemoji CDN URL for the given emoji."""
+    """Return a data URI embedding the Twemoji SVG for ``emoji``.
+
+    Some forums block external image loads inside pasted SVGs. By
+    inlining the emoji as a base64 ``data:`` URI, the generated SVG is
+    self-contained and renders correctly when copied elsewhere.
+    """
     code_points = "-".join(f"{ord(c):x}" for c in emoji)
-    return f"{TWEMOJI_BASE}/{code_points}.svg"
+    url = f"{TWEMOJI_BASE}/{code_points}.svg"
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+        encoded = base64.b64encode(resp.content).decode("ascii")
+        return f"data:image/svg+xml;base64,{encoded}"
+    except Exception:
+        return ""
 
 
 env.filters["twemoji_url"] = twemoji_url
