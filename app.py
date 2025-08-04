@@ -24,6 +24,7 @@ from app.utils import (
     mask_ip,
     ping_ip,
     ip_to_flag,
+    ip_to_isp,
     twemoji_url,
 )
 
@@ -384,11 +385,13 @@ def vps_list():
                 "ip_display": "-",
                 "ping_status": "",
                 "flag": "",
+                "isp": "-",
             }
             if vps.ip_address:
                 ip_info["ip_display"] = mask_ip(vps.ip_address)
                 ip_info["ping_status"] = ping_ip(vps.ip_address)
                 ip_info["flag"] = ip_to_flag(vps.ip_address)
+                ip_info["isp"] = ip_to_isp(vps.ip_address)
             vps_data.append((vps, data, specs, ip_info))
         status_order = {"active": 0, "forsale": 1, "sold": 2, "inactive": 3}
         vps_data.sort(
@@ -418,11 +421,13 @@ def view_vps(name: str):
             "ip_display": "-",
             "ping_status": "",
             "flag": "",
+            "isp": "-",
         }
         if vps.ip_address:
             ip_info["ip_display"] = mask_ip(vps.ip_address)
             ip_info["ping_status"] = ping_ip(vps.ip_address)
             ip_info["flag"] = ip_to_flag(vps.ip_address)
+            ip_info["isp"] = ip_to_isp(vps.ip_address)
         generate_svg(vps, data, config)
     svg_url = url_for("static", filename=f"images/{name}.svg")
     if config and config.site_url:
