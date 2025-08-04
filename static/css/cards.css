@@ -64,9 +64,9 @@
   display: flex;
   flex-direction: column;
   width: var(--card-width);
-  max-width: var(--card-width);
-  min-height: 520px;
+  max-width: 90vw;
   height: auto;
+  max-height: 100vh;
   padding: 1rem;
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
