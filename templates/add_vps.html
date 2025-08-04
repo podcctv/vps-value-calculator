@@ -68,7 +68,10 @@
         update_cycle: 1,
         ip_address: '',
         sale_percent: '0',
-        sale_fixed: '0'
+        sale_fixed: '0',
+        sale_method: '',
+        push_fee: '0',
+        push_fee_currency: 'CNY'
       };
       const initial = { ...defaultData, ...(window.initialData || {}) };
       const [form, setForm] = useState(initial);
@@ -139,6 +142,16 @@
                   {form.status === 'forsale' && (
                     <>
                       <div className="flex flex-col mt-4">
+                        <label className="mb-1 text-cyan-200">交易方式</label>
+                        <input name="sale_method" list="sale_method_list" value={form.sale_method} onChange={handleChange} placeholder="如 PUSH" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                        <datalist id="sale_method_list">
+                          <option value="PUSH" />
+                          <option value="原邮" />
+                          <option value="改邮箱" />
+                          <option value="给ROOT" />
+                        </datalist>
+                      </div>
+                      <div className="flex flex-col mt-4">
                         <label className="mb-1 text-cyan-200">转让溢价 (%)</label>
                         <select name="sale_percent" value={form.sale_percent} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
                           <option value="-50">-50%</option>
@@ -155,6 +168,19 @@
                       <div className="flex flex-col mt-4">
                         <label className="mb-1 text-cyan-200">固定溢价 (RMB)</label>
                         <input type="number" step="0.01" name="sale_fixed" value={form.sale_fixed} onChange={handleChange} placeholder="如 10" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                      </div>
+                      <div className="flex flex-col mt-4">
+                        <label className="mb-1 text-cyan-200">Push 费用</label>
+                        <div className="flex gap-2">
+                          <input type="number" step="0.01" name="push_fee" value={form.push_fee} onChange={handleChange} placeholder="如 5" className="flex-1 bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                          <select name="push_fee_currency" value={form.push_fee_currency} onChange={handleChange} className="bg-black border border-cyan-500 rounded-md px-2 text-white focus:ring-2 focus:ring-cyan-400">
+                            <option value="USD">USD</option>
+                            <option value="CNY">CNY</option>
+                            <option value="EUR">EUR</option>
+                            <option value="JPY">JPY</option>
+                            <option value="HKD">HKD</option>
+                          </select>
+                        </div>
                       </div>
                     </>
                   )}

@@ -270,6 +270,9 @@ def add_vps():
                 status=form.get("status"),
                 sale_percent=float(form.get("sale_percent") or 0.0),
                 sale_fixed=float(form.get("sale_fixed") or 0.0),
+                sale_method=form.get("sale_method"),
+                push_fee=float(form.get("push_fee") or 0.0),
+                push_fee_currency=form.get("push_fee_currency"),
             )
             db.add(vps)
             db.commit()
@@ -317,6 +320,9 @@ def edit_vps(vps_id: int):
             vps.status = form.get("status")
             vps.sale_percent = float(form.get("sale_percent") or 0.0)
             vps.sale_fixed = float(form.get("sale_fixed") or 0.0)
+            vps.sale_method = form.get("sale_method")
+            vps.push_fee = float(form.get("push_fee") or 0.0)
+            vps.push_fee_currency = form.get("push_fee_currency")
             db.commit()
             config = db.query(SiteConfig).first()
             data = calculate_remaining(vps)
@@ -343,6 +349,9 @@ def edit_vps(vps_id: int):
             "update_cycle": vps.update_cycle,
             "sale_percent": vps.sale_percent,
             "sale_fixed": vps.sale_fixed,
+            "sale_method": vps.sale_method,
+            "push_fee": vps.push_fee,
+            "push_fee_currency": vps.push_fee_currency,
         }
         return render_template("add_vps.html", vps_data=vps_data)
 

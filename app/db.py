@@ -60,6 +60,9 @@ def _run_migrations():
             "cycle_base_date": "DATE",
             "sale_percent": "FLOAT DEFAULT 0.0",
             "sale_fixed": "FLOAT DEFAULT 0.0",
+            "sale_method": "TEXT",
+            "push_fee": "FLOAT DEFAULT 0.0",
+            "push_fee_currency": "TEXT DEFAULT 'CNY'",
         }
         for column, definition in optional_columns.items():
             if column not in columns:

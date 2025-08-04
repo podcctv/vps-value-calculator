@@ -46,7 +46,7 @@
             {% if vps.status == 'active' %}
             <span class="card-status-tag">在使用</span>
             {% elif vps.status == 'forsale' %}
-            <span class="card-status-tag">待出售</span>
+            <span class="card-status-tag">待出售{% if vps.sale_method %} - {{ vps.sale_method }}{% endif %}</span>
             {% elif vps.status == 'sold' %}
             <span class="card-status-tag">已转让</span>
             {% elif vps.status == 'inactive' %}
@@ -67,8 +67,6 @@
                 <div class="vps-row"><span>剩余天数：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_days }} 天{% else %}-{% endif %}</span></div>
                 <div class="vps-row"><span>剩余价值：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_value }} CNY{% else %}-{% endif %}</span></div>
                 {% if vps.status == 'forsale' %}
-                <div class="vps-row"><span>转让溢价：</span><span>{{ vps.sale_percent }}%</span></div>
-                <div class="vps-row"><span>固定溢价：</span><span>{{ vps.sale_fixed }} 元</span></div>
                 <div class="vps-row"><span>最终价格：</span><span>{{ data.final_price }} CNY</span></div>
                 {% endif %}
                 <div class="vps-row"><span>描述说明：</span><span>{{ vps.description or '-' }}</span></div>
@@ -95,16 +93,10 @@
         const cards = document.querySelectorAll('.vps-card');
         if (!cards.length) return;
         let maxLen = 0;
-        vendors.forEach(v => {
-            maxLen = Math.max(maxLen, v.textContent.trim().length);
+        [...vendors, ...ips, ...titles].forEach(el => {
+            maxLen = Math.max(maxLen, el.textContent.trim().length);
         });
-        ips.forEach(ip => {
-            maxLen = Math.max(maxLen, ip.textContent.trim().length + 5);
-        });
-        titles.forEach(title => {
-            maxLen = Math.max(maxLen, title.textContent.trim().length);
-        });
-        let width = Math.max(maxLen + 4, 20); // 额外留白
+        let width = Math.max(maxLen + 2, 20);
         document.documentElement.style.setProperty('--card-width', `${width}ch`);
         const banner = document.querySelector('.banner');
         const header = document.querySelector('h1');
