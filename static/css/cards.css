@@ -58,6 +58,11 @@
   box-sizing: border-box;
 }
 
+.card-wrapper {
+  transform-origin: top left;
+  width: 100%;
+}
+
 /* 单个卡片样式 */
 .vps-card {
   position: relative;

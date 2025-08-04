@@ -40,7 +40,8 @@
 <div class="container-fluid mx-auto px-4 py-8">
     <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">VPS 列表</h1>
     {% if vps_data %}
-    <div class="card-container">
+    <div class="card-wrapper">
+        <div class="card-container">
         {% for vps, data, specs, ip_info in vps_data %}
         <div class="vps-card relative {% if vps.status == 'sold' %}sold{% elif vps.status == 'inactive' %}inactive{% elif vps.status == 'forsale' %}forsale{% endif %}" data-href="{{ url_for('view_vps', name=vps.name) }}">
             {% if vps.status == 'active' %}
@@ -74,6 +75,7 @@
             </div>
         </div>
         {% endfor %}
+        </div>
     </div>
     {% else %}
     <p class="text-center">暂无 VPS 条目。</p>
@@ -85,6 +87,22 @@
         card.addEventListener('click', () => {
             window.location.href = card.dataset.href;
         });
+    });
+
+    const cardWrapper = document.querySelector('.card-wrapper');
+    let scale = 0.9;
+    function applyScale() {
+        cardWrapper.style.transform = `scale(${scale})`;
+        cardWrapper.style.transformOrigin = 'top left';
+        cardWrapper.style.width = `${100 / scale}%`;
+    }
+    applyScale();
+
+    cardWrapper.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        scale = Math.min(Math.max(scale + delta, 0.9), 1);
+        applyScale();
     });
 
     function getTextWidth(text, font) {
