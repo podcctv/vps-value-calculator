@@ -52,15 +52,16 @@
   justify-content: center;
   align-items: stretch;
   padding: 1rem;
-  width: 90%;
-  max-width: 90%;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
 .card-wrapper {
-  transform-origin: top left;
-  width: 100%;
+  width: 90%;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 /* 单个卡片样式 */

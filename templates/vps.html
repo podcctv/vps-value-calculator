@@ -89,14 +89,6 @@
         });
     });
 
-    const cardWrapper = document.querySelector('.card-wrapper');
-    if (cardWrapper) {
-        const scale = 0.9;
-        cardWrapper.style.transform = `scale(${scale})`;
-        cardWrapper.style.transformOrigin = 'top left';
-        cardWrapper.style.width = `${100 / scale}%`;
-    }
-
     function getTextWidth(text, font) {
         const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement('canvas'));
         const context = canvas.getContext('2d');
