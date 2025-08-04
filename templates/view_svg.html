@@ -51,6 +51,7 @@
             {% if vps.status == 'forsale' %}
             <div class="label">转让溢价</div><div>：</div><div>{{ vps.sale_percent }}%</div>
             <div class="label">固定溢价</div><div>：</div><div>{{ vps.sale_fixed }} 元</div>
+            <div class="label">Push 费用</div><div>：</div><div>{{ data.push_fee_cny }} 元</div>
             <div class="label">最终价格</div><div>：</div><div>{{ data.final_price }} 元</div>
             {% endif %}
             <div class="label">描述说明</div><div>：</div><div>{{ vps.description or '-' }}</div>

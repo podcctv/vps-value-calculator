@@ -29,6 +29,9 @@ class VPS(Base):
     status = Column(String, default="active")
     sale_percent = Column(Float, default=0.0)
     sale_fixed = Column(Float, default=0.0)
+    sale_method = Column(String)
+    push_fee = Column(Float, default=0.0)
+    push_fee_currency = Column(String, default="CNY")
 
 
 class User(Base):

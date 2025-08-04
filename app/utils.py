@@ -85,12 +85,26 @@ def calculate_remaining(vps):
     total_value = vps.renewal_price * rate
     sale_percent = getattr(vps, "sale_percent", 0.0) or 0.0
     sale_fixed = getattr(vps, "sale_fixed", 0.0) or 0.0
-    final_price = remaining_value * (1 + sale_percent / 100) + sale_fixed
+    push_fee = getattr(vps, "push_fee", 0.0) or 0.0
+    push_currency = getattr(vps, "push_fee_currency", "CNY") or "CNY"
+    push_rate = 1.0
+    if push_currency != "CNY":
+        try:
+            resp = requests.get(
+                f"https://open.er-api.com/v6/latest/{push_currency}", timeout=10
+            )
+            data = resp.json()
+            push_rate = data.get("rates", {}).get("CNY", push_rate)
+        except Exception:
+            pass
+    push_fee_cny = push_fee * push_rate
+    final_price = remaining_value * (1 + sale_percent / 100) + sale_fixed + push_fee_cny
     return {
         "remaining_days": remaining_days,
         "remaining_value": round(remaining_value, 2),
         "total_value": round(total_value, 2),
         "final_price": round(final_price, 2),
+        "push_fee_cny": round(push_fee_cny, 2),
         "cycle_start": start,
         "cycle_end": end,
     }
