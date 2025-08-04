@@ -84,6 +84,7 @@
     function adjustCardWidth() {
         const vendors = document.querySelectorAll('.vendor-name');
         const ips = document.querySelectorAll('.ip-address');
+        const titles = document.querySelectorAll('.vps-title');
         const cards = document.querySelectorAll('.vps-card');
         if (!cards.length) return;
         let maxLen = 0;
@@ -92,6 +93,9 @@
         });
         ips.forEach(ip => {
             maxLen = Math.max(maxLen, ip.textContent.trim().length + 5);
+        });
+        titles.forEach(title => {
+            maxLen = Math.max(maxLen, title.textContent.trim().length);
         });
         let width = Math.max(maxLen + 4, 20); // 额外留白
         document.documentElement.style.setProperty('--card-width', `${width}ch`);
