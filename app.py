@@ -24,6 +24,7 @@ from app.utils import (
     mask_ip,
     ping_ip,
     ip_to_flag,
+    twemoji_url,
 )
 
 app = Flask(__name__)
@@ -43,11 +44,7 @@ def twemoji_filter(emoji: str) -> str:
     )
 
 
-@app.template_filter("twemoji_url")
-def twemoji_url_filter(emoji: str) -> str:
-    """Return a Twemoji CDN URL for the given emoji."""
-    code_points = "-".join(f"{ord(c):x}" for c in emoji)
-    return f"{TWEMOJI_BASE}/{code_points}.svg"
+app.add_template_filter(twemoji_url, "twemoji_url")
 
 Base.metadata.create_all(bind=engine)
 
