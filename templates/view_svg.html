@@ -117,12 +117,16 @@
         const fixedPremium = info['固定溢价'] || '0';
         const remainingValue = leftInfo['剩余价值'] || info['剩余价值'] || '0';
         const pushFee = info['Push 费用'] || '0';
-        const transferPremium = info['转让溢价'] || '1';
+        const transferPercentStr = info['转让溢价'] || '0%';
+        const transferPercent = parseFloat(transferPercentStr) || 0;
+        const transferPremiumCny = (
+            (parseFloat(remainingValue) + parseFloat(pushFee)) * transferPercent / 100
+        ).toFixed(2);
 
         const lines = [];
-        lines.push(`**${finalPrice}** 出售 **${info['商家']} ${info['配置']}** 的 **${machineName}** 机器`);
+        lines.push(`[VVC一键发帖]${finalPrice} 元出售${vendor}的${machineName} ${info['配置']} ${info['月流量']} 月流量 机器`);
         lines.push('');
-        lines.push(`最终价格 = （${fixedPremium} + ${remainingValue} + ${fixedPremium} + ${pushFee} ） * ${transferPremium} = ${finalPrice}`);
+        lines.push(`最终价格 = （[转让溢价]${transferPremiumCny} 元 + [剩余价值]${remainingValue} 元 + [PUSH费用]${pushFee} 元 ） * （1+[转让溢价]${transferPercentStr}）+[固定溢价]${fixedPremium} 元 = ${finalPrice} 元`);
         lines.push('');
 
         lines.push(`## 🟦 [${machineName}] ${vendor} - 出售信息\n`);
