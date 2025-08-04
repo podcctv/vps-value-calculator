@@ -71,7 +71,7 @@
         </div>
         <div class="card-buttons">
             <a href="{{ url_for('vps_list') }}">返回列表</a>
-            <button id="copyLinkBtn">复制链接</button>
+            <button id="copyLinkBtn">复制一键发帖</button>
             <a href="{{ url_for('edit_vps', vps_id=vps_id) }}">编辑此项</a>
         </div>
     </div>
@@ -91,11 +91,29 @@
     document.getElementById('copyLinkBtn').addEventListener('click', function () {
         const rawUrl = {{ svg_abs_url|tojson }};
         const url = encodeURI(rawUrl);
-        const text = `![image](${url})`;
+
+        const vendor = {{ (vps.vendor_name or '-')|tojson }};
+        const specsText = {{ (specs.cpu + ' / ' + specs.memory + ' / ' + specs.storage)|tojson }};
+        const machineName = {{ vps.name|tojson }};
+
+        const lines = [];
+        lines.push(`出手${vendor} ${specsText}的${machineName}机器`);
+
+        document.querySelectorAll('.vps-info-grid .label').forEach(label => {
+            const value = label.nextElementSibling.nextElementSibling.textContent.trim();
+            lines.push(`${label.textContent}：${value}`);
+        });
+
+        document.querySelectorAll('.left-info div, .right-info div').forEach(div => {
+            lines.push(div.textContent.trim());
+        });
+
+        lines.push(`![image](${url})`);
+        const text = lines.join('\n');
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {
-                alert('链接已复制');
+                alert('发帖内容已复制');
             }).catch(() => {
                 fallbackCopyText(text);
             });
@@ -114,7 +132,7 @@
         textArea.select();
         try {
             if (document.execCommand('copy')) {
-                alert('链接已复制');
+                alert('发帖内容已复制');
             } else {
                 throw new Error('copy failed');
             }
