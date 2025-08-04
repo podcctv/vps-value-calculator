@@ -53,15 +53,15 @@
 
   <text x="30" y="40" class="title">demo</text>
 
-  <text x="30" y="80" class="label">
-    <tspan x="30" dy="0">商家： -</tspan>
-    <tspan x="30" dy="25">配置： - / - / -</tspan>
-    <tspan x="30" dy="25">续费周期： 每月</tspan>
-    <tspan x="30" dy="25">续费金额： 10.0 USD</tspan>
-    <tspan x="30" dy="25">剩余天数： 31</tspan>
-    <tspan x="30" dy="25">剩余价值： 72.04 元</tspan>
-  </text>
+  <text x="30" y="80" class="label">商家： -</text>
+  <text x="30" y="105" class="label">配置： - / - / -</text>
 
-  <text x="370" y="180" class="footer" text-anchor="end">更新时间：2025/08/03</text>
-  <text x="370" y="205" class="footer" text-anchor="end">Noodseek ID：@Flanker</text>
+  <text x="30" y="130" class="label">续费金额： 10.0 USD</text>
+  <text x="220" y="130" class="label">更新时间：2025/08/03</text>
+
+  <text x="30" y="155" class="label">续费周期： 每月</text>
+  <text x="220" y="155" class="label">NodeSeekID：@Flanker</text>
+
+  <text x="30" y="180" class="label">剩余天数： 31</text>
+  <text x="30" y="205" class="label">剩余价值： 72.04 元</text>
 </svg>
