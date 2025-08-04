@@ -159,7 +159,8 @@
 }
 
 .ip-address,
-.vendor-name {
+.vendor-name,
+.isp-name {
   display: inline-block;
   max-width: 100%;
   word-break: break-all;
