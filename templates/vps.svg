@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 {% if vps.status == 'forsale' %}445{% else %}340{% endif %}" width="640" height="{% if vps.status == 'forsale' %}445{% else %}340{% endif %}" style="min-width:500px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 {% if vps.status == 'forsale' %}445{% elif vps.status in ['sold', 'inactive'] %}270{% else %}340{% endif %}" width="640" height="{% if vps.status == 'forsale' %}445{% elif vps.status in ['sold', 'inactive'] %}270{% else %}340{% endif %}" style="min-width:500px;">
   <style>
     .title {
       fill: {% if vps.status in ['sold', 'inactive'] %}#6b7280{% else %}#50d0ff{% endif %};
@@ -115,6 +115,9 @@
 
   <text x="610" y="365" class="footer" text-anchor="end">更新时间: {{ today.strftime('%Y/%m/%d') }}</text>
   <text x="610" y="390" class="footer" text-anchor="end">NodeSeekID: {{ config.username if config and config.username else '' }}</text>
+  {% elif vps.status in ['sold', 'inactive'] %}
+  <text x="610" y="215" class="footer" text-anchor="end">更新时间: {{ today.strftime('%Y/%m/%d') }}</text>
+  <text x="610" y="240" class="footer" text-anchor="end">NodeSeekID: {{ config.username if config and config.username else '' }}</text>
   {% else %}
   <text x="610" y="265" class="footer" text-anchor="end">更新时间: {{ today.strftime('%Y/%m/%d') }}</text>
   <text x="610" y="290" class="footer" text-anchor="end">NodeSeekID: {{ config.username if config and config.username else '' }}</text>
