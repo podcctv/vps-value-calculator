@@ -88,27 +88,81 @@
     updatePingStatus();
     setInterval(updatePingStatus, 60000);
 
-    document.getElementById('copyLinkBtn').addEventListener('click', function () {
+    document.getElementById('copyLinkBtn').addEventListener('click', async function () {
         const rawUrl = {{ svg_abs_url|tojson }};
-        const url = encodeURI(rawUrl);
-
         const vendor = {{ (vps.vendor_name or '-')|tojson }};
         const specsText = {{ (specs.cpu + ' / ' + specs.memory + ' / ' + specs.storage)|tojson }};
         const machineName = {{ vps.name|tojson }};
+        const status = {{ vps.status|tojson }};
+
+        let svgText = '';
+        try {
+            svgText = await fetch(encodeURI(rawUrl)).then(r => r.text());
+        } catch (err) {
+            alert('获取 SVG 内容失败');
+            return;
+        }
+
+        const info = {};
+        document.querySelectorAll('.vps-info-grid .label').forEach(label => {
+            const key = label.textContent.trim();
+            const value = label.nextElementSibling.nextElementSibling.textContent.trim();
+            info[key] = value;
+        });
+
+        const leftInfo = {};
+        document.querySelectorAll('.left-info div').forEach(div => {
+            const parts = div.textContent.split('：');
+            if (parts.length === 2) leftInfo[parts[0].trim()] = parts[1].trim();
+        });
+
+        const rightInfo = {};
+        document.querySelectorAll('.right-info div').forEach(div => {
+            const parts = div.textContent.split('：');
+            if (parts.length === 2) rightInfo[parts[0].trim()] = parts[1].trim();
+        });
 
         const lines = [];
-        lines.push(`出手${vendor} ${specsText}的${machineName}机器`);
+        lines.push(`## 🟦 [${machineName}] ${vendor} - 出售信息\n`);
 
-        document.querySelectorAll('.vps-info-grid .label').forEach(label => {
-            const value = label.nextElementSibling.nextElementSibling.textContent.trim();
-            lines.push(`${label.textContent}：${value}`);
-        });
+        lines.push(`### 📌 基本信息`);
+        lines.push(`- **商家**：\`${info['商家']}\``);
+        lines.push(`- **配置**：${info['配置']}`);
+        lines.push(`- **IP 地址**：${info['IP 地址']}`);
+        lines.push(`- **在线状态**：${info['在线状态']}\n`);
 
-        document.querySelectorAll('.left-info div, .right-info div').forEach(div => {
-            lines.push(div.textContent.trim());
-        });
+        lines.push(`### 💰 出售信息`);
+        lines.push(`- **续费金额**：\`${info['续费金额']}\``);
+        lines.push(`- **到期时间**：\`${info['到期时间']}\``);
+        if (leftInfo['剩余天数']) lines.push(`- **剩余天数**：${leftInfo['剩余天数']}`);
+        if (leftInfo['剩余价值']) lines.push(`- **剩余价值**：${leftInfo['剩余价值']}`);
 
-        lines.push(`![image](${url})`);
+        if (info['转让溢价'] || info['固定溢价'] || info['Push 费用']) {
+            lines.push(`\n### 🔄 转让说明`);
+            if (info['转让溢价']) lines.push(`- **转让溢价**：\`${info['转让溢价']}\``);
+            if (info['固定溢价']) lines.push(`- **固定溢价**：\`${info['固定溢价']}\``);
+            if (info['Push 费用']) lines.push(`- **Push 费用**：\`${info['Push 费用']}\``);
+        }
+
+        const finalPrice = leftInfo['最终价格'] || info['最终价格'];
+        if (finalPrice) {
+            lines.push(`\n### 🧮 **最终价格：\`${finalPrice}\`**\n`);
+        }
+
+        const statusText = status === 'forsale' ? '待出售 - PUSH' : status;
+        lines.push(`> 🟡 状态：**${statusText}**`);
+        if (rightInfo['更新时间']) lines.push(`> 📅 更新时间：\`${rightInfo['更新时间']}\``);
+        if (rightInfo['NodeSeekID']) lines.push(`> 🆔 NodeSeek ID：\`${rightInfo['NodeSeekID']}\``);
+
+        if (info['描述说明'] && info['描述说明'] !== '-') {
+            lines.push(`\n### 📣 说明`);
+            lines.push(`- ${info['描述说明']}`);
+        }
+
+        lines.push(`\n\`\`\`svg`);
+        lines.push(svgText.trim());
+        lines.push('```');
+
         const text = lines.join('\n');
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
