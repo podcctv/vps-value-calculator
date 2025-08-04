@@ -124,9 +124,9 @@
         ).toFixed(2);
 
         const lines = [];
-        lines.push(`[VVC一键发帖]${finalPrice} 元出售${vendor}的${machineName} ${info['配置']} ${info['月流量']} 月流量 机器`);
+        lines.push(`[VVC一键发帖]${finalPrice} 出售${vendor}的${machineName} ${info['配置']} ${info['月流量']} 月流量 机器`);
         lines.push('');
-        lines.push(`最终价格 = （[转让溢价]${transferPremiumCny} 元 + [剩余价值]${remainingValue} 元 + [PUSH费用]${pushFee} 元 ） * （1+[转让溢价]${transferPercentStr}）+[固定溢价]${fixedPremium} 元 = ${finalPrice} 元`);
+        lines.push(`最终价格 = （[转让溢价]${transferPremiumCny} 元 + [剩余价值]${remainingValue} 元 + [PUSH费用]${pushFee} 元 ） * （1+[转让溢价]${transferPercentStr}）+[固定溢价]${fixedPremium} 元 = ${finalPrice} `);
         lines.push('');
 
         lines.push(`## 🟦 [${machineName}] ${vendor} - 出售信息\n`);
