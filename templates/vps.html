@@ -86,33 +86,44 @@
         });
     });
 
+    function getTextWidth(text, font) {
+        const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement('canvas'));
+        const context = canvas.getContext('2d');
+        context.font = font;
+        return context.measureText(text).width;
+    }
+
     function adjustCardWidth() {
-        const vendors = document.querySelectorAll('.vendor-name');
-        const ips = document.querySelectorAll('.ip-address');
-        const titles = document.querySelectorAll('.vps-title');
+        const elements = document.querySelectorAll('.vendor-name, .ip-address, .vps-title');
         const cards = document.querySelectorAll('.vps-card');
-        if (!cards.length) return;
-        let maxLen = 0;
-        [...vendors, ...ips, ...titles].forEach(el => {
-            maxLen = Math.max(maxLen, el.textContent.trim().length);
+        if (!cards.length || !elements.length) return;
+
+        let maxWidth = 0;
+        elements.forEach(el => {
+            const style = getComputedStyle(el);
+            const font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+            maxWidth = Math.max(maxWidth, getTextWidth(el.textContent.trim(), font));
         });
-        let width = Math.max(maxLen + 2, 20);
-        document.documentElement.style.setProperty('--card-width', `${width}ch`);
+
+        const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        let width = Math.max(maxWidth + 32, 20 * fontSize);
+        document.documentElement.style.setProperty('--card-width', `${width}px`);
+
         const banner = document.querySelector('.banner');
         const header = document.querySelector('h1');
         const bannerHeight = banner ? banner.offsetHeight : 0;
         const headerHeight = header ? header.offsetHeight : 0;
         const availableHeight = window.innerHeight - bannerHeight - headerHeight;
         let maxHeight = Math.max(...Array.from(cards).map(card => card.scrollHeight));
-        while (maxHeight > availableHeight && width < 100) {
+        while (maxHeight > availableHeight && width < 100 * fontSize) {
             const ratio = maxHeight / availableHeight;
-            width = Math.min(width * ratio, 100);
-            document.documentElement.style.setProperty('--card-width', `${width}ch`);
+            width = Math.min(width * ratio, 100 * fontSize);
+            document.documentElement.style.setProperty('--card-width', `${width}px`);
             maxHeight = Math.max(...Array.from(cards).map(card => card.scrollHeight));
         }
     }
     window.addEventListener('resize', adjustCardWidth);
-    adjustCardWidth();
+    window.addEventListener('load', adjustCardWidth);
 
     function updatePingStatus() {
         document.querySelectorAll('.ping-status').forEach(el => {
