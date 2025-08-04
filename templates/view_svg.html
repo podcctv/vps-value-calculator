@@ -88,20 +88,11 @@
     updatePingStatus();
     setInterval(updatePingStatus, 60000);
 
-    document.getElementById('copyLinkBtn').addEventListener('click', async function () {
+    document.getElementById('copyLinkBtn').addEventListener('click', function () {
         const rawUrl = {{ svg_abs_url|tojson }};
         const vendor = {{ (vps.vendor_name or '-')|tojson }};
-        const specsText = {{ (specs.cpu + ' / ' + specs.memory + ' / ' + specs.storage)|tojson }};
         const machineName = {{ vps.name|tojson }};
         const status = {{ vps.status|tojson }};
-
-        let svgText = '';
-        try {
-            svgText = await fetch(encodeURI(rawUrl)).then(r => r.text());
-        } catch (err) {
-            alert('获取 SVG 内容失败');
-            return;
-        }
 
         const info = {};
         document.querySelectorAll('.vps-info-grid .label').forEach(label => {
@@ -165,9 +156,8 @@
             lines.push(`- ${info['描述说明']}`);
         }
 
-        lines.push(`\n\`\`\`svg`);
-        lines.push(svgText.trim());
-        lines.push('```');
+        lines.push('');
+        lines.push(`![image](${rawUrl})`);
 
         const text = lines.join('\n');
 
