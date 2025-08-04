@@ -95,9 +95,14 @@
         });
         let width = Math.max(maxLen + 4, 20); // 额外留白
         document.documentElement.style.setProperty('--card-width', `${width}ch`);
+        const banner = document.querySelector('.banner');
+        const header = document.querySelector('h1');
+        const bannerHeight = banner ? banner.offsetHeight : 0;
+        const headerHeight = header ? header.offsetHeight : 0;
+        const availableHeight = window.innerHeight - bannerHeight - headerHeight;
         let maxHeight = Math.max(...Array.from(cards).map(card => card.scrollHeight));
-        while (maxHeight > window.innerHeight && width < 100) {
-            const ratio = maxHeight / window.innerHeight;
+        while (maxHeight > availableHeight && width < 100) {
+            const ratio = maxHeight / availableHeight;
             width = Math.min(width * ratio, 100);
             document.documentElement.style.setProperty('--card-width', `${width}ch`);
             maxHeight = Math.max(...Array.from(cards).map(card => card.scrollHeight));
