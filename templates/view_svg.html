@@ -122,7 +122,18 @@
             if (parts.length === 2) rightInfo[parts[0].trim()] = parts[1].trim();
         });
 
+        const finalPrice = leftInfo['最终价格'] || info['最终价格'] || '0';
+        const fixedPremium = info['固定溢价'] || '0';
+        const remainingValue = leftInfo['剩余价值'] || info['剩余价值'] || '0';
+        const pushFee = info['Push 费用'] || '0';
+        const transferPremium = info['转让溢价'] || '1';
+
         const lines = [];
+        lines.push(`**${finalPrice} 元** 出售 **${info['商家']} ${info['配置']}** 的 **${machineName}** 机器`);
+        lines.push('');
+        lines.push(`最终价格 = （${fixedPremium} + ${remainingValue} + ${fixedPremium} + ${pushFee} ） * ${transferPremium}`);
+        lines.push('');
+
         lines.push(`## 🟦 [${machineName}] ${vendor} - 出售信息\n`);
 
         lines.push(`### 📌 基本信息`);
@@ -142,11 +153,6 @@
             if (info['转让溢价']) lines.push(`- **转让溢价**：\`${info['转让溢价']}\``);
             if (info['固定溢价']) lines.push(`- **固定溢价**：\`${info['固定溢价']}\``);
             if (info['Push 费用']) lines.push(`- **Push 费用**：\`${info['Push 费用']}\``);
-        }
-
-        const finalPrice = leftInfo['最终价格'] || info['最终价格'];
-        if (finalPrice) {
-            lines.push(`\n### 🧮 **最终价格：\`${finalPrice}\`**\n`);
         }
 
         const statusText = status === 'forsale' ? '待出售 - PUSH' : status;
