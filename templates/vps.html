@@ -52,7 +52,7 @@
             {% endif %}
             <h3 class="vps-title">{{ vps.name }}</h3>
             <div class="vps-content">
-                <div class="vps-row"><span>商家：</span><span>{{ vps.vendor_name or '-' }}</span></div>
+                <div class="vps-row"><span>商家：</span><span class="vendor-name">{{ vps.vendor_name or '-' }}</span></div>
                 <div class="vps-row"><span>CPU：</span><span>{{ specs.cpu }}</span></div>
                 <div class="vps-row"><span>内存：</span><span>{{ specs.memory }}</span></div>
                 <div class="vps-row"><span>存储：</span><span>{{ specs.storage }}</span></div>
@@ -82,12 +82,12 @@
     });
 
     function adjustCardWidth() {
-        const titles = document.querySelectorAll('.vps-title');
+        const vendors = document.querySelectorAll('.vendor-name');
         const ips = document.querySelectorAll('.ip-address');
-        if (!titles.length) return;
+        if (!vendors.length && !ips.length) return;
         let maxLen = 0;
-        titles.forEach(t => {
-            maxLen = Math.max(maxLen, t.textContent.trim().length);
+        vendors.forEach(v => {
+            maxLen = Math.max(maxLen, v.textContent.trim().length);
         });
         ips.forEach(ip => {
             maxLen = Math.max(maxLen, ip.textContent.trim().length + 5);

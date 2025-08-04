@@ -153,7 +153,8 @@
   color: var(--font-color);
 }
 
-.ip-address {
+.ip-address,
+.vendor-name {
   display: inline-block;
   max-width: 100%;
   word-break: break-all;
