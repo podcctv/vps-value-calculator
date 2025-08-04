@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 {% if vps.status == 'forsale' %}445{% else %}340{% endif %}" width="640" height="{% if vps.status == 'forsale' %}445{% else %}340{% endif %}" style="min-width:500px;">
   <style>
     .title {
-      fill: #50d0ff;
+      fill: {% if vps.status in ['sold', 'inactive'] %}#6b7280{% else %}#50d0ff{% endif %};
       font-size: 22px;
       font-family: 'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace;
       font-weight: bold;
     }
     .label {
-      fill: #4afc90;
+      fill: {% if vps.status in ['sold', 'inactive'] %}#6b7280{% else %}#4afc90{% endif %};
       font-size: 16px;
       font-family: 'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace;
     }
@@ -29,6 +29,16 @@
     <rect x="450" y="20" rx="6" ry="6" width="160" height="32" fill="#facc15" />
     <text x="460" y="42" font-size="16" font-family="'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace" fill="white" font-weight="bold">待出售{% if vps.sale_method %} - {{ vps.sale_method }}{% endif %}</text>
   </g>
+  {% elif vps.status == 'sold' %}
+  <g>
+    <rect x="500" y="20" rx="6" ry="6" width="110" height="32" fill="#6b7280" />
+    <text x="510" y="42" font-size="16" font-family="'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace" fill="white" font-weight="bold">已转让</text>
+  </g>
+  {% elif vps.status == 'inactive' %}
+  <g>
+    <rect x="500" y="20" rx="6" ry="6" width="110" height="32" fill="#6b7280" />
+    <text x="510" y="42" font-size="16" font-family="'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace" fill="white" font-weight="bold">已停用</text>
+  </g>
   {% endif %}
   <text x="30" y="50" class="title">{{ vps.name }}</text>
 
@@ -45,6 +55,17 @@
   <image x="140" y="125" width="20" height="20" href="{{ ip_info.flag|twemoji_url }}" />
   <text x="170" y="140" class="label">{{ ip_info.ip_display }}</text>
 
+  {% if vps.status in ['sold', 'inactive'] %}
+  <text x="30" y="165" class="label">续费金额</text>
+  <text x="120" y="165" class="label">：</text>
+  <text x="140" y="165" class="label">{{ vps.renewal_price }} {{ vps.currency }}</text>
+
+  <text x="30" y="190" class="label">续费周期</text>
+  <text x="120" y="190" class="label">：</text>
+  <text x="140" y="190" class="label">{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</text>
+  <text x="610" y="265" class="footer" text-anchor="end">更新时间: {{ today.strftime('%Y/%m/%d') }}</text>
+  <text x="610" y="290" class="footer" text-anchor="end">NodeSeekID: {{ config.username if config and config.username else '' }}</text>
+  {% else %}
   <text x="30" y="165" class="label">在线状态</text>
   <text x="120" y="165" class="label">：</text>
   <text x="140" y="165" class="label">{{ ip_info.ping_status }}</text>
@@ -91,5 +112,6 @@
   {% else %}
   <text x="610" y="265" class="footer" text-anchor="end">更新时间: {{ today.strftime('%Y/%m/%d') }}</text>
   <text x="610" y="290" class="footer" text-anchor="end">NodeSeekID: {{ config.username if config and config.username else '' }}</text>
+  {% endif %}
   {% endif %}
 </svg>
