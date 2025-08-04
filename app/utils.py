@@ -235,6 +235,37 @@ def ip_to_flag(ip: str) -> str:
     return "🏳️"
 
 
+def ip_to_isp(ip: str) -> str:
+    """Return ISP name for IP using ip-api.com.
+
+    The input ``ip`` may include comments or emoji. Extract the first
+    IPv4 address before querying to ensure the lookup succeeds.
+    """
+    try:
+        import re
+
+        match = re.search(r"(?:\d{1,3}\.){3}\d{1,3}", ip)
+        if not match:
+            return "-"
+        clean_ip = match.group(0)
+
+        resp = requests.get(
+            f"http://ip-api.com/json/{clean_ip}?fields=isp", timeout=5
+        )
+        isp = None
+        try:
+            data = resp.json()
+            isp = data.get("isp") or data.get("org")
+        except Exception:
+            isp = resp.text.strip()
+
+        if isp:
+            return isp
+    except Exception:
+        pass
+    return "-"
+
+
 def generate_svg(vps, data, config=None):
     template = env.get_template("vps.svg")
     specs = parse_instance_config(vps.instance_config)
@@ -244,6 +275,7 @@ def generate_svg(vps, data, config=None):
         "ip_display": mask_ip(ip_raw) if ip_raw else "-",
         "ping_status": ping_ip(ip_raw) if ip_raw else "未知",
         "flag": ip_to_flag(ip_raw) if ip_raw else "🏳️",
+        "isp": ip_to_isp(ip_raw) if ip_raw else "-",
     }
     content = template.render(
         vps=vps,
