@@ -83,10 +83,14 @@ def calculate_remaining(vps):
             pass
     remaining_value = vps.renewal_price * rate * remaining_days / total_days
     total_value = vps.renewal_price * rate
+    sale_percent = getattr(vps, "sale_percent", 0.0) or 0.0
+    sale_fixed = getattr(vps, "sale_fixed", 0.0) or 0.0
+    final_price = remaining_value * (1 + sale_percent / 100) + sale_fixed
     return {
         "remaining_days": remaining_days,
         "remaining_value": round(remaining_value, 2),
         "total_value": round(total_value, 2),
+        "final_price": round(final_price, 2),
         "cycle_start": start,
         "cycle_end": end,
     }

@@ -103,6 +103,11 @@
   color: #fff;
 }
 
+.vps-card.forsale .card-status-tag {
+  background: #facc15;
+  color: #000;
+}
+
 /* 状态标签 */
 .card-status-tag {
   position: absolute;

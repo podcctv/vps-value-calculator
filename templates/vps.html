@@ -42,9 +42,11 @@
     {% if vps_data %}
     <div class="card-container">
         {% for vps, data, specs, ip_info in vps_data %}
-        <div class="vps-card relative {% if vps.status == 'sold' %}sold{% elif vps.status == 'inactive' %}inactive{% endif %}" data-href="{{ url_for('view_vps', name=vps.name) }}">
+        <div class="vps-card relative {% if vps.status == 'sold' %}sold{% elif vps.status == 'inactive' %}inactive{% elif vps.status == 'forsale' %}forsale{% endif %}" data-href="{{ url_for('view_vps', name=vps.name) }}">
             {% if vps.status == 'active' %}
             <span class="card-status-tag">在使用</span>
+            {% elif vps.status == 'forsale' %}
+            <span class="card-status-tag">待出售</span>
             {% elif vps.status == 'sold' %}
             <span class="card-status-tag">已转让</span>
             {% elif vps.status == 'inactive' %}
@@ -60,10 +62,15 @@
                 <div class="vps-row"><span>IP 地址：</span><span class="ip-address">{{ ip_info.flag|twemoji }} {{ ip_info.ip_display }}</span></div>
                 <div class="vps-row"><span>在线状态：</span><span class="ping-status" data-ip="{{ vps.ip_address }}">{{ ip_info.ping_status }}</span></div>
                 <div class="vps-row"><span>续费金额：</span><span>{{ vps.renewal_price or '-' }} {{ vps.currency }}</span></div>
-                <div class="vps-row"><span>购买日期：</span><span>{{ vps.purchase_date.strftime('%Y-%m-%d') if vps.purchase_date and vps.status == 'active' else '-' }}</span></div>
+                <div class="vps-row"><span>购买日期：</span><span>{{ vps.purchase_date.strftime('%Y-%m-%d') if vps.purchase_date and (vps.status == 'active' or vps.status == 'forsale') else '-' }}</span></div>
                 <div class="vps-row"><span>续费周期：</span><span>{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</span></div>
-                <div class="vps-row"><span>剩余天数：</span><span>{% if vps.status == 'active' %}{{ data.remaining_days }} 天{% else %}-{% endif %}</span></div>
-                <div class="vps-row"><span>剩余价值：</span><span>{% if vps.status == 'active' %}{{ data.remaining_value }} CNY{% else %}-{% endif %}</span></div>
+                <div class="vps-row"><span>剩余天数：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_days }} 天{% else %}-{% endif %}</span></div>
+                <div class="vps-row"><span>剩余价值：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_value }} CNY{% else %}-{% endif %}</span></div>
+                {% if vps.status == 'forsale' %}
+                <div class="vps-row"><span>转让溢价：</span><span>{{ vps.sale_percent }}%</span></div>
+                <div class="vps-row"><span>固定溢价：</span><span>{{ vps.sale_fixed }} 元</span></div>
+                <div class="vps-row"><span>最终价格：</span><span>{{ data.final_price }} CNY</span></div>
+                {% endif %}
                 <div class="vps-row"><span>描述说明：</span><span>{{ vps.description or '-' }}</span></div>
             </div>
         </div>

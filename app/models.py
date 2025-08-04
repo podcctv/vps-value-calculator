@@ -27,6 +27,8 @@ class VPS(Base):
     update_cycle = Column(Integer, default=7)
     dynamic_svg = Column(Boolean, default=True)
     status = Column(String, default="active")
+    sale_percent = Column(Float, default=0.0)
+    sale_fixed = Column(Float, default=0.0)
 
 
 class User(Base):

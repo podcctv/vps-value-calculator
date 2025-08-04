@@ -268,6 +268,8 @@ def add_vps():
                 update_cycle=int(form.get("update_cycle") or 7),
                 dynamic_svg=bool(form.get("dynamic_svg")),
                 status=form.get("status"),
+                sale_percent=float(form.get("sale_percent") or 0.0),
+                sale_fixed=float(form.get("sale_fixed") or 0.0),
             )
             db.add(vps)
             db.commit()
@@ -313,6 +315,8 @@ def edit_vps(vps_id: int):
             vps.update_cycle = int(form.get("update_cycle") or 7)
             vps.dynamic_svg = bool(form.get("dynamic_svg"))
             vps.status = form.get("status")
+            vps.sale_percent = float(form.get("sale_percent") or 0.0)
+            vps.sale_fixed = float(form.get("sale_fixed") or 0.0)
             db.commit()
             config = db.query(SiteConfig).first()
             data = calculate_remaining(vps)
@@ -337,6 +341,8 @@ def edit_vps(vps_id: int):
             "dynamic_svg": vps.dynamic_svg,
             "status": vps.status,
             "update_cycle": vps.update_cycle,
+            "sale_percent": vps.sale_percent,
+            "sale_fixed": vps.sale_fixed,
         }
         return render_template("add_vps.html", vps_data=vps_data)
 
@@ -375,7 +381,7 @@ def vps_list():
                 ip_info["ping_status"] = ping_ip(vps.ip_address)
                 ip_info["flag"] = ip_to_flag(vps.ip_address)
             vps_data.append((vps, data, specs, ip_info))
-        status_order = {"active": 0, "sold": 1, "inactive": 2}
+        status_order = {"active": 0, "forsale": 1, "sold": 2, "inactive": 3}
         vps_data.sort(
             key=lambda item: (
                 status_order.get(item[0].status, 3),
