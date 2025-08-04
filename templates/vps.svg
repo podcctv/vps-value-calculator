@@ -1,22 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 {% if vps.status == 'forsale' %}445{% elif vps.status in ['sold', 'inactive'] %}270{% else %}340{% endif %}" width="640" height="{% if vps.status == 'forsale' %}445{% elif vps.status in ['sold', 'inactive'] %}270{% else %}340{% endif %}" style="min-width:500px;">
+<svg id="vps-{{ vps.id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 {% if vps.status == 'forsale' %}445{% elif vps.status in ['sold', 'inactive'] %}270{% else %}340{% endif %}" width="640" height="{% if vps.status == 'forsale' %}445{% elif vps.status in ['sold', 'inactive'] %}270{% else %}340{% endif %}" style="min-width:500px;">
   <style>
-    .title {
+    #vps-{{ vps.id }} .title {
       fill: {% if vps.status in ['sold', 'inactive'] %}#6b7280{% else %}#50d0ff{% endif %};
       font-size: 22px;
       font-family: 'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace;
       font-weight: bold;
     }
-    .label {
+    #vps-{{ vps.id }} .label {
       fill: {% if vps.status in ['sold', 'inactive'] %}#6b7280{% else %}#4afc90{% endif %};
       font-size: 16px;
       font-family: 'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace;
     }
-    .footer {
+    #vps-{{ vps.id }} .footer {
       fill: #888;
       font-size: 14px;
       font-family: 'JetBrains Mono', 'Courier New', 'Noto Color Emoji', 'Segoe UI Emoji', 'Apple Color Emoji', monospace;
     }
-    .card-bg {
+    #vps-{{ vps.id }} .card-bg {
       fill: #0c0f17;
       stroke: #3cffb5;
       stroke-width: 1;
