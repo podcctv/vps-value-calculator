@@ -1,11 +1,10 @@
-<svg viewBox="0 0 400 300" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+<svg viewBox="0 0 400 240" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
   <defs>
     <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#111" />
       <stop offset="100%" stop-color="#000" />
     </linearGradient>
 
-    <!-- 亮度和光影滤镜 -->
     <filter id="spec-blur" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
       <feSpecularLighting in="blur" surfaceScale="5" specularConstant="1" specularExponent="20" lighting-color="#00ff00" result="spec">
@@ -15,7 +14,6 @@
       <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
     </filter>
 
-    <!-- 标题文字阴影 -->
     <filter id="text-shadow" color-interpolation-filters="sRGB">
       <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#00d9ff" flood-opacity="0.5" />
     </filter>
@@ -34,11 +32,6 @@
       font-size: 16px;
       font-family: 'Courier New', monospace;
     }
-    .footer {
-      fill: #888;
-      font-size: 12px;
-      font-family: 'Courier New', monospace;
-    }
     rect {
       fill: url(#bg-gradient);
       stroke: #00ff00;
@@ -53,15 +46,27 @@
 
   <text x="30" y="40" class="title">demo</text>
 
-  <text x="30" y="80" class="label">商家： -</text>
-  <text x="30" y="105" class="label">配置： - / - / -</text>
+  <text x="30" y="80" class="label">商家：</text>
+  <text x="110" y="80" class="label">-</text>
 
-  <text x="30" y="130" class="label">续费金额： 10.0 USD</text>
-  <text x="220" y="130" class="label">更新时间：2025/08/03</text>
+  <text x="30" y="105" class="label">配置：</text>
+  <text x="110" y="105" class="label">- / - / -</text>
 
-  <text x="30" y="155" class="label">续费周期： 每月</text>
-  <text x="220" y="155" class="label">NodeSeekID：@Flanker</text>
+  <text x="30" y="130" class="label">续费金额：</text>
+  <text x="110" y="130" class="label">10.0 USD</text>
 
-  <text x="30" y="180" class="label">剩余天数： 31</text>
-  <text x="30" y="205" class="label">剩余价值： 72.04 元</text>
+  <text x="220" y="130" class="label">更新时间：</text>
+  <text x="320" y="130" class="label">2025/08/03</text>
+
+  <text x="30" y="155" class="label">续费周期：</text>
+  <text x="110" y="155" class="label">每月</text>
+
+  <text x="220" y="155" class="label">NodeSeekID：</text>
+  <text x="320" y="155" class="label">@Flanker</text>
+
+  <text x="30" y="180" class="label">剩余天数：</text>
+  <text x="110" y="180" class="label">31</text>
+
+  <text x="30" y="205" class="label">剩余价值：</text>
+  <text x="110" y="205" class="label">72.04 元</text>
 </svg>
