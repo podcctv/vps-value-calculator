@@ -54,3 +54,29 @@ def test_invite_code_required(client):
     # Register second user with correct invite code
     res = client.post('/register', data={'username': username2, 'password': 'p', 'invite_code': 'Flanker'})
     assert res.status_code == 302
+
+
+def test_manage_displays_ip_without_port(client):
+    username = f"u_{uuid.uuid4().hex}"
+    res = client.post('/register', data={'username': username, 'password': 'p', 'invite_code': 'Flanker'})
+    assert res.status_code == 302
+
+    vps_name = f"vps_{uuid.uuid4().hex}"
+    data = {
+        'name': vps_name,
+        'purchase_date': '2024-01-01',
+        'renewal_days': '',
+        'renewal_price': '',
+        'currency': 'USD',
+        'exchange_rate': '',
+        'dynamic_svg': 'on',
+        'ip_address': '1.2.3.4:5678',
+    }
+    res = client.post('/vps/new', data=data)
+    assert res.status_code == 302
+
+    resp = client.get('/manage')
+    assert resp.status_code == 200
+    text = resp.get_data(as_text=True)
+    assert '1.**.**.4' in text
+    assert ':5678' not in text

@@ -289,6 +289,8 @@ def add_vps():
 def manage_vps():
     with Session(engine) as db:
         vps_list = db.query(VPS).all()
+        for vps in vps_list:
+            vps.ip_display = mask_ip(vps.ip_address) if vps.ip_address else "-"
     return render_template("manage_vps.html", vps_list=vps_list)
 
 
