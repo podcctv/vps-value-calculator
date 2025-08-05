@@ -98,7 +98,7 @@ def calculate_remaining(vps):
         except Exception:
             pass
     push_fee_cny = push_fee * push_rate
-    final_price = remaining_value * (1 + sale_percent / 100) + sale_fixed + push_fee_cny
+    final_price = (remaining_value + push_fee_cny) * (1 + sale_percent / 100) + sale_fixed
     return {
         "remaining_days": remaining_days,
         "remaining_value": round(remaining_value, 2),
