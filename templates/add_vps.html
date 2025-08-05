@@ -143,6 +143,7 @@
       if (form.purchase_date && renewalDays) {
         const purchase = new Date(form.purchase_date);
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         let start = purchase;
         let end;
         if (monthsMap[renewalDays]) {
