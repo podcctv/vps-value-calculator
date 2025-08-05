@@ -41,11 +41,17 @@
     {% if vps_list %}
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {% for vps in vps_list %}
-        <div class="bg-[#111111] rounded-xl border border-cyan-400 p-6 relative">
+        {% if config and config.site_url %}
+        {% set abs_url = config.site_url.rstrip('/') ~ '/' ~ vps.name ~ '.svg' %}
+        {% else %}
+        {% set abs_url = url_for('get_vps_image', name=vps.name, _external=True) %}
+        {% endif %}
+        <div class="bg-[#111111] rounded-xl border border-cyan-400 p-6 relative shadow-lg hover:shadow-2xl hover:border-cyan-200 transition-transform transform hover:-translate-y-1" data-abs-url="{{ abs_url }}">
             <h2 class="text-xl text-cyan-400 mb-2">{{ vps.name }}</h2>
             <p class="text-sm text-gray-300 mb-2">IP：{{ vps.ip_display }}</p>
             <div class="crt my-4 p-2 rounded overflow-x-auto" data-svg-url="{{ url_for('static', filename='images/' ~ vps.name ~ '.svg') }}"></div>
-            <div class="flex justify-between gap-2 mt-4">
+            <div class="flex flex-wrap gap-2 mt-4">
+                <button type="button" class="copy-markdown text-sm px-3 py-1 bg-green-600 rounded hover:bg-green-500 text-white">📋 复制 Markdown</button>
                 <a href="{{ url_for('edit_vps', vps_id=vps.id) }}" class="text-sm px-3 py-1 bg-blue-500 rounded hover:bg-blue-400 text-white">✏️ 编辑</a>
                 <form method="post" action="{{ url_for('delete_vps', vps_id=vps.id) }}" onsubmit="return confirm('确定要删除这个 VPS 吗？');">
                     <button type="submit" class="text-sm px-3 py-1 bg-red-600 rounded hover:bg-red-500 text-white">🗑 删除</button>
@@ -66,6 +72,44 @@
       .then(resp => resp.text())
       .then(svg => el.innerHTML = svg);
   });
+
+  document.querySelectorAll('.copy-markdown').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('[data-abs-url]');
+      const rawUrl = card.dataset.absUrl;
+      const encodedUrl = rawUrl
+        .split('/')
+        .map((seg, idx) => (idx < 3 ? seg : encodeURIComponent(seg)))
+        .join('/');
+      const markdown = `![image](${encodedUrl})`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(markdown).then(() => {
+          btn.textContent = '✅ 已复制';
+          setTimeout(() => btn.textContent = '📋 复制 Markdown', 2000);
+        }).catch(() => fallbackCopy(markdown, btn));
+      } else {
+        fallbackCopy(markdown, btn);
+      }
+    });
+  });
+
+  function fallbackCopy(text, btn) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      btn.textContent = '✅ 已复制';
+      setTimeout(() => btn.textContent = '📋 复制 Markdown', 2000);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
 </script>
 {% include 'footer.html' %}
 </body>
