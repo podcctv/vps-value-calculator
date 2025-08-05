@@ -81,7 +81,7 @@
     function updatePingStatus() {
         document.querySelectorAll('.ping-status').forEach(el => {
             const ip = el.dataset.ip;
-            fetch(`/ping/${ip}`).then(r => r.text()).then(t => {
+            fetch(`/ping/${encodeURIComponent(ip)}`).then(r => r.text()).then(t => {
                 el.textContent = t;
             });
         });

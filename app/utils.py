@@ -155,7 +155,7 @@ _ping_cache = {}
 
 
 def ping_ip(ip: str) -> str:
-    """Ping IP with simple caching and return emoji status."""
+    """Ping IP or ``ip:port`` and return emoji status with simple caching."""
     import subprocess
     import time
     import platform
@@ -168,28 +168,36 @@ def ping_ip(ip: str) -> str:
         return cached[1]
 
     status = "🔴 离线"
-    ping_exec = shutil.which("ping")
-    if ping_exec:
-        system = platform.system().lower()
-        count_arg = "-n" if system.startswith("win") else "-c"
-        timeout_arg = "-w" if system.startswith("win") else "-W"
+    if ":" in ip:
+        host, port = ip.rsplit(":", 1)
         try:
-            res = subprocess.run(
-                [ping_exec, count_arg, "1", timeout_arg, "1", ip],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            if res.returncode == 0:
-                status = "🟢 在线"
-        except Exception:
-            pass
-
-    if status == "🔴 离线":
-        try:
-            socket.create_connection((ip, 80), timeout=1).close()
+            socket.create_connection((host, int(port)), timeout=1).close()
             status = "🟢 在线"
         except Exception:
             pass
+    else:
+        ping_exec = shutil.which("ping")
+        if ping_exec:
+            system = platform.system().lower()
+            count_arg = "-n" if system.startswith("win") else "-c"
+            timeout_arg = "-w" if system.startswith("win") else "-W"
+            try:
+                res = subprocess.run(
+                    [ping_exec, count_arg, "1", timeout_arg, "1", ip],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                if res.returncode == 0:
+                    status = "🟢 在线"
+            except Exception:
+                pass
+
+        if status == "🔴 离线":
+            try:
+                socket.create_connection((ip, 80), timeout=1).close()
+                status = "🟢 在线"
+            except Exception:
+                pass
 
     _ping_cache[ip] = (now, status)
     return status
