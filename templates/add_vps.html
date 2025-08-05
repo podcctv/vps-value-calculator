@@ -163,8 +163,9 @@
         remainingValue = renewalPrice * exchangeRate * remainingDays / totalDays;
       }
       const pushFeeCny = pushFee * pushRate;
-      const transferPremium = (remainingValue + pushFeeCny) * salePercent / 100;
-      const finalPrice = remainingValue + pushFeeCny + transferPremium + saleFixed;
+      const basePrice = remainingValue + pushFeeCny;
+      const finalPrice = basePrice * (1 + salePercent / 100) + saleFixed;
+      const transferPremium = basePrice * salePercent / 100;
       const salePercentSign = salePercent >= 0 ? '+' : '-';
       const saleFixedSign = saleFixed >= 0 ? '+' : '-';
 
