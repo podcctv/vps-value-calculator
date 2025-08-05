@@ -264,8 +264,8 @@
                   <input name="traffic_limit" value={form.traffic_limit} onChange={handleChange} placeholder="如 3TB / 无限" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
                 <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">IP 地址</label>
-                  <input name="ip_address" value={form.ip_address} onChange={handleChange} placeholder="如 1.2.3.4" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
+                  <label className="mb-1 text-cyan-200">IP 地址（可含端口）</label>
+                  <input name="ip_address" value={form.ip_address} onChange={handleChange} placeholder="如 1.2.3.4 或 1.2.3.4:8080" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
                 </div>
               </fieldset>
 
