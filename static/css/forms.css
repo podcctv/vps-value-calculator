@@ -14,16 +14,13 @@ input[type="date"] {
 
 /* Premium calculation table styling */
 .price-table {
-  width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  margin: 1rem auto 0;
   font-family: "JetBrains Mono", monospace;
   text-align: center;
   background-color: #121212;
   color: #eee;
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
-  overflow-x: auto;
-  display: block;
 }
 
 .price-table th,

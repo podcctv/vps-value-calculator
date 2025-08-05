@@ -133,12 +133,14 @@
         const purchase = new Date(form.purchase_date);
         const today = new Date();
         const cycleEnd = new Date(purchase.getTime() + renewalDays * 24 * 3600 * 1000);
-        const remainingDays = Math.max(Math.ceil((cycleEnd - today) / (24 * 3600 * 1000)), 0);
+        const remainingDays = Math.max(Math.floor((cycleEnd - today) / (24 * 3600 * 1000)), 0);
         remainingValue = renewalPrice * exchangeRate * remainingDays / renewalDays;
       }
       const pushFeeCny = pushFee * pushRate;
       const transferPremium = (remainingValue + pushFeeCny) * salePercent / 100;
       const finalPrice = remainingValue + pushFeeCny + transferPremium + saleFixed;
+      const salePercentSign = salePercent >= 0 ? '+' : '-';
+      const saleFixedSign = saleFixed >= 0 ? '+' : '-';
 
       return (
         <div className="container mx-auto px-4 py-8">
@@ -242,7 +244,7 @@
                             </div>
                           </div>
                           </div>
-                          <div className="mt-6 overflow-auto">
+                          <div className="mt-6 overflow-auto flex flex-col items-center">
                             <table className="price-table">
                               <thead>
                                 <tr>
@@ -267,8 +269,8 @@
                             </table>
                             <div className="calculation-text">
                               最终价格 <span className="equal-sign">=</span> ({remainingValue.toFixed(2)} + {pushFeeCny.toFixed(2)})
-                              <span className="equal-sign">*</span> (1 + {salePercent}%)
-                              <span className="equal-sign">+</span> {saleFixed}
+                              <span className="equal-sign">*</span> (1 {salePercentSign} {Math.abs(salePercent)}%)
+                              <span className="equal-sign">{saleFixedSign}</span> {Math.abs(saleFixed)}
                               <span className="equal-sign">=</span>
                               <strong style={{ color: '#2ae39d' }}>{finalPrice.toFixed(2)}</strong>
                             </div>
