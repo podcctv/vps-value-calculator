@@ -242,31 +242,35 @@
                           </div>
                           </div>
                           <div className="mt-6 overflow-auto">
-                            <table className="w-full text-sm text-center border border-cyan-500">
+                            <table className="price-table">
                               <thead>
-                                <tr className="bg-black">
-                                  <th className="border border-cyan-500 px-2 py-1">转让溢价</th>
-                                  <th className="border border-cyan-500 px-2 py-1">剩余价值</th>
-                                  <th className="border border-cyan-500 px-2 py-1">Push费用</th>
-                                  <th className="border border-cyan-500 px-2 py-1">转让溢价%</th>
-                                  <th className="border border-cyan-500 px-2 py-1">固定溢价</th>
-                                  <th className="border border-cyan-500 px-2 py-1">最终价格</th>
+                                <tr>
+                                  <th>转让溢价</th>
+                                  <th>剩余价值</th>
+                                  <th>Push费用</th>
+                                  <th>转让溢价%</th>
+                                  <th>固定溢价</th>
+                                  <th>最终价格</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr>
-                                  <td className="border border-cyan-500 px-2 py-1">{transferPremium.toFixed(2)}</td>
-                                  <td className="border border-cyan-500 px-2 py-1">{remainingValue.toFixed(2)}</td>
-                                  <td className="border border-cyan-500 px-2 py-1">{pushFeeCny.toFixed(2)}</td>
-                                  <td className="border border-cyan-500 px-2 py-1">{salePercent}%</td>
-                                  <td className="border border-cyan-500 px-2 py-1">{saleFixed}</td>
-                                  <td className="border border-cyan-500 px-2 py-1">{finalPrice.toFixed(2)}</td>
+                                  <td>{transferPremium.toFixed(2)}</td>
+                                  <td>{remainingValue.toFixed(2)}</td>
+                                  <td>{pushFeeCny.toFixed(2)}</td>
+                                  <td>{salePercent}%</td>
+                                  <td>{saleFixed}</td>
+                                  <td className="final">{finalPrice.toFixed(2)}</td>
                                 </tr>
                               </tbody>
                             </table>
-                            <p className="text-xs text-gray-400 mt-2 text-center">
-                              最终价格 = （{remainingValue.toFixed(2)} + {pushFeeCny.toFixed(2)}） * （1 + {salePercent}%） + {saleFixed} = {finalPrice.toFixed(2)}
-                            </p>
+                            <div className="calculation-text">
+                              最终价格 <span className="equal-sign">=</span> ({remainingValue.toFixed(2)} + {pushFeeCny.toFixed(2)})
+                              <span className="equal-sign">*</span> (1 + {salePercent}%)
+                              <span className="equal-sign">+</span> {saleFixed}
+                              <span className="equal-sign">=</span>
+                              <strong style={{ color: '#2ae39d' }}>{finalPrice.toFixed(2)}</strong>
+                            </div>
                           </div>
                         </div>
                       </>
