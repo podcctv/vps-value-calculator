@@ -5,3 +5,9 @@ input[type="date"] {
   padding: 0.5rem;
   border-radius: 6px;
 }
+
+.input-full-width {
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+}
