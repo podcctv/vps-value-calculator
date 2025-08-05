@@ -90,7 +90,10 @@
     setInterval(updatePingStatus, 60000);
 
     document.getElementById('copyLinkBtn').addEventListener('click', function () {
-        const rawUrl = encodeURI({{ svg_abs_url|tojson }});
+        const encodedUrl = {{ svg_abs_url|tojson }}
+            .split('/')
+            .map((seg, idx) => (idx < 3 ? seg : encodeURIComponent(seg)))
+            .join('/');
         const vendor = {{ (vps.vendor_name or '-')|tojson }};
         const machineName = {{ vps.name|tojson }};
         const status = {{ vps.status|tojson }};
@@ -164,7 +167,7 @@
         }
 
         lines.push('');
-        lines.push(`![image](${rawUrl})`);
+        lines.push(`![image](${encodedUrl})`);
 
         const text = lines.join('\n');
 
