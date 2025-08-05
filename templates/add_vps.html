@@ -128,13 +128,39 @@
       const renewalPrice = parseFloat(form.renewal_price) || 0;
       const renewalDays = parseInt(form.renewal_days) || 0;
       const exchangeRate = parseFloat(form.exchange_rate) || 1;
+      const DAY_MS = 24 * 3600 * 1000;
+      const monthsMap = {30: 1, 90: 3, 365: 12, 1095: 36};
+      const addMonths = (date, months) => {
+        const d = new Date(date);
+        const day = d.getDate();
+        d.setMonth(d.getMonth() + months);
+        if (d.getDate() < day) {
+          d.setDate(0);
+        }
+        return d;
+      };
       let remainingValue = 0;
       if (form.purchase_date && renewalDays) {
         const purchase = new Date(form.purchase_date);
         const today = new Date();
-        const cycleEnd = new Date(purchase.getTime() + renewalDays * 24 * 3600 * 1000);
-        const remainingDays = Math.max(Math.floor((cycleEnd - today) / (24 * 3600 * 1000)), 0);
-        remainingValue = renewalPrice * exchangeRate * remainingDays / renewalDays;
+        let start = purchase;
+        let end;
+        if (monthsMap[renewalDays]) {
+          const months = monthsMap[renewalDays];
+          while (addMonths(start, months) <= today) {
+            start = addMonths(start, months);
+          }
+          end = addMonths(start, months);
+        } else {
+          const deltaMs = renewalDays * DAY_MS;
+          while (start.getTime() + deltaMs <= today.getTime()) {
+            start = new Date(start.getTime() + deltaMs);
+          }
+          end = new Date(start.getTime() + deltaMs);
+        }
+        const remainingDays = Math.max(Math.floor((end - today) / DAY_MS), 0);
+        const totalDays = Math.max(Math.floor((end - start) / DAY_MS), 1);
+        remainingValue = renewalPrice * exchangeRate * remainingDays / totalDays;
       }
       const pushFeeCny = pushFee * pushRate;
       const transferPremium = (remainingValue + pushFeeCny) * salePercent / 100;
