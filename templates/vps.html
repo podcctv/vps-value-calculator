@@ -69,7 +69,18 @@
                 <div class="vps-row"><span>剩余天数：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_days }} 天{% else %}-{% endif %}</span></div>
                 <div class="vps-row"><span>剩余价值：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_value }} CNY{% else %}-{% endif %}</span></div>
                 {% if vps.status == 'forsale' %}
-                <div class="vps-row"><span>最终价格：</span><span>{{ data.final_price }} CNY</span></div>
+                <div class="vps-row">
+                    <span>最终价格：</span>
+                    <span>
+                        {{
+                            (
+                                (data.remaining_value + data.push_fee_cny)
+                                * (1 + (vps.sale_percent or 0) / 100)
+                                + (vps.sale_fixed or 0)
+                            ) | round(2)
+                        }} CNY
+                    </span>
+                </div>
                 {% endif %}
                 <div class="vps-row"><span>描述说明：</span><span>{{ vps.description or '-' }}</span></div>
             </div>
