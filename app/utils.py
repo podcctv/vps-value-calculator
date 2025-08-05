@@ -144,11 +144,20 @@ def parse_instance_config(config: str):
 
 
 def mask_ip(ip: str) -> str:
-    """Mask the middle two octets of an IPv4 address."""
-    parts = ip.split(".")
-    if len(parts) == 4:
-        return f"{parts[0]}.**.**.{parts[3]}"
-    return ip
+    """Mask the middle two octets of an IPv4 address.
+
+    Any port information or extra text is stripped before masking so that an
+    input like ``"1.2.3.4:5678"`` will be rendered as ``"1.**.**.4"``.
+    """
+    import re
+
+    match = re.search(r"(?:\d{1,3}\.){3}\d{1,3}", ip)
+    if not match:
+        # Fallback to returning the part before a colon if no IPv4 is found
+        return ip.split(":")[0]
+    clean_ip = match.group(0)
+    parts = clean_ip.split(".")
+    return f"{parts[0]}.**.**.{parts[3]}"
 
 
 _ping_cache = {}
