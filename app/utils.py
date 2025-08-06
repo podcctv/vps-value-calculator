@@ -297,6 +297,10 @@ def ip_to_isp(ip: str) -> str:
 def generate_svg(vps, data, config=None):
     template = env.get_template("vps.svg")
     specs = parse_instance_config(vps.instance_config)
+    STATIC_DIR.mkdir(parents=True, exist_ok=True)
+    out_file = STATIC_DIR / f"{vps.name}.svg"
+    if vps.status in ["sold", "inactive"] and out_file.exists():
+        return out_file
     today = date.today()
     ip_raw = getattr(vps, "ip_address", "") or ""
     ip_info = {
@@ -313,7 +317,5 @@ def generate_svg(vps, data, config=None):
         config=config,
         ip_info=ip_info,
     )
-    STATIC_DIR.mkdir(parents=True, exist_ok=True)
-    out_file = STATIC_DIR / f"{vps.name}.svg"
     out_file.write_text(content, encoding="utf-8")
     return out_file

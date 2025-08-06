@@ -69,8 +69,8 @@
   <text x="140" y="190" class="label">{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</text>
 
   <text x="360" y="190" class="label">NodeSeekID</text>
-  <text x="450" y="190" class="label">：</text>
-  <text x="470" y="190" class="label">{{ config.username if config and config.username else '' }}</text>
+  <text x="480" y="190" class="label">：</text>
+  <text x="500" y="190" class="label">{{ config.username if config and config.username else '' }}</text>
   {% else %}
   <text x="30" y="165" class="label">在线状态</text>
   <text x="120" y="165" class="label">：</text>
