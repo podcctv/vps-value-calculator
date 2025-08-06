@@ -2,31 +2,30 @@
 
 ## 2025-08-06
 
-- Fix deploy script to show latest commit
-- Cache server status for 10 minutes
-- Avoid blocking IP lookups during VPS page load
-- Add loading animation for VPS list page
-- Serve favicon without binary file
-- perf: streamline asset loading
+- Fixed deploy script to display the latest commit hash after deployment so operators can verify the running version.
+- Introduced a 10‑minute cache for server status requests to reduce repeated network calls.
+- IP country lookups now run asynchronously during VPS page loads to prevent blocking the page render.
+- Added a spinner animation while the VPS list page fetches data, improving user feedback during loads.
+- Favicon is now generated and served dynamically, eliminating the need for a static binary icon file.
+- Streamlined asset loading by bundling and minifying resources for better performance.
 
 ## 2025-08-05
 
-- fix: correct cloudflare beacon script path
-- docs: record recent updates
-- feat: add markdown copy button
-- Fix remaining value calculation in edit form
-- Use consistent final price formula across pages
-- feat: calculate final sale price using transfer premium
-- fix: align sale calculator with backend
-- fix premium calc layout and negative sign
-- Wrap React script in raw block to avoid Jinja parsing
-- style: beautify premium calculation section
-- feat: improve sale premium UI and calculation
-- style: align sale premium inputs
-- feat: improve sale premium input and layout
-- feat: hide port in vps IP display
-- Encode special characters in copied SVG URL
-- feat: support TCP ping with optional port
+### Features
+- Added a markdown copy button for one-click sharing of generated posts.
+- Calculated the final sale price using transfer premiums and refreshed the sale premium UI and inputs.
+- Supported TCP ping with an optional port and hid port numbers in VPS IP displays.
+
+### Fixes
+- Corrected the Cloudflare beacon script path and aligned the sale calculator logic with the backend.
+- Fixed remaining value calculation in the edit form, addressed premium calculator layout issues, and resolved negative sign display.
+- Wrapped the React script in a raw block to prevent Jinja parsing and encoded special characters in copied SVG URLs.
+
+### Documentation
+- Recorded recent updates in the project documentation.
+
+### Styling
+- Beautified the premium calculation section and aligned related input fields for a consistent appearance.
 
 ## 2025-08-04
 
