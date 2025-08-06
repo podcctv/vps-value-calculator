@@ -8,6 +8,7 @@ from flask import (
     url_for,
     session,
     Response,
+    jsonify,
 )
 import base64
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -408,9 +409,6 @@ def vps_list():
             }
             if vps.ip_address:
                 ip_info["ip_display"] = mask_ip(vps.ip_address)
-                ip_info["ping_status"] = ping_ip(vps.ip_address)
-                ip_info["flag"] = ip_to_flag(vps.ip_address)
-                ip_info["isp"] = ip_to_isp(vps.ip_address)
             vps_data.append((vps, data, specs, ip_info))
         status_order = {"active": 0, "forsale": 1, "sold": 2, "inactive": 3}
         vps_data.sort(
@@ -425,6 +423,12 @@ def vps_list():
 @app.route("/ping/<path:ip>")
 def ping_status(ip: str):
     return ping_ip(ip)
+
+
+@app.route("/ipinfo/<path:ip>")
+def ip_info(ip: str):
+    """Return flag emoji and ISP name for ``ip``."""
+    return jsonify({"flag": ip_to_flag(ip), "isp": ip_to_isp(ip)})
 
 
 @app.route("/vps/<string:name>")
@@ -444,9 +448,6 @@ def view_vps(name: str):
         }
         if vps.ip_address:
             ip_info["ip_display"] = mask_ip(vps.ip_address)
-            ip_info["ping_status"] = ping_ip(vps.ip_address)
-            ip_info["flag"] = ip_to_flag(vps.ip_address)
-            ip_info["isp"] = ip_to_isp(vps.ip_address)
         generate_svg(vps, data, config)
     svg_url = url_for("static", filename=f"images/{name}.svg")
     if config and config.site_url:

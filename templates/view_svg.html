@@ -44,8 +44,8 @@
             <div class="label">商家</div><div>：</div><div>{{ vps.vendor_name or '-' }}</div>
             <div class="label">配置</div><div>：</div><div>{{ specs.cpu }} / {{ specs.memory }} / {{ specs.storage }}</div>
             <div class="label">月流量</div><div>：</div><div>{{ vps.traffic_limit or '-' }}</div>
-            <div class="label">IP 地址</div><div>：</div><div class="ip-address">{{ ip_info.flag|twemoji }} {{ ip_info.ip_display }}</div>
-            <div class="label">ISP</div><div>：</div><div>{{ ip_info.isp }}</div>
+            <div class="label">IP 地址</div><div>：</div><div class="ip-address" data-ip="{{ vps.ip_address }}"><span class="ip-flag"></span> {{ ip_info.ip_display }}</div>
+            <div class="label">ISP</div><div>：</div><div class="isp-name" data-ip="{{ vps.ip_address }}">{{ ip_info.isp }}</div>
             <div class="label">在线状态</div><div>：</div><div><span class="ping-status" data-ip="{{ vps.ip_address }}">{{ ip_info.ping_status }}</span></div>
             <div class="label">到期时间</div><div>：</div><div>{{ data.cycle_end.strftime('%Y/%m/%d') if data.cycle_end else '-' }}</div>
             <div class="label">续费金额</div><div>：</div><div>{{ vps.renewal_price or '-' }} {{ vps.currency }}</div>
@@ -78,6 +78,8 @@
     </div>
 </div>
 <script>
+    const TWEMOJI_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg';
+
     function updatePingStatus() {
         document.querySelectorAll('.ping-status').forEach(el => {
             const ip = el.dataset.ip;
@@ -86,8 +88,27 @@
             });
         });
     }
+
+    function emojiToImg(emoji) {
+        const codePoints = Array.from(emoji).map(c => c.codePointAt(0).toString(16)).join('-');
+        return `<img src="${TWEMOJI_BASE}/${codePoints}.svg" alt="${emoji}" class="twemoji" style="display:inline-block;height:1em;width:1em;vertical-align:-0.1em;">`;
+    }
+
+    function updateIpInfo() {
+        document.querySelectorAll('.ip-address').forEach(el => {
+            const ip = el.dataset.ip;
+            fetch(`/ipinfo/${encodeURIComponent(ip)}`).then(r => r.json()).then(data => {
+                const flagEl = el.querySelector('.ip-flag');
+                if (flagEl) flagEl.innerHTML = emojiToImg(data.flag);
+                const ispEl = document.querySelector(`.isp-name[data-ip="${ip}"]`);
+                if (ispEl) ispEl.textContent = data.isp;
+            });
+        });
+    }
+
     updatePingStatus();
     setInterval(updatePingStatus, 60000);
+    updateIpInfo();
 
     document.getElementById('copyLinkBtn').addEventListener('click', function () {
         const encodedUrl = {{ svg_abs_url|tojson }}
