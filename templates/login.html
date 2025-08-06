@@ -6,8 +6,10 @@
     <title>登录</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
 </head>
 <body>
+    {% include 'loading_overlay.html' %}
     <h1>登录</h1>
     <form method="post">
         <p><input name="username" placeholder="用户名"></p>

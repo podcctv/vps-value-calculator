@@ -15,9 +15,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
 </head>
 <body class="min-h-screen font-mono">
-<div id="loading-overlay">
-    <div class="loader"></div>
-</div>
+{% include 'loading_overlay.html' %}
 <nav class="banner">
     <a href="{{ url_for('vps_list') }}" class="banner-home">
         <div class="banner-title">
@@ -136,11 +134,7 @@
         }
     }
     window.addEventListener('resize', adjustCardWidth);
-    window.addEventListener('load', () => {
-        adjustCardWidth();
-        const loader = document.getElementById('loading-overlay');
-        if (loader) loader.style.display = 'none';
-    });
+    window.addEventListener('load', adjustCardWidth);
 
 </script>
 {% include 'footer.html' %}
