@@ -10,14 +10,14 @@
 </head>
 <body class="min-h-screen flex flex-col bg-gray-100">
     {% include 'loading_overlay.html' %}
-    <div class="flex-grow flex items-center justify-center">
-        <div class="w-full max-w-sm bg-white rounded shadow-md p-8">
+    <div class="flex-1 flex items-center justify-center">
+        <div class="w-full max-w-xs bg-white rounded shadow-md p-8">
             <h1 class="text-2xl font-bold mb-6 text-center">注册</h1>
             <form method="post" class="space-y-4">
-                <input name="username" placeholder="用户名" class="w-full px-3 py-2 border rounded" />
-                <input type="password" name="password" placeholder="密码" class="w-full px-3 py-2 border rounded" />
-                <input name="invite_code" placeholder="邀请码" class="w-full px-3 py-2 border rounded" />
-                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded">注册</button>
+                <input name="username" placeholder="用户名" class="block w-64 mx-auto px-3 py-2 border rounded" />
+                <input type="password" name="password" placeholder="密码" class="block w-64 mx-auto px-3 py-2 border rounded" />
+                <input name="invite_code" placeholder="邀请码" class="block w-64 mx-auto px-3 py-2 border rounded" />
+                <button type="submit" class="block w-64 mx-auto bg-green-500 hover:bg-green-600 text-white py-2 rounded">注册</button>
             </form>
         </div>
     </div>
