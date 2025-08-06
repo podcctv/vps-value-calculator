@@ -1,23 +1,51 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用户入口</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/animated-bg.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登录 - VPS Value Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+  <style>
+    body {
+      background: linear-gradient(to right, #141e30, #243b55);
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col animated-bg">
-    {% include 'loading_overlay.html' %}
-    <div class="flex-1 flex items-center justify-center">
-        <form method="post" class="w-80 flex flex-col space-y-4">
-            <input name="username" placeholder="用户名" class="w-full px-3 py-2 border rounded text-left" />
-            <input type="password" name="password" placeholder="密码" class="w-full px-3 py-2 border rounded text-left" />
-            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">进入</button>
-        </form>
+<body class="min-h-screen flex items-center justify-center text-white">
+  <div class="bg-white bg-opacity-5 backdrop-blur-sm rounded-2xl shadow-2xl w-full max-w-sm p-8">
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-bold">欢迎登录</h1>
+      <p class="text-sm text-gray-300 mt-2">进入 VPS 管理后台</p>
     </div>
-    {% include 'footer.html' %}
+
+    <form method="post" class="space-y-5">
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-300 mb-1">用户名</label>
+        <input id="username" name="username" type="text" required
+               class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-white placeholder-gray-400">
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-300 mb-1">密码</label>
+        <input id="password" name="password" type="password" required
+               class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-white placeholder-gray-400">
+      </div>
+
+      <div>
+        <label for="invite_code" class="block text-sm font-medium text-gray-300 mb-1">邀请码</label>
+        <input id="invite_code" name="invite_code" type="text"
+               class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-white placeholder-gray-400">
+      </div>
+
+      <button type="submit"
+              class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition duration-200">
+        登录
+      </button>
+    </form>
+
+    <div class="mt-6 text-center text-sm text-gray-400">
+      &copy; 2025 <a href="https://github.com/podcctv/vps-value-calculator" class="text-blue-400 hover:underline">vps value calculator</a>
+    </div>
+  </div>
 </body>
 </html>
