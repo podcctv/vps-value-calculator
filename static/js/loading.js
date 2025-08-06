@@ -1,12 +1,12 @@
 (function () {
-    const loader = document.getElementById('loading-overlay');
-    const progressBar = document.querySelector('#loading-bar .progress');
-    const loadingText = document.getElementById('loading-text');
+    var loader = document.getElementById('loading-overlay');
+    var progressBar = document.querySelector('#loading-bar .progress');
+    var loadingText = document.getElementById('loading-text');
     if (!loader || !progressBar) return;
 
-    let width = 0;
-    let interval;
-    let dotsInterval;
+    var width = 0;
+    var interval;
+    var dotsInterval;
 
     function startProgress() {
         loader.style.display = 'flex';
@@ -15,15 +15,15 @@
         if (loadingText) loadingText.textContent = 'Loading';
         clearInterval(interval);
         clearInterval(dotsInterval);
-        interval = setInterval(() => {
+        interval = setInterval(function () {
             width = Math.min(width + Math.random() * 20, 90);
             progressBar.style.width = width + '%';
         }, 200);
-        let dots = 0;
-        dotsInterval = setInterval(() => {
+        var dots = 0;
+        dotsInterval = setInterval(function () {
             if (!loadingText) return;
             dots = (dots + 1) % 4;
-            loadingText.textContent = 'Loading' + '.'.repeat(dots);
+            loadingText.textContent = 'Loading' + new Array(dots + 1).join('.');
         }, 500);
     }
 
@@ -31,7 +31,7 @@
         clearInterval(interval);
         clearInterval(dotsInterval);
         progressBar.style.width = '100%';
-        setTimeout(() => {
+        setTimeout(function () {
             loader.style.display = 'none';
             if (loadingText) loadingText.textContent = 'Loading';
         }, 300);
@@ -41,11 +41,13 @@
     window.addEventListener('load', stopProgress);
     window.addEventListener('beforeunload', startProgress);
 
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', e => {
-            const href = link.getAttribute('href');
-            if (!href || href.startsWith('#') || link.target === '_blank') return;
+    var links = document.querySelectorAll('a');
+    for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', function (e) {
+            var href = this.getAttribute('href');
+            if (!href || href.charAt(0) === '#' || this.target === '_blank') return;
             startProgress();
         });
-    });
+    }
 })();
+
