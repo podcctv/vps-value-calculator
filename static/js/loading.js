@@ -30,19 +30,8 @@
         }, 500);
     }
 
-    function stopProgress() {
-        clearInterval(interval);
-        clearInterval(dotsInterval);
-        progressBar.style.width = '100%';
-        setTimeout(function () {
-            loader.style.display = 'none';
-            if (loadingText) loadingText.textContent = 'Loading';
-            isLoading = false;
-        }, 300);
-    }
-
-    startProgress();
-    window.addEventListener('load', stopProgress);
+    // Progress bar starts on navigation events only
+    // Removed automatic start on page load to prevent duplicate flashes
     window.addEventListener('beforeunload', startProgress);
 
     var links = document.querySelectorAll('a');
