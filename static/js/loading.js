@@ -30,9 +30,25 @@
         }, 500);
     }
 
+    function hideProgress() {
+        if (!isLoading) {
+            loader.style.display = 'none';
+            progressBar.style.width = '0%';
+            return;
+        }
+        isLoading = false;
+        clearInterval(interval);
+        clearInterval(dotsInterval);
+        loader.style.display = 'none';
+        progressBar.style.width = '0%';
+        if (loadingText) loadingText.textContent = 'Loading';
+    }
+
     // Progress bar starts on navigation events only
     // Removed automatic start on page load to prevent duplicate flashes
     window.addEventListener('beforeunload', startProgress);
+
+    window.addEventListener('pageshow', hideProgress);
 
     var links = document.querySelectorAll('a');
     for (var i = 0; i < links.length; i++) {
