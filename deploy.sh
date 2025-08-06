@@ -13,10 +13,12 @@ fi
 export PERSIST_DIR
 mkdir -p "$PERSIST_DIR/data" "$PERSIST_DIR/static/images"
 
-# Clean repository and pull the latest code
-git reset --hard
+# Fetch latest code and reset working tree
+git fetch origin main
+git reset --hard origin/main
 git clean -fd
-git pull
+# Display the current commit for clarity
+git log -1 --oneline
 
 # Stop existing containers
 docker compose down
