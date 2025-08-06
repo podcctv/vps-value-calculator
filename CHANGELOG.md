@@ -1,0 +1,175 @@
+# Changelog
+
+## 2025-08-06
+
+- Fix deploy script to show latest commit
+- Cache server status for 10 minutes
+- Avoid blocking IP lookups during VPS page load
+- Add loading animation for VPS list page
+- Serve favicon without binary file
+- perf: streamline asset loading
+
+## 2025-08-05
+
+- fix: correct cloudflare beacon script path
+- docs: record recent updates
+- feat: add markdown copy button
+- Fix remaining value calculation in edit form
+- Use consistent final price formula across pages
+- feat: calculate final sale price using transfer premium
+- fix: align sale calculator with backend
+- fix premium calc layout and negative sign
+- Wrap React script in raw block to avoid Jinja parsing
+- style: beautify premium calculation section
+- feat: improve sale premium UI and calculation
+- style: align sale premium inputs
+- feat: improve sale premium input and layout
+- feat: hide port in vps IP display
+- Encode special characters in copied SVG URL
+- feat: support TCP ping with optional port
+
+## 2025-08-04
+
+- style: adjust vps card width
+- Remove card scaling via mouse wheel
+- Enable wheel-based scaling for VPS cards
+- Adjust VPS card container width
+- Adjust ISP position and wrapping
+- feat: show ISP info for VPS
+- fix: scope svg styles to prevent global greying
+- Adjust sold/inactive SVG height
+- Update vps_card.svg
+- Align renewal info with metadata on sold SVG
+- style: improve SVG display for sold and inactive VPS
+- Update view_svg.html
+- Update view_svg.html
+- Update view_svg.html
+- Update view_svg.html
+- refactor one-click post format
+- fix: correct copy text formatting
+- feat: use static svg link for copy
+- feat: improve one-click post copy
+- feat: improve copy post formatting
+- fix: correct sale button color and footer alignment
+- feat: copy full post content
+- feat: copy full post content
+- feat: add sale status badge to SVG
+- fix: adjust card width based on longest content
+- feat: add push fee and sale method
+- feat: add for-sale status and pricing
+- fix: account for title length when sizing VPS cards
+- fix: adjust card height calculation for header
+- Ensure cards fit viewport and update footer behavior
+- Adjust VPS card width based on vendor or IP
+- embed emoji in svg and fix layout issues
+- Prevent IP address wrapping
+- feat: adjust card width for ip
+- Update footer.html
+- fix: center vps cards
+- style: improve vps card spacing
+- Adjust card layout to dynamic width
+- fix: adjust VPS card layout
+- Center cards and limit row width
+- Update footer.html
+- Update footer.html
+- Update footer.html
+- feat: update footer with centered github badge
+- Center footer and add GitHub icon
+- feat: add GitHub badge to footer
+- Update README.md
+- Update README.md
+- docs: add badges to README
+- fix: improve footer layout
+- Add shared footer with GitHub info
+- feat: refresh images at China midnight
+- Align SVG label colons
+- fix: keep ip address on same line as flag emoji
+
+## 2025-08-03
+
+- feat: use twemoji for flag emoji
+- fix: show emoji flags for IP addresses
+- Use ip-api for IP country lookup
+- feat: serve tailwind locally
+- Reduce card container margins
+- fix: make vps cards responsive
+- feat: optimize VPS card layout
+- Fix IP flag lookup
+- feat: add responsive styles for mobile
+- Update README.md
+- Update vps.svg
+- Update view_svg.html
+- Align SVG footer and compress spacing
+- Update README.md
+- Update README.md
+- Update README.md
+- Align footer info with remaining values
+- docs: document default invite code
+- Update README.md
+- feat: add mobile responsive layout
+- style: improve card layout on small screens
+- docs: document CLI usage in README
+- fix: enable copy link on SVG page
+- Separate IP and status fields and improve flag lookup
+- refactor: improve banner layout and ping
+- feat: enhance admin and site config
+- Refine VPS views and ping handling
+- style: polish banner and svg layouts
+- fix: add site config migration
+- feat: enhance dashboard and network status
+- Enhance VPS display with IP details
+- style: improve vps details and list views
+- Add tests for instance config parsing
+- feat: show renewal date before cycle
+- Fix VPS page layout and link copy
+- feat: refresh theme colors
+- feat: enhance vps images and config
+- feat: add responsive SVG card
+- Update tests for invitation code
+- Add renewal cycle start/end and inactive status
+- Improve VPS card layout and interactions
+- Revamp VPS card UI and add cycle base date
+- style: add date input theme
+- Add standalone SVG display template
+- style: modernize VPS card layout
+- feat: add status badge and clipboard helper
+- Improve card layout and markdown copy
+- Replace SVG rendering with HTML info and add share button
+- refactor: improve VPS form usability
+- Handle optional fields when adding VPS
+- style: match add vps page to neon theme
+- feat: enhance vps form with currency and payment options
+- feat: overhaul vps page style
+- Add manage VPS template
+- feat: add cyberpunk style to VPS gallery
+- Enhance VPS gallery with SVG preview modal and floating add button
+- feat: add public vps gallery
+- fix: update Babel CDN path (#18)
+- fix: correct tailwind integrity hash (#17)
+- feat: remove tailwind CDN warning (#16)
+- feat: redesign add vps page with react
+- style: apply dark terminal theme to VPS SVG
+- fix: add migrations for new VPS columns
+- Update docker-compose.yml
+- Add template for VPS input page
+- Add migration for expiry date
+- Add schema migration for transaction_date
+- Introduce interactive CLI for VPS management
+- Add templates for registration, login, and admin user management
+- Update README.md
+- Update README.md
+- feat: improve deploy script and update docs
+- docs: update usage instructions and port
+- feat: support platform persistence in deploy
+- Add home page listing VPS images
+- Update README.md
+- Fix Docker image tag to be lowercase
+- ci: push Docker image to GitHub packages (#2)
+- Update README.md
+- Update README.md
+- Update README.md
+- Create docker-image.yml
+- feat: add dockerized vps value calculator (#1)
+- Update README.md
+- Initial commit
+
