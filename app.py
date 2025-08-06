@@ -7,7 +7,9 @@ from flask import (
     redirect,
     url_for,
     session,
+    Response,
 )
+import base64
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy.orm import Session
@@ -31,6 +33,21 @@ from app.utils import (
 app = Flask(__name__)
 app.secret_key = "change-me"
 TWEMOJI_BASE = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg"
+
+FAVICON_BASE64 = (
+    "AAABAAMAEBAAAAAAIABQAAAANgAAABgYAAAAACAAWQAAAIYAAAAgIAAAAAAgAGEAAADfAAAAiVBO"
+    "Rw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAF0lEQVR4nGP8z0AaYCJR/aiGUQ1DSAMA"
+    "QC4BH2bjRnMAAAAASUVORK5CYIKJUE5HDQoaCgAAAA1JSERSAAAAGAAAABgIAgAAAG8Vqq8AAAAg"
+    "SURBVHicY/zPQB3ARCVzRg0aNWjUoFGDRg0aNYgCAAB7qgEve1X4owAAAABJRU5ErkJggolQTkcN"
+    "ChoKAAAADUlIRFIAAAAgAAAAIAgCAAAA/BjtowAAAChJREFUeJztzTEBAAAIwzDAv2cwwb5UQNNb"
+    "2Sb8BwAAAAAAAAAAAG8do8QBP4tgIzoAAAAASUVORK5CYII="
+)
+
+
+@app.route("/favicon.ico")
+def favicon():
+    icon_bytes = base64.b64decode(FAVICON_BASE64)
+    return Response(icon_bytes, mimetype="image/vnd.microsoft.icon")
 
 
 @app.template_filter("twemoji")
