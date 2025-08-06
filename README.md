@@ -9,7 +9,6 @@ Another VPS value calculation
 # 📚 项目文档
 
 - [📅 更新日志](./CHANGELOG.md)
-- [⚖️ License](./LICENSE)
 
 # 💰 VPS 剩余价值计算器
 
