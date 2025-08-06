@@ -160,8 +160,20 @@ def refresh_images():
             generate_svg(vps, data, config)
 
 
+def refresh_ip_info():
+    with Session(engine) as db:
+        vps_list = db.query(VPS).filter(VPS.ip_address != None).all()
+        for vps in vps_list:
+            ip = vps.ip_address
+            if ip:
+                ping_ip(ip)
+                ip_to_flag(ip)
+                ip_to_isp(ip)
+
+
 scheduler = BackgroundScheduler(timezone="Asia/Shanghai")
 scheduler.add_job(refresh_images, "cron", hour=0, minute=0)
+scheduler.add_job(refresh_ip_info, "interval", minutes=10)
 scheduler.start()
 
 
@@ -402,13 +414,11 @@ def vps_list():
             data = calculate_remaining(vps)
             specs = parse_instance_config(vps.instance_config)
             ip_info = {
-                "ip_display": "-",
-                "ping_status": "",
-                "flag": "",
-                "isp": "-",
+                "ip_display": mask_ip(vps.ip_address) if vps.ip_address else "-",
+                "ping_status": ping_ip(vps.ip_address) if vps.ip_address else "",
+                "flag": ip_to_flag(vps.ip_address) if vps.ip_address else "",
+                "isp": ip_to_isp(vps.ip_address) if vps.ip_address else "-",
             }
-            if vps.ip_address:
-                ip_info["ip_display"] = mask_ip(vps.ip_address)
             vps_data.append((vps, data, specs, ip_info))
         status_order = {"active": 0, "forsale": 1, "sold": 2, "inactive": 3}
         vps_data.sort(
@@ -441,13 +451,11 @@ def view_vps(name: str):
         data = calculate_remaining(vps)
         specs = parse_instance_config(vps.instance_config)
         ip_info = {
-            "ip_display": "-",
-            "ping_status": "",
-            "flag": "",
-            "isp": "-",
+            "ip_display": mask_ip(vps.ip_address) if vps.ip_address else "-",
+            "ping_status": ping_ip(vps.ip_address) if vps.ip_address else "",
+            "flag": ip_to_flag(vps.ip_address) if vps.ip_address else "",
+            "isp": ip_to_isp(vps.ip_address) if vps.ip_address else "-",
         }
-        if vps.ip_address:
-            ip_info["ip_display"] = mask_ip(vps.ip_address)
         generate_svg(vps, data, config)
     svg_url = url_for("static", filename=f"images/{name}.svg")
     if config and config.site_url:
