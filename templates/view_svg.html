@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
 </head>
-<body class="min-h-screen font-mono">
+<body class="min-h-screen font-mono flex flex-col">
 {% include 'loading_overlay.html' %}
 <nav class="banner">
     <a href="{{ url_for('vps_list') }}" class="banner-home">

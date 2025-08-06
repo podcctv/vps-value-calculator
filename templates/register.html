@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
     {% include 'loading_overlay.html' %}
     <h1>注册</h1>
     <form method="post">

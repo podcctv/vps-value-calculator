@@ -7,8 +7,11 @@
     var width = 0;
     var interval;
     var dotsInterval;
+    var isLoading = false;
 
     function startProgress() {
+        if (isLoading) return;
+        isLoading = true;
         loader.style.display = 'flex';
         width = 0;
         progressBar.style.width = '0%';
@@ -34,6 +37,7 @@
         setTimeout(function () {
             loader.style.display = 'none';
             if (loadingText) loadingText.textContent = 'Loading';
+            isLoading = false;
         }, 300);
     }
 
