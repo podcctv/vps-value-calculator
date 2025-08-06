@@ -3,24 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+    <title>用户入口</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animated-bg.css') }}">
 </head>
-<body class="min-h-screen flex flex-col bg-gray-100">
+<body class="min-h-screen flex flex-col animated-bg">
     {% include 'loading_overlay.html' %}
     <div class="flex-1 flex items-center justify-center">
-        <div class="w-full max-w-xs bg-white rounded shadow-md p-8">
-            <h1 class="text-2xl font-bold mb-6 text-center">登录</h1>
-            <form method="post" class="space-y-4">
-                <input name="username" placeholder="用户名" class="block w-64 mx-auto px-3 py-2 border rounded" />
-                <input type="password" name="password" placeholder="密码" class="block w-64 mx-auto px-3 py-2 border rounded" />
-                <button type="submit" class="block w-64 mx-auto bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">登录</button>
-            </form>
-        </div>
+        <form method="post" class="flex flex-col items-center space-y-4">
+            <input name="username" placeholder="用户名" class="w-64 px-3 py-2 border rounded" />
+            <input type="password" name="password" placeholder="密码" class="w-64 px-3 py-2 border rounded" />
+            <button type="submit" class="w-64 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded">进入</button>
+        </form>
     </div>
     {% include 'footer.html' %}
 </body>
 </html>
-
