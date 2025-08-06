@@ -26,11 +26,8 @@ else
 fi
 
 # Reset working tree to match remote
-git reset --hard origin/main
+git reset --hard -q origin/main
 git clean -fd
-
-# Display the current commit for clarity
-git log -1 --oneline
 
 # Stop existing containers
 docker compose down
