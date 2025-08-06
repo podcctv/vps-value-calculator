@@ -8,7 +8,7 @@ Another VPS value calculation
 
 # 📚 项目文档
 
-- [📅 更新日志](./CHANGELOG.md)
+- [📅 更新日志](./CHANGELOG_CN.md) | [Changelog](./CHANGELOG_EN.md)
 
 # 💰 VPS 剩余价值计算器
 
