@@ -95,6 +95,20 @@ chmod +x ./vps-value-calculator/deploy.sh
 
 脚本会自动设置持久化目录、拉取最新代码并通过 `docker compose` 重建并启动服务。
 
+### 🐳 使用预构建镜像一键部署
+
+如果只需要运行服务，可直接使用预构建的镜像：
+
+```bash
+docker pull ghcr.io/podcctv/vps-value-calculator:latest
+docker run -d --name vps-value-calculator -p 8280:8280 \
+  -v /opt/vps-value-calculator/data:/app/data \
+  -v /opt/vps-value-calculator/static/images:/app/static/images \
+  ghcr.io/podcctv/vps-value-calculator:latest
+```
+
+默认数据和图片同样会保存到 `/opt/vps-value-calculator/data/` 和 `/opt/vps-value-calculator/static/images/`。
+
 ---
 
 ## 用户注册
