@@ -6,6 +6,11 @@ input[type="date"] {
   border-radius: 6px;
 }
 
+input,
+textarea {
+  text-align: center;
+}
+
 .input-full-width {
   width: 100%;
   max-width: 600px;
