@@ -6,6 +6,7 @@ import base64
 from functools import lru_cache
 import re
 import requests
+import time
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static" / "images"
@@ -161,6 +162,8 @@ def mask_ip(ip: str) -> str:
 
 
 _ping_cache = {}
+_flag_cache = {}
+_isp_cache = {}
 
 
 def ping_ip(ip: str) -> str:
@@ -173,7 +176,7 @@ def ping_ip(ip: str) -> str:
 
     now = time.time()
     cached = _ping_cache.get(ip)
-    if cached and now - cached[0] < 60:
+    if cached and now - cached[0] < 600:
         return cached[1]
 
     status = "🔴 离线"
@@ -219,16 +222,19 @@ def ip_to_flag(ip: str) -> str:
     first IPv4 address before querying the API so that a stored value like
     "🏳️ 160.1.2.3" still resolves correctly.
     """
+    import re
+    now = time.time()
+    match = re.search(r"(?:\d{1,3}\.){3}\d{1,3}", ip)
+    if not match:
+        return "🏳️"
+    clean_ip = match.group(0)
+
+    cached = _flag_cache.get(clean_ip)
+    if cached and now - cached[0] < 600:
+        return cached[1]
+
+    flag = "🏳️"
     try:
-        import re
-
-        match = re.search(r"(?:\d{1,3}\.){3}\d{1,3}", ip)
-        if not match:
-            return "🏳️"
-        clean_ip = match.group(0)
-
-        # ip-api returns JSON with a country code. Be tolerant of different
-        # response formats in case of alternative services or errors.
         resp = requests.get(
             f"http://ip-api.com/json/{clean_ip}?fields=countryCode", timeout=5
         )
@@ -246,10 +252,12 @@ def ip_to_flag(ip: str) -> str:
                 code = text
 
         if code and len(code) == 2 and code.isalpha():
-            return chr(ord(code[0]) + 127397) + chr(ord(code[1]) + 127397)
+            flag = chr(ord(code[0]) + 127397) + chr(ord(code[1]) + 127397)
     except Exception:
         pass
-    return "🏳️"
+
+    _flag_cache[clean_ip] = (now, flag)
+    return flag
 
 
 def ip_to_isp(ip: str) -> str:
@@ -258,29 +266,32 @@ def ip_to_isp(ip: str) -> str:
     The input ``ip`` may include comments or emoji. Extract the first
     IPv4 address before querying to ensure the lookup succeeds.
     """
+    import re
+    now = time.time()
+    match = re.search(r"(?:\d{1,3}\.){3}\d{1,3}", ip)
+    if not match:
+        return "-"
+    clean_ip = match.group(0)
+
+    cached = _isp_cache.get(clean_ip)
+    if cached and now - cached[0] < 600:
+        return cached[1]
+
+    isp = "-"
     try:
-        import re
-
-        match = re.search(r"(?:\d{1,3}\.){3}\d{1,3}", ip)
-        if not match:
-            return "-"
-        clean_ip = match.group(0)
-
         resp = requests.get(
             f"http://ip-api.com/json/{clean_ip}?fields=isp", timeout=5
         )
-        isp = None
         try:
             data = resp.json()
-            isp = data.get("isp") or data.get("org")
+            isp = data.get("isp") or data.get("org") or "-"
         except Exception:
-            isp = resp.text.strip()
-
-        if isp:
-            return isp
+            isp = resp.text.strip() or "-"
     except Exception:
         pass
-    return "-"
+
+    _isp_cache[clean_ip] = (now, isp)
+    return isp
 
 
 def generate_svg(vps, data, config=None):

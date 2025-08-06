@@ -1,4 +1,4 @@
-from app.utils import ip_to_flag
+from app.utils import ip_to_flag, _flag_cache
 
 class DummyResponse:
     def __init__(self, data):
@@ -10,6 +10,7 @@ class DummyResponse:
 
 
 def test_ip_to_flag_handles_json_response(monkeypatch):
+    _flag_cache.clear()
     def fake_get(url, timeout=5):
         return DummyResponse({'countryCode': 'US'})
     monkeypatch.setattr('app.utils.requests.get', fake_get)
@@ -17,6 +18,7 @@ def test_ip_to_flag_handles_json_response(monkeypatch):
 
 
 def test_ip_to_flag_extracts_ipv4(monkeypatch):
+    _flag_cache.clear()
     def fake_get(url, timeout=5):
         return DummyResponse({'countryCode': 'AU'})
     monkeypatch.setattr('app.utils.requests.get', fake_get)
