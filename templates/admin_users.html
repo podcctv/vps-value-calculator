@@ -10,8 +10,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
 </head>
 <body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono">
+{% include 'loading_overlay.html' %}
 <nav class="banner">
     <a href="{{ url_for('vps_list') }}" class="banner-home">
         <div class="banner-title">

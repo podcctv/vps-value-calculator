@@ -6,6 +6,7 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 9999;
@@ -20,7 +21,25 @@
     animation: spin 1s linear infinite;
 }
 
+#loading-bar {
+    width: 80%;
+    max-width: 400px;
+    height: 10px;
+    background: #f3f3f3;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+#loading-bar .progress {
+    height: 100%;
+    width: 0;
+    background: #3498db;
+    transition: width 0.3s;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
