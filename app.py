@@ -154,7 +154,7 @@ def refresh_images():
         config = db.query(SiteConfig).first()
         vps_list = db.query(VPS).all()
         for vps in vps_list:
-            if not vps.dynamic_svg:
+            if not vps.dynamic_svg or vps.status in ["sold", "inactive"]:
                 continue
             data = calculate_remaining(vps)
             generate_svg(vps, data, config)
