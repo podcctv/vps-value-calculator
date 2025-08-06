@@ -12,8 +12,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
 </head>
 <body class="min-h-screen font-mono">
+<div id="loading-overlay">
+    <div class="loader"></div>
+</div>
 <nav class="banner">
     <a href="{{ url_for('vps_list') }}" class="banner-home">
         <div class="banner-title">
@@ -131,7 +135,11 @@
         }
     }
     window.addEventListener('resize', adjustCardWidth);
-    window.addEventListener('load', adjustCardWidth);
+    window.addEventListener('load', () => {
+        adjustCardWidth();
+        const loader = document.getElementById('loading-overlay');
+        if (loader) loader.style.display = 'none';
+    });
 
     function updatePingStatus() {
         document.querySelectorAll('.ping-status').forEach(el => {
