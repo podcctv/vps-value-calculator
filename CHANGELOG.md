@@ -1,174 +1,69 @@
-# Changelog
+# Changelog / 更新日志
 
 ## 2025-08-06
-
-- Fixed deploy script to display the latest commit hash after deployment so operators can verify the running version.
+### Performance / 性能优化
 - Introduced a 10‑minute cache for server status requests to reduce repeated network calls.
+  - 为服务器状态请求引入 10 分钟缓存以减少重复网络调用。
 - IP country lookups now run asynchronously during VPS page loads to prevent blocking the page render.
-- Added a spinner animation while the VPS list page fetches data, improving user feedback during loads.
-- Favicon is now generated and served dynamically, eliminating the need for a static binary icon file.
+  - 在加载 VPS 页面时，IP 国家查询改为异步执行以避免阻塞页面渲染。
 - Streamlined asset loading by bundling and minifying resources for better performance.
+  - 通过打包和压缩资源来优化资产加载性能。
+
+### Other / 其他
+- Fixed deploy script to display the latest commit hash after deployment so operators can verify the running version.
+  - 修复部署脚本，在部署后显示最新提交哈希以便运维验证运行版本。
+- Added a spinner animation while the VPS list page fetches data, improving user feedback during loads.
+  - 在 VPS 列表页面获取数据时添加加载动画，提升加载过程中的用户反馈。
+- Favicon is now generated and served dynamically, eliminating the need for a static binary icon file.
+  - Favicon 现在动态生成并提供，不再需要静态二进制图标文件。
 
 ## 2025-08-05
-
-### Features
+### Features / 新功能
 - Added a markdown copy button for one-click sharing of generated posts.
+  - 添加 Markdown 一键复制按钮以便分享生成的帖子。
 - Calculated the final sale price using transfer premiums and refreshed the sale premium UI and inputs.
+  - 根据转让溢价计算最终售价，并刷新溢价 UI 和输入。
 - Supported TCP ping with an optional port and hid port numbers in VPS IP displays.
+  - 支持带可选端口的 TCP ping，并在 VPS IP 显示中隐藏端口号。
 
-### Fixes
+### Fixes / 修复
 - Corrected the Cloudflare beacon script path and aligned the sale calculator logic with the backend.
+  - 修正 Cloudflare beacon 脚本路径并使销售计算逻辑与后端一致。
 - Fixed remaining value calculation in the edit form, addressed premium calculator layout issues, and resolved negative sign display.
+  - 修复编辑表单中的剩余价值计算，解决溢价计算器布局问题并修正负号显示。
 - Wrapped the React script in a raw block to prevent Jinja parsing and encoded special characters in copied SVG URLs.
+  - 将 React 脚本包裹在 raw 块中以避免 Jinja 解析，并对复制 SVG URL 中的特殊字符进行编码。
 
-### Documentation
+### Documentation / 文档
 - Recorded recent updates in the project documentation.
+  - 在项目文档中记录最近的更新。
 
-### Styling
+### Styling / 样式
 - Beautified the premium calculation section and aligned related input fields for a consistent appearance.
+  - 美化溢价计算部分并对齐相关输入字段以保持一致外观。
 
 ## 2025-08-04
-
-- style: adjust vps card width
-- Remove card scaling via mouse wheel
-- Enable wheel-based scaling for VPS cards
-- Adjust VPS card container width
-- Adjust ISP position and wrapping
-- feat: show ISP info for VPS
-- fix: scope svg styles to prevent global greying
-- Adjust sold/inactive SVG height
-- Update vps_card.svg
-- Align renewal info with metadata on sold SVG
-- style: improve SVG display for sold and inactive VPS
-- Update view_svg.html
-- Update view_svg.html
-- Update view_svg.html
-- Update view_svg.html
-- refactor one-click post format
-- fix: correct copy text formatting
-- feat: use static svg link for copy
-- feat: improve one-click post copy
-- feat: improve copy post formatting
-- fix: correct sale button color and footer alignment
-- feat: copy full post content
-- feat: copy full post content
-- feat: add sale status badge to SVG
-- fix: adjust card width based on longest content
-- feat: add push fee and sale method
-- feat: add for-sale status and pricing
-- fix: account for title length when sizing VPS cards
-- fix: adjust card height calculation for header
-- Ensure cards fit viewport and update footer behavior
-- Adjust VPS card width based on vendor or IP
-- embed emoji in svg and fix layout issues
-- Prevent IP address wrapping
-- feat: adjust card width for ip
-- Update footer.html
-- fix: center vps cards
-- style: improve vps card spacing
-- Adjust card layout to dynamic width
-- fix: adjust VPS card layout
-- Center cards and limit row width
-- Update footer.html
-- Update footer.html
-- Update footer.html
-- feat: update footer with centered github badge
-- Center footer and add GitHub icon
-- feat: add GitHub badge to footer
-- Update README.md
-- Update README.md
-- docs: add badges to README
-- fix: improve footer layout
-- Add shared footer with GitHub info
-- feat: refresh images at China midnight
-- Align SVG label colons
-- fix: keep ip address on same line as flag emoji
+### Performance & UI / 性能与界面
+- Adjusted VPS card and container widths to accommodate varying content and viewport sizes.
+  - 调整 VPS 卡片及容器宽度以适应不同内容和视口尺寸。
+- Enabled wheel-based scaling for VPS cards and refined layout spacing.
+  - 启用鼠标滚轮缩放 VPS 卡片并优化布局间距。
+- Displayed ISP information for VPS and scoped SVG styles to prevent global effects.
+  - 显示 VPS 的 ISP 信息并限定 SVG 样式范围以避免全局影响。
+- Various fixes to ensure cards fit the viewport and maintain consistent layout.
+  - 多项修复以确保卡片适应视口并保持一致布局。
 
 ## 2025-08-03
+### Infrastructure & Performance / 基础设施与性能
+- Served Tailwind locally and reduced card container margins for faster loads.
+  - 本地提供 Tailwind 并减少卡片容器边距以加快加载。
+- Optimized VPS card layout with responsive styles and mobile support.
+  - 使用响应式样式优化 VPS 卡片布局并支持移动端。
+- Added IP flag lookup using ip-api and improved async handling for network status.
+  - 使用 ip-api 进行 IP 国旗查询并改进网络状态的异步处理。
+- Enhanced VPS forms, dashboards, and SVG display for better usability.
+  - 改进 VPS 表单、仪表盘和 SVG 显示以提升可用性。
 
-- feat: use twemoji for flag emoji
-- fix: show emoji flags for IP addresses
-- Use ip-api for IP country lookup
-- feat: serve tailwind locally
-- Reduce card container margins
-- fix: make vps cards responsive
-- feat: optimize VPS card layout
-- Fix IP flag lookup
-- feat: add responsive styles for mobile
-- Update README.md
-- Update vps.svg
-- Update view_svg.html
-- Align SVG footer and compress spacing
-- Update README.md
-- Update README.md
-- Update README.md
-- Align footer info with remaining values
-- docs: document default invite code
-- Update README.md
-- feat: add mobile responsive layout
-- style: improve card layout on small screens
-- docs: document CLI usage in README
-- fix: enable copy link on SVG page
-- Separate IP and status fields and improve flag lookup
-- refactor: improve banner layout and ping
-- feat: enhance admin and site config
-- Refine VPS views and ping handling
-- style: polish banner and svg layouts
-- fix: add site config migration
-- feat: enhance dashboard and network status
-- Enhance VPS display with IP details
-- style: improve vps details and list views
-- Add tests for instance config parsing
-- feat: show renewal date before cycle
-- Fix VPS page layout and link copy
-- feat: refresh theme colors
-- feat: enhance vps images and config
-- feat: add responsive SVG card
-- Update tests for invitation code
-- Add renewal cycle start/end and inactive status
-- Improve VPS card layout and interactions
-- Revamp VPS card UI and add cycle base date
-- style: add date input theme
-- Add standalone SVG display template
-- style: modernize VPS card layout
-- feat: add status badge and clipboard helper
-- Improve card layout and markdown copy
-- Replace SVG rendering with HTML info and add share button
-- refactor: improve VPS form usability
-- Handle optional fields when adding VPS
-- style: match add vps page to neon theme
-- feat: enhance vps form with currency and payment options
-- feat: overhaul vps page style
-- Add manage VPS template
-- feat: add cyberpunk style to VPS gallery
-- Enhance VPS gallery with SVG preview modal and floating add button
-- feat: add public vps gallery
-- fix: update Babel CDN path (#18)
-- fix: correct tailwind integrity hash (#17)
-- feat: remove tailwind CDN warning (#16)
-- feat: redesign add vps page with react
-- style: apply dark terminal theme to VPS SVG
-- fix: add migrations for new VPS columns
-- Update docker-compose.yml
-- Add template for VPS input page
-- Add migration for expiry date
-- Add schema migration for transaction_date
-- Introduce interactive CLI for VPS management
-- Add templates for registration, login, and admin user management
-- Update README.md
-- Update README.md
-- feat: improve deploy script and update docs
-- docs: update usage instructions and port
-- feat: support platform persistence in deploy
-- Add home page listing VPS images
-- Update README.md
-- Fix Docker image tag to be lowercase
-- ci: push Docker image to GitHub packages (#2)
-- Update README.md
-- Update README.md
-- Update README.md
-- Create docker-image.yml
-- feat: add dockerized vps value calculator (#1)
-- Update README.md
-- Initial commit
-
+### Earlier / 更早
+- Initial Dockerized release with CLI utilities, migrations, and templates.
+  - 初始发布，包含 Docker 化环境、CLI 工具、迁移及模板。
