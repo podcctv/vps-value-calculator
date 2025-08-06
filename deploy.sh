@@ -13,10 +13,22 @@ fi
 export PERSIST_DIR
 mkdir -p "$PERSIST_DIR/data" "$PERSIST_DIR/static/images"
 
-# Fetch latest code and reset working tree
+# Fetch latest code and show changes
 git fetch origin main
+OLD=$(git rev-parse --short HEAD)
+NEW=$(git rev-parse --short origin/main)
+if [ "$OLD" != "$NEW" ]; then
+  echo "Updating $OLD..$NEW"
+  echo "Fast-forward"
+  git --no-pager diff --stat HEAD origin/main
+else
+  echo "Already up to date."
+fi
+
+# Reset working tree to match remote
 git reset --hard origin/main
 git clean -fd
+
 # Display the current commit for clarity
 git log -1 --oneline
 
