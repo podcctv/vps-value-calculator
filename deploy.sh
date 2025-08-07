@@ -4,6 +4,12 @@ set -e
 # Always work from the directory containing this script
 cd "$(dirname "$0")"
 
+# Ensure remote repository is configured
+if ! git remote get-url origin >/dev/null 2>&1; then
+  echo "Remote 'origin' not configured; cannot update." >&2
+  exit 1
+fi
+
 # Determine persistent storage location
 if [[ "$OS" == "Windows_NT" ]]; then
   PERSIST_DIR="${USERPROFILE//\\/\//}/Documents/vps-value-calculator"
