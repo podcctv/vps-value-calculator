@@ -9,13 +9,13 @@
     var dotsInterval;
     var isLoading = false;
 
-    function startProgress() {
+    function startProgress(message) {
         if (isLoading) return;
         isLoading = true;
         loader.style.display = 'flex';
         width = 0;
         progressBar.style.width = '0%';
-        if (loadingText) loadingText.textContent = 'Loading';
+        if (loadingText) loadingText.textContent = message || 'Loading';
         clearInterval(interval);
         clearInterval(dotsInterval);
         interval = setInterval(function () {
@@ -26,8 +26,19 @@
         dotsInterval = setInterval(function () {
             if (!loadingText) return;
             dots = (dots + 1) % 4;
-            loadingText.textContent = 'Loading' + new Array(dots + 1).join('.');
+            loadingText.textContent = (message || 'Loading') + new Array(dots + 1).join('.');
         }, 500);
+    }
+
+    function updateProgress(current, total, message) {
+        if (!isLoading) startProgress();
+        if (typeof total === 'number' && total > 0) {
+            width = Math.min(100, (current / total) * 100);
+            progressBar.style.width = width + '%';
+        }
+        if (message && loadingText) {
+            loadingText.textContent = message;
+        }
     }
 
     function hideProgress() {
@@ -44,9 +55,16 @@
         if (loadingText) loadingText.textContent = 'Loading';
     }
 
+    // Expose control helpers for manual updates
+    window.loadingOverlay = {
+        start: startProgress,
+        update: updateProgress,
+        done: hideProgress
+    };
+
     // Progress bar starts on navigation events only
     // Removed automatic start on page load to prevent duplicate flashes
-    window.addEventListener('beforeunload', startProgress);
+    window.addEventListener('beforeunload', function () { startProgress(); });
 
     window.addEventListener('pageshow', hideProgress);
 
