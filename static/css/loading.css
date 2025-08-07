@@ -40,3 +40,13 @@
     transition: width 0.3s;
 }
 
+.loading-status {
+    margin-top: 20px;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.loading-status div {
+    margin-top: 4px;
+}
+
