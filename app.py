@@ -26,6 +26,8 @@ from app.utils import (
     parse_instance_config,
     mask_ip,
     ping_ip,
+    traceroute_ip,
+    run_speedtest,
     ip_to_flag,
     ip_to_isp,
     twemoji_url,
@@ -433,6 +435,18 @@ def vps_list():
 @app.route("/ping/<path:ip>")
 def ping_status(ip: str):
     return ping_ip(ip)
+
+
+@app.route("/traceroute/<path:ip>")
+def traceroute_status(ip: str):
+    """Return traceroute output for ``ip``."""
+    return traceroute_ip(ip)
+
+
+@app.route("/speedtest")
+def speedtest_view():
+    """Run a network speed test and return simplified results."""
+    return jsonify(run_speedtest())
 
 
 @app.route("/ipinfo/<path:ip>")

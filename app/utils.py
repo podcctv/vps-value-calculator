@@ -215,6 +215,79 @@ def ping_ip(ip: str) -> str:
     return status
 
 
+def traceroute_ip(ip: str, timeout: int = 60) -> str:
+    """Run ``traceroute`` for ``ip`` and return the output as text.
+
+    The command can take a long time depending on network conditions.  A
+    configurable ``timeout`` (default 60s) is used to avoid hanging
+    indefinitely.  If the ``traceroute`` binary is missing or a timeout
+    occurs, a human readable message is returned instead of raising an
+    exception.
+    """
+    import subprocess
+    import shutil
+
+    tr_exec = shutil.which("traceroute")
+    if not tr_exec:
+        return "traceroute unavailable"
+    try:
+        result = subprocess.run(
+            [tr_exec, ip],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            timeout=timeout,
+        )
+        return result.stdout.strip()
+    except subprocess.TimeoutExpired:
+        return "Traceroute timed out"
+    except Exception as exc:
+        return f"Traceroute error: {exc}"
+
+
+def run_speedtest(timeout: int = 120) -> dict:
+    """Execute ``speedtest`` and return key metrics.
+
+    The function expects the ``speedtest`` CLI from Ookla to be available on
+    the system.  Results are simplified into Mbps for easier display.  Any
+    errors are captured and returned as ``{"error": message}``.
+    """
+    import subprocess
+    import json
+    import shutil
+
+    st_exec = shutil.which("speedtest")
+    if not st_exec:
+        return {"error": "speedtest not installed"}
+    try:
+        res = subprocess.run(
+            [st_exec, "--format=json"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=timeout,
+        )
+        if res.returncode != 0:
+            return {"error": res.stderr.strip() or "speedtest failed"}
+        data = json.loads(res.stdout)
+        download = data.get("download", {}).get("bandwidth", 0) * 8 / 1_000_000
+        upload = data.get("upload", {}).get("bandwidth", 0) * 8 / 1_000_000
+        ping = data.get("ping", {}).get("latency", 0)
+        jitter = data.get("ping", {}).get("jitter")
+        result = {
+            "download_mbps": round(download, 2),
+            "upload_mbps": round(upload, 2),
+            "ping_ms": round(ping, 2),
+        }
+        if jitter is not None:
+            result["jitter_ms"] = round(jitter, 2)
+        return result
+    except subprocess.TimeoutExpired:
+        return {"error": "speedtest timed out"}
+    except Exception as exc:
+        return {"error": str(exc)}
+
+
 def ip_to_flag(ip: str) -> str:
     """Return emoji flag for IP using ipapi.co.
 
