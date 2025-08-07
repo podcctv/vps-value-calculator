@@ -1,8 +1,7 @@
 (function(){
     const STATUS_IDS = {
         ping: 'ping-status',
-        traceroute: 'traceroute-status',
-        speedtest: 'speedtest-status'
+        traceroute: 'traceroute-status'
     };
 
     function setStatus(id, text) {
@@ -29,14 +28,6 @@
                     const res = await fetch('/traceroute/1.1.1.1');
                     return await res.text();
                 }
-            },
-            {
-                id: 'speedtest',
-                label: 'SpeedTest',
-                run: async () => {
-                    const res = await fetch('/speedtest');
-                    return await res.json();
-                }
             }
         ];
 
@@ -49,13 +40,7 @@
             try {
                 const result = await t.run();
                 let text = t.label + '：完成';
-                if (t.id === 'speedtest') {
-                    if (result.download && result.upload) {
-                        text += ` (下行 ${result.download} Mbps / 上行 ${result.upload} Mbps)`;
-                    } else if (result.error) {
-                        text += ` (${result.error})`;
-                    }
-                } else if (t.id === 'ping') {
+                if (t.id === 'ping') {
                     text += ` (${result})`;
                 }
                 setStatus(statusId, text);
