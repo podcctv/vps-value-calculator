@@ -403,8 +403,10 @@ def delete_vps(vps_id: int):
 
 
 @app.route("/")
+@app.route("/probe")
 def index():
-    return redirect(url_for("vps_list"))
+    """Initial probe page that runs network diagnostics before showing the VPS list."""
+    return render_template("probe.html")
 
 
 @app.route("/vps")
