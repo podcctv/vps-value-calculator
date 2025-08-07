@@ -40,6 +40,7 @@
         }
         if (message) {
             currentMessage = message;
+            if (loadingText) loadingText.textContent = currentMessage;
         }
     }
 

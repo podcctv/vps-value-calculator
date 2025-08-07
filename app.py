@@ -444,6 +444,12 @@ def traceroute_status(ip: str):
     return traceroute_ip(ip)
 
 
+@app.route("/probe/<path:ip>")
+def probe_view(ip: str):
+    """Render a simple probe page showing ping and traceroute results."""
+    return render_template("probe.html", ip=ip)
+
+
 @app.route("/speedtest")
 def speedtest_view():
     """Run a network speed test and return simplified results."""

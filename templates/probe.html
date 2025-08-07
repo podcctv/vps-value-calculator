@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络探测</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+</head>
+<body>
+{% include 'loading_overlay.html' %}
+<main style="padding:1rem; font-family:monospace;">
+    <h1>网络探测 - {{ ip }}</h1>
+    <pre id="probe-output" style="white-space:pre-wrap"></pre>
+</main>
+<script>
+    window.PROBE_IP = {{ ip|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/loading.js') }}"></script>
+<script src="{{ url_for('static', filename='js/probe.js') }}"></script>
+</body>
+</html>
