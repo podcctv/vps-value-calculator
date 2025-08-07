@@ -69,6 +69,18 @@ def _run_migrations():
                 with engine.begin() as conn:
                     conn.execute(text(f"ALTER TABLE vps ADD COLUMN {column} {definition}"))
 
+    # Ensure created_at exists in users table
+    if "users" in inspector.get_table_names():
+        columns = [col["name"] for col in inspector.get_columns("users")]
+        if "created_at" not in columns:
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE users ADD COLUMN created_at DATETIME"))
+                conn.execute(
+                    text(
+                        "UPDATE users SET created_at = DATETIME('now','start of hour') WHERE created_at IS NULL"
+                    )
+                )
+
     # Ensure new fields in site_config table are present
     if "site_config" in inspector.get_table_names():
         columns = [col["name"] for col in inspector.get_columns("site_config")]

@@ -15,7 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy.orm import Session
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import date
+from datetime import date, datetime
 from markupsafe import Markup
 
 from app.db import engine, Base
@@ -198,6 +198,7 @@ def register():
                 username=username,
                 password_hash=generate_password_hash(password),
                 is_admin=is_admin,
+                created_at=datetime.utcnow().replace(minute=0, second=0, microsecond=0),
             )
             db.add(user)
             db.commit()

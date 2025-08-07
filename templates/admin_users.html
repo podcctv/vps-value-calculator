@@ -79,6 +79,7 @@
                     <th class="py-2 px-3">ID</th>
                     <th class="py-2 px-3">用户名</th>
                     <th class="py-2 px-3">管理员</th>
+                    <th class="py-2 px-3">注册时间</th>
                     <th class="py-2 px-3">操作</th>
                 </tr>
             </thead>
@@ -88,6 +89,7 @@
                     <td class="py-2 px-3">{{ user.id }}</td>
                     <td class="py-2 px-3">{{ user.username }}</td>
                     <td class="py-2 px-3">{{ '是' if user.is_admin else '否' }}</td>
+                    <td class="py-2 px-3">{{ user.created_at.strftime('%Y-%m-%d %I:%M %p') if user.created_at else '-' }}</td>
                     <td class="py-2 px-3 space-x-2">
                         <form method="post" class="inline">
                             <input type="hidden" name="user_id" value="{{ user.id }}">

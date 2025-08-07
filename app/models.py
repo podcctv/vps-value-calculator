@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, Date, Boolean
+from sqlalchemy import Column, Integer, String, Float, Date, Boolean, DateTime
+from datetime import datetime
 from .db import Base
 
 
@@ -41,6 +42,10 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     password_hash = Column(String)
     is_admin = Column(Boolean, default=False)
+    created_at = Column(
+        DateTime,
+        default=lambda: datetime.utcnow().replace(minute=0, second=0, microsecond=0),
+    )
 
 
 class InviteCode(Base):
