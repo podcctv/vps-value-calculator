@@ -231,8 +231,12 @@ def traceroute_ip(ip: str, timeout: int = 60) -> str:
     if not tr_exec:
         return "traceroute unavailable"
     try:
+        # ``-n`` avoids DNS lookups which can significantly slow down
+        # the command or even cause timeouts on some systems.  ``-w`` and
+        # ``-q`` reduce per-hop wait times and probe count so that a
+        # result is produced quickly for the probe page.
         result = subprocess.run(
-            [tr_exec, ip],
+            [tr_exec, "-n", "-w", "1", "-q", "1", ip],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -281,6 +285,26 @@ def run_speedtest(timeout: int = 120) -> dict:
         }
         if jitter is not None:
             result["jitter_ms"] = round(jitter, 2)
+
+        # Build simple character graphs for a text based display.  The
+        # graphs are scaled to a width of 40 characters based on the
+        # larger of download/upload speeds so both bars share a scale.
+        top_speed = max(download, upload, 1)
+        scale = top_speed / 40
+        dl_bar = "█" * int(download / scale)
+        ul_bar = "█" * int(upload / scale)
+        result["download_graph"] = dl_bar
+        result["upload_graph"] = ul_bar
+
+        # Provide an aligned summary line for single thread results
+        # (used when character graphs are rendered).  Padding keeps the
+        # arrows and Mbps labels lined up even when values have different
+        # widths.
+        result["single_thread_line"] = (
+            f"Single Thread - ⬇️ {result['download_mbps']:>7.2f} Mbps "
+            f"⬆️ {result['upload_mbps']:>7.2f} Mbps"
+        )
+
         return result
     except subprocess.TimeoutExpired:
         return {"error": "speedtest timed out"}

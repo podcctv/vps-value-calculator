@@ -8,6 +8,7 @@
     var interval;
     var dotsInterval;
     var isLoading = false;
+    var currentMessage = 'Loading';
 
     function startProgress(message) {
         if (isLoading) return;
@@ -15,7 +16,8 @@
         loader.style.display = 'flex';
         width = 0;
         progressBar.style.width = '0%';
-        if (loadingText) loadingText.textContent = message || 'Loading';
+        currentMessage = message || 'Loading';
+        if (loadingText) loadingText.textContent = currentMessage;
         clearInterval(interval);
         clearInterval(dotsInterval);
         interval = setInterval(function () {
@@ -26,7 +28,7 @@
         dotsInterval = setInterval(function () {
             if (!loadingText) return;
             dots = (dots + 1) % 4;
-            loadingText.textContent = (message || 'Loading') + new Array(dots + 1).join('.');
+            loadingText.textContent = currentMessage + new Array(dots + 1).join('.');
         }, 500);
     }
 
@@ -36,8 +38,8 @@
             width = Math.min(100, (current / total) * 100);
             progressBar.style.width = width + '%';
         }
-        if (message && loadingText) {
-            loadingText.textContent = message;
+        if (message) {
+            currentMessage = message;
         }
     }
 
@@ -52,7 +54,8 @@
         clearInterval(dotsInterval);
         loader.style.display = 'none';
         progressBar.style.width = '0%';
-        if (loadingText) loadingText.textContent = 'Loading';
+        currentMessage = 'Loading';
+        if (loadingText) loadingText.textContent = currentMessage;
     }
 
     // Expose control helpers for manual updates
