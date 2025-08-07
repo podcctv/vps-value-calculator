@@ -1,5 +1,9 @@
 # Changelog
 
+## 2025-08-07
+### UI
+- Replaced the plain red favicon with an animated color-shifting diamond for a more playful feel.
+
 ## 2025-08-06
 ### Performance
 - Introduced a 10-minute cache for server status requests to reduce repeated network calls.
