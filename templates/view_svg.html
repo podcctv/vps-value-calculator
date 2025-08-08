@@ -116,19 +116,19 @@
         const pushFee = info['Push 费用'] || '0';
         const transferPercentStr = info['转让溢价'] || '0%';
         const transferPercent = parseFloat(transferPercentStr) || 0;
-        const transferPremiumCny = (
-            (parseFloat(remainingValue) + parseFloat(pushFee)) * transferPercent / 100
-        ).toFixed(2);
         const percentSign = transferPercent >= 0 ? '+' : '-';
         const fixedPremiumNum = parseFloat(fixedPremium) || 0;
         const fixedSign = fixedPremiumNum >= 0 ? '+' : '-';
+        const transferPremiumCny = (
+            (parseFloat(remainingValue) + parseFloat(pushFee)) * transferPercent / 100 + fixedPremiumNum
+        ).toFixed(2);
 
         const lines = [];
         lines.push(`[VVC一键发帖]${finalPrice} 出售${vendor}的${machineName} ${info['配置']} ${info['月流量']} 月流量 机器`);
         lines.push('');
         lines.push('[欢迎大家试用VVC（vps-value-calculator）DOCKER部署动态剩余价值计算版](https://github.com/podcctv/vps-value-calculator)');
         lines.push('');
-        lines.push(`转让溢价 = （[剩余价值]${remainingValue} + [PUSH费用]${pushFee}） * [转让溢价]${transferPercentStr} = ${transferPremiumCny} 元`);
+        lines.push(`转让溢价 = （[剩余价值]${remainingValue} + [PUSH费用]${pushFee}） * [转让溢价]${transferPercentStr} + [固定溢价]${fixedPremium} = ${transferPremiumCny} 元`);
         lines.push(`最终价格 = （[剩余价值]${remainingValue} + [PUSH费用]${pushFee}） * （1${percentSign}[转让溢价]${Math.abs(transferPercent)}%）${fixedSign}[固定溢价]${Math.abs(fixedPremiumNum)} = ${finalPrice}`);
         lines.push('');
 
