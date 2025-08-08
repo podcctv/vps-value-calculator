@@ -2,6 +2,7 @@ from datetime import datetime, date
 import argparse
 import requests
 from sqlalchemy.orm import Session
+from wcwidth import wcswidth
 
 from app.db import engine, Base
 from app.models import VPS
@@ -71,11 +72,31 @@ def list_vps():
     if not vps_list:
         print("No VPS entries found.")
         return
-    header = f"{'Name':15} {'Currency':8} {'Price':>10} {'Remain(d)':>10} {'Value(CNY)':>12}"
+    def pad(value: str, width: int, align: str = "left") -> str:
+        """Pad ``value`` accounting for wide characters."""
+        text = str(value)
+        padding = width - wcswidth(text)
+        if padding <= 0:
+            return text
+        if align == "right":
+            return " " * padding + text
+        return text + " " * padding
+
+    header = (
+        f"{pad('Name',15)} {pad('Currency',8)} "
+        f"{pad('Price',10,'right')} {pad('Remain(d)',10,'right')} {pad('Value(CNY)',12,'right')}"
+    )
     print(header)
     for vps in vps_list:
         data = calculate_remaining(vps)
-        line = f"{vps.name:15} {vps.currency:8} {vps.renewal_price:10.2f} {data['remaining_days']:10} {data['remaining_value']:12.2f}"
+        price_str = f"{vps.renewal_price:.2f}"
+        remain_value_str = f"{data['remaining_value']:.2f}"
+        line = (
+            f"{pad(vps.name,15)} {pad(vps.currency,8)} "
+            f"{pad(price_str,10,'right')} "
+            f"{pad(data['remaining_days'],10,'right')} "
+            f"{pad(remain_value_str,12,'right')}"
+        )
         print(line)
 
 def interactive_menu():
