@@ -1,6 +1,6 @@
 # VPS-value-calculation
 
-[简体中文](./README.md) | [English](./README_EN.md)
+[简体中文](./README.md) | English
 
 Another VPS value calculation
 
