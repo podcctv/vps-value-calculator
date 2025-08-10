@@ -6,7 +6,7 @@ Another VPS value calculation
 
 ## 📚 Documentation
 
-- [更新日志](./CHANGELOG_CN.md) | [Changelog](./CHANGELOG_EN.md)
+- [Changelog](./CHANGELOG_EN.md)
 
 ## 💰 VPS Residual Value Calculator
 
