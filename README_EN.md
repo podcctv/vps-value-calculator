@@ -19,7 +19,6 @@ A visual tool designed for **VPS trading** scenarios. It automatically calculate
 
 ## 📰 Latest Updates
 
-* Replaced the plain red favicon with a dynamic color-changing diamond icon.
 * Added 10-minute caching for server status requests to reduce network calls.
 * Made IP country lookup asynchronous when loading VPS pages to avoid blocking rendering.
 * Bundled and compressed static assets to improve loading performance.
