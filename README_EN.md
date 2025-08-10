@@ -162,10 +162,10 @@ Running `python cli.py` opens an interactive menu.
 
 ## 🛠 Tech Stack
 
-* **Backend**: Node.js / Python / Flask
-* **Frontend**: React (optional) / SVG template engine
-* **Database**: SQLite / MySQL
-* **Deployment**: Docker + Docker Compose + Cron
+* **Backend**: Python (Flask, SQLAlchemy, APScheduler)
+* **Templates & Styling**: Jinja2, Tailwind CSS (built with Node.js)
+* **Database**: SQLite (extensible to MySQL)
+* **Deployment**: Docker, Docker Compose, Cron
 
 ---
 

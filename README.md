@@ -164,10 +164,10 @@ python cli.py add
 
 ## 🛠 技术栈
 
-* **后端**：Node.js / Python / Flask
-* **前端**：React (可选) / SVG 动态模板引擎
-* **数据库**：SQLite / MySQL
-* **部署**：Docker + Docker Compose + Cron
+* **后端**：Python（Flask、SQLAlchemy、APScheduler）
+* **模板与样式**：Jinja2、Tailwind CSS（通过 Node.js 构建）
+* **数据库**：SQLite（可扩展至 MySQL）
+* **部署**：Docker、Docker Compose、Cron
 
 ---
 
