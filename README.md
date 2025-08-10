@@ -5,6 +5,7 @@
 Another VPS value calculation
 
 
+[English](./README_EN.md) | [简体中文](./README.md)
 
 # 📚 项目文档
 
