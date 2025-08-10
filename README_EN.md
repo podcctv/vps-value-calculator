@@ -12,7 +12,8 @@ Another VPS value calculation
 
 A visual tool designed for **VPS trading** scenarios. It automatically calculates residual value, renders images, and provides shareable links, helping you manage, display, and trade VPS resources efficiently.
 
-![image](https://github.com/user-attachments/assets/6e749447-0aa8-47ff-a381-7cbe044f33b1)
+<img width="2552" height="1557" alt="image" src="https://github.com/user-attachments/assets/696e1824-dc0a-4969-890f-13e13a2616da" />
+
 
 ---
 
