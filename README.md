@@ -4,9 +4,6 @@
 
 Another VPS value calculation
 
-
- [简体中文](./README.md)
-
 # 📚 项目文档
 
 - [📅 更新日志](./CHANGELOG_CN.md) 
