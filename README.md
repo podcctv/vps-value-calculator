@@ -5,11 +5,11 @@
 Another VPS value calculation
 
 
-[English](./README_EN.md) | [简体中文](./README.md)
+ [简体中文](./README.md)
 
 # 📚 项目文档
 
-- [📅 更新日志](./CHANGELOG_CN.md) | [Changelog](./CHANGELOG_EN.md)
+- [📅 更新日志](./CHANGELOG_CN.md) 
 
 # 💰 VPS 剩余价值计算器
 
