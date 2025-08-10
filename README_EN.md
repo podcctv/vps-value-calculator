@@ -19,6 +19,14 @@ A visual tool designed for **VPS trading** scenarios. It automatically calculate
 
 ## 📰 Latest Updates
 
+* Replaced the plain red favicon with a dynamic color-changing diamond icon.
+* Added 10-minute caching for server status requests to reduce network calls.
+* Made IP country lookup asynchronous when loading VPS pages to avoid blocking rendering.
+* Bundled and compressed static assets to improve loading performance.
+* Deployment script now outputs the latest commit hash after completion for version verification.
+* Added a loading animation while fetching VPS list data for better user feedback.
+* Added one-click Markdown copy for easy post sharing.
+* Support TCP ping with an optional port and hide the port from the displayed IP.
 * Fixed residual value calculation on the edit page and unified the final price formula across all pages.
 * Supports automatic final sale price calculation based on transfer premium with consistent logic between front end and back end.
 * Improved premium input and display, including layout adjustments and negative value handling.
