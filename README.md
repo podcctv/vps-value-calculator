@@ -1,4 +1,4 @@
-# VPS-value-calculation  [![Docker Image CI](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml/badge.svg)](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml) 
+# VPS-value-calculation  [![Build & Publish Docker](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml/badge.svg)](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml) 
 
  [![Built with Love](https://forthebadge.com/images/badges/built-with-love.svg)](https://www.nodeseek.com/post-412783-1)
 
