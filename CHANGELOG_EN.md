@@ -1,5 +1,7 @@
 # Changelog
 
+[简体中文](./CHANGELOG_CN.md) | English
+
 ## 2025-08-07
 ### UI
 - Replaced the plain red favicon with an animated color-shifting diamond for a more playful feel.
