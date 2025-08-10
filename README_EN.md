@@ -1,4 +1,4 @@
-# VPS-value-calculation
+# VPS-value-calculation [![Build & Publish Docker](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml/badge.svg)](https://github.com/podcctv/VPS-value-calculation/actions/workflows/docker-image.yml) 
 
 [简体中文](./README.md) | English
 
