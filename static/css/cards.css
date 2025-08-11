@@ -40,23 +40,17 @@
 }
 
 /* 卡片容器布局 */
-.card-container {
+.card-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
   align-items: stretch;
   padding: 1rem;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-.card-wrapper {
   width: 90%;
   max-width: 1600px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* 单个卡片样式 */
@@ -170,10 +164,23 @@
   white-space: normal;
 }
 
+@media (max-width: 1200px) {
+  .vps-card {
+    flex: 1 1 calc(33.333% - 1rem);
+    max-width: calc(33.333% - 1rem);
+  }
+}
 
-@media (max-width: 768px) {
-  .card-container {
-    gap: 0.75rem;
-    padding: 0.5rem;
+@media (max-width: 900px) {
+  .vps-card {
+    flex: 1 1 calc(50% - 1rem);
+    max-width: calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 600px) {
+  .vps-card {
+    flex: 1 1 100%;
+    max-width: 100%;
   }
 }

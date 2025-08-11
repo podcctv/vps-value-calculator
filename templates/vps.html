@@ -53,7 +53,6 @@
     <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">VPS 列表</h1>
     {% if vps_data %}
     <div class="card-wrapper">
-        <div class="card-container">
         {% for vps, data, specs, ip_info in vps_data %}
         <div class="vps-card relative {% if vps.status == 'sold' %}sold{% elif vps.status == 'inactive' %}inactive{% elif vps.status == 'forsale' %}forsale{% endif %}" data-href="{{ url_for('view_vps', name=vps.name) }}">
             {% if vps.status == 'active' %}
@@ -92,7 +91,6 @@
             </div>
         </div>
         {% endfor %}
-        </div>
     </div>
     {% else %}
     <p class="text-center">暂无 VPS 条目。</p>
