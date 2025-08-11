@@ -12,6 +12,7 @@ from flask import (
 )
 import base64
 import time
+from urllib.parse import quote
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy.orm import Session
@@ -370,8 +371,13 @@ def add_vps():
 def manage_vps():
     with Session(engine) as db:
         vps_list = db.query(VPS).all()
+        config = get_site_config()
         for vps in vps_list:
             vps.ip_display = mask_ip(vps.ip_address) if vps.ip_address else "-"
+            if config and config.site_url:
+                vps.abs_url = f"{config.site_url.rstrip('/')}/{quote(vps.name)}.svg"
+            else:
+                vps.abs_url = url_for("get_vps_image", name=vps.name, _external=True)
     return render_template("manage_vps.html", vps_list=vps_list)
 
 
@@ -505,9 +511,9 @@ def view_vps(name: str):
         generate_svg(vps, data, config)
     svg_url = url_for("static", filename=f"images/{name}.svg")
     if config and config.site_url:
-        svg_abs_url = f"{config.site_url.rstrip('/')}/{name}.svg"
+        svg_abs_url = f"{config.site_url.rstrip('/')}/{quote(name)}.svg"
     else:
-        svg_abs_url = url_for("static", filename=f"images/{name}.svg", _external=True)
+        svg_abs_url = url_for("get_vps_image", name=name, _external=True)
     return render_template(
         "view_svg.html",
         name=name,
@@ -538,7 +544,7 @@ def get_vps_image(name: str):
             directory,
             svg_path.name,
             mimetype="image/svg+xml",
-            cache_timeout=0,
+            max_age=0,
         )
 
 
