@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Banner */
 .banner {
   display: flex;
@@ -44,7 +52,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-start;
   /* Avoid layout jumping when card heights differ */
   align-items: flex-start;
   padding: 1rem;
@@ -63,7 +71,7 @@
   max-width: calc(25% - 1rem);
   min-width: 300px;
   /* Reserve space to prevent CLS while content loads */
-  min-height: 420px;
+  min-height: 440px;
   height: auto;
   max-height: 100vh;
   padding: 1rem;
@@ -168,10 +176,30 @@
 }
 
 /* Reserve width for async-loaded fields to avoid layout shift */
-.ip-address,
+.ip-address {
+  min-width: 120px;
+}
 .vendor-name,
 .isp-name {
   min-width: 80px;
+}
+
+.vps-price {
+  display: inline-block;
+  min-width: 80px;
+}
+
+/* Fixed dimensions for emoji icons */
+.flag-icon {
+  width: 20px;
+  height: 14px;
+  display: inline-block;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
 }
 
 @media (max-width: 1200px) {
