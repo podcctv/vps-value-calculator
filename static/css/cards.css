@@ -41,7 +41,8 @@
 
 /* 全局变量 */
 :root {
-  --card-width: 52rem;
+  /* Responsive max card width: min 20rem, preferred 80vw, max 40rem */
+  --card-width: clamp(20rem, 80vw, 40rem);
 }
 
 /* 卡片容器布局 */
@@ -69,8 +70,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: var(--card-width);
-  max-width: 90vw;
+  width: 100%;
+  max-width: var(--card-width);
   height: auto;
   max-height: 100vh;
   padding: 1rem;
