@@ -55,6 +55,8 @@ body {
     box-shadow: 0 0 12px rgba(0, 255, 128, 0.1);
     width: 100%;
     max-width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
   }
 
   .card-status-tag {
