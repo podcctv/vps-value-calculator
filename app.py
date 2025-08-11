@@ -18,6 +18,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import date, datetime
 from markupsafe import Markup
 
+from flask_compress import Compress
+
 from app.db import engine, Base
 from app.models import VPS, User, InviteCode, SiteConfig
 from app.utils import (
@@ -34,7 +36,11 @@ from app.utils import (
 )
 
 app = Flask(__name__)
+Compress(app)
 app.secret_key = "change-me"
+
+# Cache static files for one year to leverage browser caching
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 31536000
 TWEMOJI_BASE = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg"
 
 # Animated favicon (16x16 diamond that cycles through colors)
@@ -504,7 +510,13 @@ def get_vps_image(name: str):
         data = calculate_remaining(vps)
         svg_path = generate_svg(vps, data, config)
         directory = svg_path.parent
-        return send_from_directory(directory, svg_path.name, mimetype="image/svg+xml")
+        # Dynamic SVGs change frequently; disable caching
+        return send_from_directory(
+            directory,
+            svg_path.name,
+            mimetype="image/svg+xml",
+            cache_timeout=0,
+        )
 
 
 if __name__ == "__main__":

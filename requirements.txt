@@ -3,3 +3,4 @@ SQLAlchemy==2.0.23
 APScheduler==3.10.4
 requests==2.31.0
 wcwidth==0.2.6
+Flask-Compress==1.18

@@ -11,8 +11,8 @@
 </head>
 <body class="min-h-screen font-mono flex flex-col">
     {% include 'loading_overlay.html' %}
-    <script src="{{ url_for('static', filename='js/loading.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/probe.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/favicon.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loading.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/probe.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/favicon.js') }}" defer></script>
 </body>
 </html>
