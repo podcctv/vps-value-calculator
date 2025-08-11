@@ -71,14 +71,18 @@ def favicon():
 
 
 @app.template_filter("twemoji")
-def twemoji_filter(emoji: str) -> str:
-    """Return an HTML img tag rendering the emoji via Twemoji."""
+def twemoji_filter(emoji: str, width: int = 16, height: int = 16, extra_class: str = "") -> str:
+    """Return an HTML img tag rendering the emoji via Twemoji.
+
+    Allows specifying explicit width/height and an extra CSS class to
+    help reserve layout space and reduce CLS.
+    """
     code_points = "-".join(f"{ord(c):x}" for c in emoji)
     url = f"{TWEMOJI_BASE}/{code_points}.svg"
     return Markup(
-        f'<img src="{url}" alt="{emoji}" class="twemoji" '
-        'style="display:inline-block;height:1em;width:1em;vertical-align:-0.1em;">'
-
+        f'<img src="{url}" alt="{emoji}" class="twemoji {extra_class}" '
+        f'width="{width}" height="{height}" '
+        f'style="display:inline-block;width:{width}px;height:{height}px;vertical-align:-0.1em;">'
     )
 
 

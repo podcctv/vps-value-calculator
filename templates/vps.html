@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="VPS剩余价值计算器，快速查看与管理主机信息并计算服务器的剩余价值。">
     <title>vps剩余价值计算器</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"></noscript>
+    <link rel="preload" href="{{ url_for('static', filename='fonts/JetBrainsMono-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ url_for('static', filename='css/tailwind.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="{{ url_for('static', filename='css/crt.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="{{ url_for('static', filename='css/cards.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -72,11 +69,12 @@
                 <div class="vps-row"><span>内存：</span><span>{{ specs.memory }}</span></div>
                 <div class="vps-row"><span>存储：</span><span>{{ specs.storage }}</span></div>
                 <div class="vps-row"><span>月流量：</span><span>{{ vps.traffic_limit or '-' }}</span></div>
-    <div class="vps-row"><span>IP 地址：</span><span class="ip-address">{{ ip_info.flag|twemoji }} {{ ip_info.ip_display }}</span></div>
+    <div class="vps-row"><span>IP 地址：</span><span class="ip-address">{{ ip_info.flag|twemoji(20,14,'flag-icon') }} {{ ip_info.ip_display }}</span></div>
     {% if vps.status != 'sold' and vps.status != 'inactive' %}
-    <div class="vps-row"><span>在线状态：</span><span class="ping-status">{{ ip_info.ping_status }}</span></div>
+    {% set status_parts = ip_info.ping_status.split(' ', 1) %}
+    <div class="vps-row"><span>在线状态：</span><span class="ping-status">{{ status_parts[0]|twemoji(12,12,'status-dot') }} {{ status_parts[1] if status_parts|length > 1 else '' }}</span></div>
     {% endif %}
-                <div class="vps-row"><span>续费金额：</span><span>{{ vps.renewal_price or '-' }} {{ vps.currency }}</span></div>
+                <div class="vps-row"><span>续费金额：</span><span class="vps-price">{{ vps.renewal_price or '-' }} {{ vps.currency }}</span></div>
                 <div class="vps-row"><span>购买日期：</span><span>{{ vps.purchase_date.strftime('%Y-%m-%d') if vps.purchase_date and (vps.status == 'active' or vps.status == 'forsale') else '-' }}</span></div>
                 <div class="vps-row"><span>续费周期：</span><span>{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</span></div>
                 <div class="vps-row"><span>剩余天数：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_days }} 天{% else %}-{% endif %}</span></div>
@@ -84,7 +82,7 @@
                 {% if vps.status == 'forsale' %}
                 <div class="vps-row">
                     <span>最终价格：</span>
-                    <span>{{ data.final_price }} CNY</span>
+                    <span class="vps-price">{{ data.final_price }} CNY</span>
                 </div>
                 {% endif %}
                 <div class="vps-row"><span>描述说明：</span><span>{{ vps.description or '-' }}</span></div>
