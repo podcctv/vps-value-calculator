@@ -11,6 +11,7 @@ from flask import (
     jsonify,
 )
 import base64
+import time
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy.orm import Session
@@ -41,6 +42,15 @@ app.secret_key = "change-me"
 
 # Cache static files for one year to leverage browser caching
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 31536000
+
+
+@app.after_request
+def add_cache_headers(response):
+    if request.path.startswith("/static/"):
+        response.headers.setdefault(
+            "Cache-Control", "public, max-age=31536000, immutable"
+        )
+    return response
 TWEMOJI_BASE = "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg"
 
 # Animated favicon (16x16 diamond that cycles through colors)
@@ -97,6 +107,38 @@ def get_site_stats():
             calculate_remaining(vps)["remaining_value"] for vps in active_vps
         )
     return {"count": count, "total_value": round(total, 2)}
+
+
+_vps_cache = {"data": None, "time": 0}
+
+
+def get_vps_data():
+    now = time.time()
+    if _vps_cache["data"] is not None and now - _vps_cache["time"] < 60:
+        return _vps_cache["data"]
+    with Session(engine) as db:
+        vps_list = db.query(VPS).all()
+        vps_data = []
+        for vps in vps_list:
+            data = calculate_remaining(vps)
+            specs = parse_instance_config(vps.instance_config)
+            ip_info = {
+                "ip_display": mask_ip(vps.ip_address) if vps.ip_address else "-",
+                "ping_status": ping_ip(vps.ip_address) if vps.ip_address else "",
+                "flag": ip_to_flag(vps.ip_address) if vps.ip_address else "",
+                "isp": ip_to_isp(vps.ip_address) if vps.ip_address else "-",
+            }
+            vps_data.append((vps, data, specs, ip_info))
+        status_order = {"active": 0, "forsale": 1, "sold": 2, "inactive": 3}
+        vps_data.sort(
+            key=lambda item: (
+                status_order.get(item[0].status, 3),
+                -item[1]["remaining_value"],
+            )
+        )
+    _vps_cache["data"] = vps_data
+    _vps_cache["time"] = now
+    return vps_data
 
 
 def login_required(f):
@@ -418,26 +460,7 @@ def index():
 
 @app.route("/vps")
 def vps_list():
-    with Session(engine) as db:
-        vps_list = db.query(VPS).all()
-        vps_data = []
-        for vps in vps_list:
-            data = calculate_remaining(vps)
-            specs = parse_instance_config(vps.instance_config)
-            ip_info = {
-                "ip_display": mask_ip(vps.ip_address) if vps.ip_address else "-",
-                "ping_status": ping_ip(vps.ip_address) if vps.ip_address else "",
-                "flag": ip_to_flag(vps.ip_address) if vps.ip_address else "",
-                "isp": ip_to_isp(vps.ip_address) if vps.ip_address else "-",
-            }
-            vps_data.append((vps, data, specs, ip_info))
-        status_order = {"active": 0, "forsale": 1, "sold": 2, "inactive": 3}
-        vps_data.sort(
-            key=lambda item: (
-                status_order.get(item[0].status, 3),
-                -item[1]["remaining_value"],
-            )
-        )
+    vps_data = get_vps_data()
     return render_template("vps.html", vps_data=vps_data)
 
 
