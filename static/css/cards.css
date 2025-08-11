@@ -45,7 +45,8 @@
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  align-items: stretch;
+  /* Avoid layout jumping when card heights differ */
+  align-items: flex-start;
   padding: 1rem;
   width: 90%;
   max-width: 1600px;
@@ -61,6 +62,8 @@
   flex: 1 1 calc(25% - 1rem);
   max-width: calc(25% - 1rem);
   min-width: 300px;
+  /* Reserve space to prevent CLS while content loads */
+  min-height: 420px;
   height: auto;
   max-height: 100vh;
   padding: 1rem;
@@ -162,6 +165,13 @@
   max-width: 100%;
   word-break: break-all;
   white-space: normal;
+}
+
+/* Reserve width for async-loaded fields to avoid layout shift */
+.ip-address,
+.vendor-name,
+.isp-name {
+  min-width: 80px;
 }
 
 @media (max-width: 1200px) {
