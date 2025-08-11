@@ -45,12 +45,7 @@
     {% if vps_list %}
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {% for vps in vps_list %}
-        {% if config and config.site_url %}
-        {% set abs_url = config.site_url.rstrip('/') ~ '/' ~ vps.name ~ '.svg' %}
-        {% else %}
-        {% set abs_url = url_for('get_vps_image', name=vps.name, _external=True) %}
-        {% endif %}
-        <div class="bg-[#111111] rounded-xl border border-cyan-400 p-6 relative shadow-lg hover:shadow-2xl hover:border-cyan-200 transition-transform transform hover:-translate-y-1" data-abs-url="{{ abs_url }}">
+        <div class="bg-[#111111] rounded-xl border border-cyan-400 p-6 relative shadow-lg hover:shadow-2xl hover:border-cyan-200 transition-transform transform hover:-translate-y-1" data-abs-url="{{ vps.abs_url }}">
             <h2 class="text-xl text-cyan-400 mb-2">{{ vps.name }}</h2>
             <p class="text-sm text-gray-300 mb-2">IP：{{ vps.ip_display }}</p>
             <div class="crt my-4 p-2 rounded overflow-x-auto" data-svg-url="{{ url_for('static', filename='images/' ~ vps.name ~ '.svg') }}"></div>
@@ -79,12 +74,8 @@
   document.querySelectorAll('.copy-markdown').forEach(btn => {
     btn.addEventListener('click', () => {
       const card = btn.closest('[data-abs-url]');
-      const rawUrl = card.dataset.absUrl;
-      const encodedUrl = rawUrl
-        .split('/')
-        .map((seg, idx) => (idx < 3 ? seg : encodeURIComponent(seg)))
-        .join('/');
-      const markdown = `![image](${encodedUrl})`;
+      const url = card.dataset.absUrl;
+      const markdown = `![image](${url})`;
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(markdown).then(() => {

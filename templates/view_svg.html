@@ -85,10 +85,7 @@
 
 
     document.getElementById('copyLinkBtn').addEventListener('click', function () {
-        const encodedUrl = {{ svg_abs_url|tojson }}
-            .split('/')
-            .map((seg, idx) => (idx < 3 ? seg : encodeURIComponent(seg)))
-            .join('/');
+        const encodedUrl = {{ svg_abs_url|tojson }};
         const vendor = {{ (vps.vendor_name or '-')|tojson }};
         const machineName = {{ vps.name|tojson }};
         const status = {{ vps.status|tojson }};

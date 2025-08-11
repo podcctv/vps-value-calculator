@@ -3,6 +3,7 @@ import importlib.util
 from pathlib import Path
 import sys
 import uuid
+from urllib.parse import quote
 
 # Load the Flask application from app.py despite the package name conflict
 ROOT = Path(__file__).resolve().parents[1]
@@ -80,3 +81,26 @@ def test_manage_displays_ip_without_port(client):
     text = resp.get_data(as_text=True)
     assert '1.**.**.4' in text
     assert ':5678' not in text
+
+
+def test_svg_url_handles_special_chars(client):
+    username = f"u_{uuid.uuid4().hex}"
+    res = client.post('/register', data={'username': username, 'password': 'p', 'invite_code': 'Flanker'})
+    assert res.status_code == 302
+
+    vps_name = "[香港]" + uuid.uuid4().hex
+    data = {
+        'name': vps_name,
+        'purchase_date': '2024-01-01',
+        'renewal_days': '',
+        'renewal_price': '',
+        'currency': 'USD',
+        'exchange_rate': '',
+        'dynamic_svg': 'on',
+    }
+    res = client.post('/vps/new', data=data)
+    assert res.status_code == 302
+
+    encoded = quote(vps_name)
+    resp = client.get(f'/vps/{encoded}.svg')
+    assert resp.status_code == 200
