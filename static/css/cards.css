@@ -66,7 +66,7 @@
   flex-direction: column;
   flex: 1 1 calc(25% - 1rem);
   max-width: calc(25% - 1rem);
-  min-width: 250px;
+  min-width: 300px;
   height: auto;
   max-height: 100vh;
   padding: 1rem;
