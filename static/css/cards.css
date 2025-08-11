@@ -41,7 +41,7 @@
 
 /* 全局变量 */
 :root {
-  --card-width: 20ch; /* 默认卡片宽度，JS 会根据标题长度更新 */
+  --card-width: 52rem;
 }
 
 /* 卡片容器布局 */
@@ -164,6 +164,7 @@
   color: var(--font-color);
 }
 
+.vps-title,
 .ip-address,
 .vendor-name,
 .isp-name {
