@@ -3,15 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VPS剩余价值计算器，快速查看与管理主机信息并计算服务器的剩余价值。">
     <title>vps剩余价值计算器</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"></noscript>
+    <link rel="preload" href="{{ url_for('static', filename='css/tailwind.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/crt.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/cards.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/responsive.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/loading.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+    </noscript>
 </head>
 <body class="min-h-screen font-mono flex flex-col">
 {% include 'loading_overlay.html' %}
