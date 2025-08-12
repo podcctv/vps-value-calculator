@@ -232,6 +232,17 @@ scheduler.add_job(refresh_ip_info, "interval", minutes=10)
 scheduler.start()
 
 
+@app.route("/robots.txt")
+def robots_txt():
+    lines = [
+        "User-agent: *",
+        "Disallow: /register",
+        "Disallow: /login",
+        "Allow: /vps",
+    ]
+    return Response("\n".join(lines), mimetype="text/plain")
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
