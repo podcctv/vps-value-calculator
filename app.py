@@ -23,7 +23,7 @@ from markupsafe import Markup
 from flask_compress import Compress
 
 from app.db import engine, Base
-from app.models import VPS, User, InviteCode, SiteConfig
+from app.models import VPS, User, InviteCode, SiteConfig, VisitStats
 from app.utils import (
     calculate_remaining,
     generate_svg,
@@ -112,6 +112,38 @@ def get_site_stats():
             calculate_remaining(vps)["remaining_value"] for vps in active_vps
         )
     return {"count": count, "total_value": round(total, 2)}
+
+
+def get_visit_stats():
+    with Session(engine) as db:
+        stats = db.get(VisitStats, 1)
+        if not stats:
+            return {"visitors": 0, "crawlers": 0}
+        return {"visitors": stats.visitors, "crawlers": stats.crawlers}
+
+
+@app.before_request
+def track_visits():
+    if request.endpoint == "static":
+        return
+    ua = request.headers.get("User-Agent", "").lower()
+    bots = ("bot", "spider", "crawl", "slurp")
+    is_bot = any(keyword in ua for keyword in bots)
+    with Session(engine) as db:
+        stats = db.get(VisitStats, 1)
+        if not stats:
+            stats = VisitStats(id=1, visitors=0, crawlers=0)
+            db.add(stats)
+        if is_bot:
+            stats.crawlers += 1
+        else:
+            stats.visitors += 1
+        db.commit()
+
+
+@app.context_processor
+def inject_visit_stats():
+    return {"visit_stats": get_visit_stats()}
 
 
 _vps_cache = {"data": None, "time": 0}
