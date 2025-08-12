@@ -3,6 +3,7 @@
     src="https://img.shields.io/badge/%C2%A9%20{{ current_year }}-{{ (config.copyright or '') | urlencode }}-blue"
     alt="Copyright badge"
     class="h-5"
+    width="{{ ('© ' ~ current_year)|shield_width(config.copyright or '') }}"
     height="20"
     loading="lazy"
   />
@@ -10,6 +11,7 @@
     src="https://img.shields.io/badge/Visitors-{{ visit_stats.visitors }}-blue"
     alt="Visitors badge"
     class="h-5"
+    width="{{ 'Visitors'|shield_width(visit_stats.visitors) }}"
     height="20"
     loading="lazy"
   />
@@ -17,6 +19,7 @@
     src="https://img.shields.io/badge/Crawlers-{{ visit_stats.crawlers }}-orange"
     alt="Crawlers badge"
     class="h-5"
+    width="{{ 'Crawlers'|shield_width(visit_stats.crawlers) }}"
     height="20"
     loading="lazy"
   />
