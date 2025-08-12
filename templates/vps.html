@@ -107,31 +107,31 @@
             if (rect.width > maxWidth) maxWidth = rect.width;
             if (rect.height > maxHeight) maxHeight = rect.height;
         });
-    cards.forEach(card => {
-        card.style.width = `${maxWidth}px`;
-        card.style.minHeight = `${maxHeight}px`;
-        card.style.flex = `0 0 ${maxWidth}px`;
-    });
-}
+        cards.forEach(card => {
+            card.style.width = `${maxWidth}px`;
+            card.style.height = `${maxHeight}px`;
+            card.style.flex = `0 0 ${maxWidth}px`;
+        });
+    }
 
-function initCards() {
-    unifyCardSizes();
+    function initCards() {
+        unifyCardSizes();
         document.querySelectorAll('.vps-card').forEach(card => {
             card.addEventListener('click', () => {
                 window.location.href = card.dataset.href;
             });
         });
-}
+    }
 
-document.addEventListener('DOMContentLoaded', initCards);
-window.addEventListener('resize', () => {
-    document.querySelectorAll('.vps-card').forEach(card => {
-        card.style.width = '';
-        card.style.minHeight = '';
-        card.style.flex = '';
+    window.addEventListener('load', initCards);
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.vps-card').forEach(card => {
+            card.style.width = '';
+            card.style.height = '';
+            card.style.flex = '';
+        });
+        unifyCardSizes();
     });
-    unifyCardSizes();
-});
 </script>
 {% include 'footer.html' %}
 
