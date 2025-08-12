@@ -62,3 +62,11 @@ class SiteConfig(Base):
     site_url = Column(String, default="")
     username = Column(String, default="@Flanker")
     copyright = Column(String, default="xxx.com")
+
+
+class VisitStats(Base):
+    __tablename__ = "visit_stats"
+
+    id = Column(Integer, primary_key=True)
+    visitors = Column(Integer, default=0, nullable=False)
+    crawlers = Column(Integer, default=0, nullable=False)
