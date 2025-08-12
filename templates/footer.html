@@ -1,5 +1,11 @@
 <footer class="mt-auto w-full h-16 py-4 bg-gray-900 flex items-center justify-center gap-2 text-white text-center">
-  <span>© 2025 vvc.428048.xyz</span>
+  <img
+    src="https://img.shields.io/badge/%C2%A9%20{{ current_year }}-{{ (config.copyright or '') | urlencode }}-blue"
+    alt="Copyright badge"
+    class="h-5"
+    height="20"
+    loading="lazy"
+  />
   <img
     src="https://img.shields.io/badge/Visitors-{{ visit_stats.visitors }}-blue"
     alt="Visitors badge"

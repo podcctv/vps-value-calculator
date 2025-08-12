@@ -205,6 +205,7 @@ def inject_globals():
         "current_user": get_current_user(),
         "config": get_site_config(),
         "site_stats": get_site_stats(),
+        "current_year": datetime.now().year,
     }
 
 
