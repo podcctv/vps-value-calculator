@@ -86,6 +86,17 @@ def twemoji_filter(emoji: str, width: int = 16, height: int = 16, extra_class: s
     )
 
 
+@app.template_filter("shield_width")
+def shield_width_filter(label: str, message) -> int:
+    """Estimate the width of a shields.io badge.
+
+    This provides a rough width so the browser can reserve space before the
+    image loads, helping to minimise layout shifts for dynamic badges."""
+    base = 80
+    char_width = 8
+    return base + char_width * (len(str(label)) + len(str(message)))
+
+
 app.add_template_filter(twemoji_url, "twemoji_url")
 
 Base.metadata.create_all(bind=engine)
