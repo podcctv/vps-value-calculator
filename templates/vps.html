@@ -97,13 +97,41 @@
 </div>
 
 <script>
-
-    document.querySelectorAll('.vps-card').forEach(card => {
-        card.addEventListener('click', () => {
-            window.location.href = card.dataset.href;
+    function unifyCardSizes() {
+        const cards = Array.from(document.querySelectorAll('.vps-card'));
+        if (!cards.length) return;
+        let maxWidth = 0;
+        let maxHeight = 0;
+        cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            if (rect.width > maxWidth) maxWidth = rect.width;
+            if (rect.height > maxHeight) maxHeight = rect.height;
         });
-    });
+        cards.forEach(card => {
+            card.style.width = `${maxWidth}px`;
+            card.style.height = `${maxHeight}px`;
+            card.style.flex = `0 0 ${maxWidth}px`;
+        });
+    }
 
+    function initCards() {
+        unifyCardSizes();
+        document.querySelectorAll('.vps-card').forEach(card => {
+            card.addEventListener('click', () => {
+                window.location.href = card.dataset.href;
+            });
+        });
+    }
+
+    window.addEventListener('load', initCards);
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.vps-card').forEach(card => {
+            card.style.width = '';
+            card.style.height = '';
+            card.style.flex = '';
+        });
+        unifyCardSizes();
+    });
 </script>
 {% include 'footer.html' %}
 
