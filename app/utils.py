@@ -396,13 +396,11 @@ def generate_svg(vps, data, config=None):
     specs = parse_instance_config(vps.instance_config)
     STATIC_DIR.mkdir(parents=True, exist_ok=True)
     out_file = STATIC_DIR / f"{vps.name}.svg"
-    if vps.status in ["sold", "inactive"] and out_file.exists():
-        return out_file
     today = date.today()
     ip_raw = getattr(vps, "ip_address", "") or ""
     ip_info = {
         "ip_display": mask_ip(ip_raw) if ip_raw else "-",
-        "ping_status": ping_ip(ip_raw) if ip_raw else "未知",
+        "ping_status": ping_ip(ip_raw) if ip_raw and vps.status not in ["sold", "inactive"] else "未知",
         "flag": ip_to_flag(ip_raw) if ip_raw else "🏳️",
         "isp": ip_to_isp(ip_raw) if ip_raw else "-",
     }

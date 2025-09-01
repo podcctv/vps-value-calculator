@@ -552,7 +552,9 @@ def view_vps(name: str):
         specs = parse_instance_config(vps.instance_config)
         ip_info = {
             "ip_display": mask_ip(vps.ip_address) if vps.ip_address else "-",
-            "ping_status": ping_ip(vps.ip_address) if vps.ip_address else "",
+            "ping_status": ping_ip(vps.ip_address)
+            if vps.ip_address and vps.status not in ["sold", "inactive"]
+            else "",
             "flag": ip_to_flag(vps.ip_address) if vps.ip_address else "",
             "isp": ip_to_isp(vps.ip_address) if vps.ip_address else "-",
         }
