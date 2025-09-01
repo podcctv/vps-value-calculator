@@ -47,8 +47,10 @@
             <div class="label">月流量</div><div>：</div><div>{{ vps.traffic_limit or '-' }}</div>
             <div class="label">IP 地址</div><div>：</div><div class="ip-address">{{ ip_info.flag|twemoji(20,14,'flag-icon') }} {{ ip_info.ip_display }}</div>
             <div class="label">ISP</div><div>：</div><div class="isp-name">{{ ip_info.isp }}</div>
+            {% if vps.status != 'sold' and vps.status != 'inactive' %}
             {% set status_parts = ip_info.ping_status.split(' ', 1) %}
             <div class="label">在线状态</div><div>：</div><div><span class="ping-status">{{ status_parts[0]|twemoji(12,12,'status-dot') }} {{ status_parts[1] if status_parts|length > 1 else '' }}</span></div>
+            {% endif %}
             <div class="label">到期时间</div><div>：</div><div>{{ data.cycle_end.strftime('%Y/%m/%d') if data.cycle_end else '-' }}</div>
             <div class="label">续费金额</div><div>：</div><div class="vps-price">{{ vps.renewal_price or '-' }} {{ vps.currency }}</div>
             {% if vps.status == 'forsale' %}
@@ -135,7 +137,7 @@
         lines.push(`- **商家**：\`${info['商家']}\``);
         lines.push(`- **配置**：${info['配置']}`);
         lines.push(`- **IP 地址**：${info['IP 地址']}`);
-        lines.push(`- **在线状态**：${info['在线状态']}\n`);
+        if (info['在线状态']) lines.push(`- **在线状态**：${info['在线状态']}\n`);
 
         lines.push(`### 💰 出售信息`);
         lines.push(`- **续费金额**：\`${info['续费金额']}\``);
