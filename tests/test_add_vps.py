@@ -104,3 +104,27 @@ def test_svg_url_handles_special_chars(client):
     encoded = quote(vps_name)
     resp = client.get(f'/vps/{encoded}.svg')
     assert resp.status_code == 200
+
+
+def test_add_vps_rejects_path_traversal(client):
+    username = f"u_{uuid.uuid4().hex}"
+    res = client.post('/register', data={'username': username, 'password': 'p', 'invite_code': 'Flanker'})
+    assert res.status_code == 302
+
+    svg_files_before = {p.relative_to(ROOT) for p in ROOT.glob('static/**/*.svg')}
+    data = {
+        'name': '../etc/passwd',
+        'purchase_date': '2024-01-01',
+        'renewal_days': '',
+        'renewal_price': '',
+        'currency': 'USD',
+        'exchange_rate': '',
+        'dynamic_svg': 'on',
+    }
+    res = client.post('/vps/new', data=data)
+    assert res.status_code == 400
+
+    svg_files_after = {p.relative_to(ROOT) for p in ROOT.glob('static/**/*.svg')}
+    assert svg_files_after == svg_files_before
+    outside_path = ROOT / 'static' / 'etc' / 'passwd.svg'
+    assert not outside_path.exists()

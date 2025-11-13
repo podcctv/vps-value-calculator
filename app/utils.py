@@ -1,12 +1,13 @@
 from datetime import date, timedelta
 from calendar import monthrange
 from jinja2 import Environment, FileSystemLoader
-from pathlib import Path
+from pathlib import Path, PurePath
 import base64
 from functools import lru_cache
 import re
 import requests
 import time
+from werkzeug.utils import secure_filename
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static" / "images"
@@ -391,11 +392,18 @@ def ip_to_isp(ip: str) -> str:
     return isp
 
 
-def generate_svg(vps, data, config=None):
+def generate_svg(vps, data, config=None, safe_name=None):
     template = env.get_template("vps.svg")
     specs = parse_instance_config(vps.instance_config)
-    STATIC_DIR.mkdir(parents=True, exist_ok=True)
-    out_file = STATIC_DIR / f"{vps.name}.svg"
+    images_dir = STATIC_DIR.resolve()
+    images_dir.mkdir(parents=True, exist_ok=True)
+    if safe_name is None:
+        safe_name = secure_filename(getattr(vps, "name", ""))
+    if not safe_name:
+        raise ValueError("VPS name is invalid for SVG generation")
+    if PurePath(safe_name).name != safe_name:
+        raise ValueError("Unsafe VPS name detected")
+    out_file = images_dir / f"{safe_name}.svg"
     today = date.today()
     ip_raw = getattr(vps, "ip_address", "") or ""
     ip_info = {
