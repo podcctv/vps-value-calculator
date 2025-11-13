@@ -4,9 +4,11 @@ from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 import base64
 from functools import lru_cache
+from typing import Optional, Tuple
 import re
 import requests
 import time
+import ipaddress
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static" / "images"
@@ -166,6 +168,42 @@ _flag_cache = {}
 _isp_cache = {}
 
 
+def parse_host_port(value: str) -> Tuple[str, Optional[int]]:
+    """Split ``value`` into host and optional port.
+
+    The parser understands common forms such as ``host``, ``host:port`` and
+    ``[ipv6]:port``.  Bare IPv6 literals are detected via :mod:`ipaddress` so
+    that addresses like ``"2001:db8::1"`` are *not* misinterpreted as
+    ``host:port`` despite containing colons.
+    """
+
+    value = (value or "").strip()
+    if not value:
+        return "", None
+
+    if value.startswith("["):
+        end = value.find("]")
+        if end != -1:
+            host = value[1:end]
+            rest = value[end + 1 :]
+            if rest.startswith(":") and rest[1:].isdigit():
+                return host, int(rest[1:])
+            return host, None
+
+    try:
+        ipaddress.ip_address(value)
+        return value, None
+    except ValueError:
+        pass
+
+    if ":" in value:
+        host, port = value.rsplit(":", 1)
+        if port.isdigit():
+            return host, int(port)
+
+    return value, None
+
+
 def ping_ip(ip: str) -> str:
     """Ping IP or ``ip:port`` and return emoji status with simple caching."""
     import subprocess
@@ -180,10 +218,11 @@ def ping_ip(ip: str) -> str:
         return cached[1]
 
     status = "🔴 离线"
-    if ":" in ip:
-        host, port = ip.rsplit(":", 1)
+    host, port = parse_host_port(ip)
+    target = host or ip
+    if port is not None:
         try:
-            socket.create_connection((host, int(port)), timeout=1).close()
+            socket.create_connection((target, port), timeout=1).close()
             status = "🟢 在线"
         except Exception:
             pass
@@ -195,7 +234,7 @@ def ping_ip(ip: str) -> str:
             timeout_arg = "-w" if system.startswith("win") else "-W"
             try:
                 res = subprocess.run(
-                    [ping_exec, count_arg, "1", timeout_arg, "1", ip],
+                    [ping_exec, count_arg, "1", timeout_arg, "1", target],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
                 )
@@ -206,7 +245,7 @@ def ping_ip(ip: str) -> str:
 
         if status == "🔴 离线":
             try:
-                socket.create_connection((ip, 80), timeout=1).close()
+                socket.create_connection((target, 80), timeout=1).close()
                 status = "🟢 在线"
             except Exception:
                 pass
