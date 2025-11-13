@@ -12,8 +12,10 @@ from flask import (
 )
 import base64
 import time
+import os
 from urllib.parse import quote
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from functools import wraps
 from sqlalchemy.orm import Session
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -199,6 +201,36 @@ def admin_required(f):
     return decorated
 
 
+def validate_vps_name(name: str) -> str:
+    """Validate a VPS name and return a filesystem-safe variant.
+
+    The function rejects path traversal attempts, path separators and other
+    characters that could cause the generated SVG file to escape the
+    ``static/images`` directory. The returned value is safe to use as a file
+    name inside ``static/images``.
+    """
+
+    if not name or not name.strip():
+        raise ValueError("VPS name is required")
+
+    if ".." in name:
+        raise ValueError("VPS name cannot contain '..'")
+
+    separators = {"/", "\\"}
+    separators.add(os.sep)
+    if os.altsep:
+        separators.add(os.altsep)
+
+    if any(sep in name for sep in separators if sep):
+        raise ValueError("VPS name cannot contain path separators")
+
+    safe_name = secure_filename(name)
+    if not safe_name:
+        raise ValueError("VPS name is not valid")
+
+    return safe_name
+
+
 @app.context_processor
 def inject_globals():
     return {
@@ -245,7 +277,11 @@ def refresh_images():
             if not vps.dynamic_svg or vps.status in ["sold", "inactive"]:
                 continue
             data = calculate_remaining(vps)
-            generate_svg(vps, data, config)
+            try:
+                safe_name = validate_vps_name(vps.name)
+            except ValueError:
+                continue
+            generate_svg(vps, data, config, safe_name=safe_name)
 
 
 def refresh_ip_info():
@@ -379,6 +415,10 @@ def manage_users():
 def add_vps():
     if request.method == "POST":
         form = request.form
+        try:
+            safe_name = validate_vps_name(form["name"])
+        except ValueError as exc:
+            abort(400, description=str(exc))
         with Session(engine) as db:
             vps = VPS(
                 name=form["name"],
@@ -409,7 +449,7 @@ def add_vps():
             db.commit()
             config = db.query(SiteConfig).first()
             data = calculate_remaining(vps)
-            generate_svg(vps, data, config)
+            generate_svg(vps, data, config, safe_name=safe_name)
         return redirect(url_for("index"))
     return render_template("add_vps.html")
 
@@ -438,6 +478,10 @@ def edit_vps(vps_id: int):
             abort(404)
         if request.method == "POST":
             form = request.form
+            try:
+                safe_name = validate_vps_name(form["name"])
+            except ValueError as exc:
+                abort(400, description=str(exc))
             vps.name = form["name"]
             vps.purchase_date = date.fromisoformat(form["purchase_date"])
             vps.renewal_days = int(form["renewal_days"] or 0)
@@ -464,7 +508,7 @@ def edit_vps(vps_id: int):
             db.commit()
             config = db.query(SiteConfig).first()
             data = calculate_remaining(vps)
-            generate_svg(vps, data, config)
+            generate_svg(vps, data, config, safe_name=safe_name)
             return redirect(url_for("manage_vps"))
         vps_data = {
             "name": vps.name,
@@ -543,6 +587,10 @@ def ip_info(ip: str):
 
 @app.route("/vps/<string:name>")
 def view_vps(name: str):
+    try:
+        validate_vps_name(name)
+    except ValueError:
+        abort(404)
     with Session(engine) as db:
         vps = db.query(VPS).filter(VPS.name == name).first()
         if not vps or not vps.dynamic_svg:
@@ -558,8 +606,12 @@ def view_vps(name: str):
             "flag": ip_to_flag(vps.ip_address) if vps.ip_address else "",
             "isp": ip_to_isp(vps.ip_address) if vps.ip_address else "-",
         }
-        generate_svg(vps, data, config)
-    svg_url = url_for("static", filename=f"images/{name}.svg")
+        try:
+            safe_name = validate_vps_name(vps.name)
+        except ValueError:
+            abort(404)
+        generate_svg(vps, data, config, safe_name=safe_name)
+    svg_url = url_for("static", filename=f"images/{safe_name}.svg")
     if config and config.site_url:
         svg_abs_url = f"{config.site_url.rstrip('/')}/{quote(name)}.svg"
     else:
@@ -581,13 +633,21 @@ def view_vps(name: str):
 
 @app.route("/vps/<string:name>.svg")
 def get_vps_image(name: str):
+    try:
+        validate_vps_name(name)
+    except ValueError:
+        abort(404)
     with Session(engine) as db:
         vps = db.query(VPS).filter(VPS.name == name).first()
         if not vps or not vps.dynamic_svg:
             abort(404)
         config = db.query(SiteConfig).first()
         data = calculate_remaining(vps)
-        svg_path = generate_svg(vps, data, config)
+        try:
+            safe_name = validate_vps_name(vps.name)
+        except ValueError:
+            abort(404)
+        svg_path = generate_svg(vps, data, config, safe_name=safe_name)
         directory = svg_path.parent
         # Dynamic SVGs change frequently; disable caching
         return send_from_directory(
