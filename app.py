@@ -249,6 +249,54 @@ def inject_globals():
     }
 
 
+
+def build_vps_form_data(vps=None):
+    """Return JSON/template-safe VPS form values with no nullable input values."""
+
+    defaults = {
+        "name": "",
+        "purchase_date": date.today().isoformat(),
+        "renewal_days": 30,
+        "renewal_price": "",
+        "currency": "USD",
+        "exchange_rate": "",
+        "vendor_name": "",
+        "instance_config": "",
+        "location": "",
+        "description": "",
+        "traffic_limit": "",
+        "ip_address": "",
+        "payment_method": "PayPal",
+        "transaction_fee": 0,
+        "exchange_rate_source": "system",
+        "dynamic_svg": True,
+        "status": "active",
+        "update_cycle": 1,
+        "sale_percent": 0,
+        "sale_fixed": 0,
+        "sale_method": "",
+        "push_fee": 0,
+        "push_fee_currency": "CNY",
+    }
+    if not vps:
+        return defaults
+
+    for key in defaults:
+        value = getattr(vps, key, defaults[key])
+        if key == "purchase_date":
+            defaults[key] = value.isoformat() if value else date.today().isoformat()
+        elif key == "dynamic_svg":
+            defaults[key] = bool(value)
+        elif value is None:
+            defaults[key] = "" if isinstance(defaults[key], str) else defaults[key]
+        else:
+            defaults[key] = value
+    defaults["status"] = defaults["status"] or "active"
+    defaults["currency"] = defaults["currency"] or "USD"
+    defaults["exchange_rate_source"] = defaults["exchange_rate_source"] or "system"
+    defaults["push_fee_currency"] = defaults["push_fee_currency"] or "CNY"
+    return defaults
+
 def init_sample():
     with Session(engine) as db:
         if db.query(VPS).count() == 0:
@@ -460,7 +508,7 @@ def add_vps():
             data = calculate_remaining(vps)
             generate_svg(vps, data, config, safe_name=safe_name)
         return redirect(url_for("index"))
-    return render_template("add_vps.html")
+    return render_template("add_vps.html", vps_data=build_vps_form_data())
 
 
 @app.route("/manage")
@@ -520,32 +568,7 @@ def edit_vps(vps_id: int):
             data = calculate_remaining(vps)
             generate_svg(vps, data, config, safe_name=safe_name)
             return redirect(url_for("manage_vps"))
-        vps_data = {
-            "name": vps.name,
-            "purchase_date": vps.purchase_date.isoformat(),
-            "renewal_days": vps.renewal_days,
-            "renewal_price": vps.renewal_price,
-            "currency": vps.currency,
-            "exchange_rate": vps.exchange_rate,
-            "vendor_name": vps.vendor_name,
-            "instance_config": vps.instance_config,
-            "location": vps.location,
-            "description": vps.description,
-            "traffic_limit": vps.traffic_limit,
-            "ip_address": vps.ip_address,
-            "payment_method": vps.payment_method,
-            "transaction_fee": vps.transaction_fee,
-            "exchange_rate_source": vps.exchange_rate_source,
-            "dynamic_svg": vps.dynamic_svg,
-            "status": vps.status,
-            "update_cycle": vps.update_cycle,
-            "sale_percent": vps.sale_percent,
-            "sale_fixed": vps.sale_fixed,
-            "sale_method": vps.sale_method,
-            "push_fee": vps.push_fee,
-            "push_fee_currency": vps.push_fee_currency,
-        }
-        return render_template("add_vps.html", vps_data=vps_data)
+        return render_template("add_vps.html", vps_data=build_vps_form_data(vps))
 
 
 @app.route("/vps/<int:vps_id>/delete", methods=["POST"])

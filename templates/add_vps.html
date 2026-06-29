@@ -3,15 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>vps剩余价值计算器</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"></noscript>
+  <title>{{ '编辑 VPS' if vps_data.name else '添加 VPS' }} - VPS剩余价值计算器</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css', v=asset_version) }}">
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css', v=asset_version) }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css', v=asset_version) }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css', v=asset_version) }}">
@@ -21,379 +14,143 @@
 <body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono flex flex-col">
   {% include 'loading_overlay.html' %}
   {% include 'navbar.html' %}
-  <div id="root"></div>
-  <script>
-    window.initialData = {{ vps_data|tojson|safe if vps_data else 'null' }};
-  </script>
-  <script type="text/babel">
-  {% raw %}
-    const { useState, useEffect } = React;
 
-    function AddVPSForm() {
-      const today = new Date().toISOString().split('T')[0];
-      const defaultData = {
-        name: '',
-        purchase_date: today,
-        renewal_days: '30',
-        renewal_price: '',
-        currency: 'USD',
-        exchange_rate: '',
-        vendor_name: '',
-        instance_config: '',
-        location: '',
-        description: '',
-        traffic_limit: '',
-        payment_method: 'PayPal',
-        transaction_fee: '0',
-        exchange_rate_source: 'system',
-        dynamic_svg: true,
-        status: 'active',
-        update_cycle: 1,
-        ip_address: '',
-        sale_percent: '0',
-        sale_fixed: '0',
-        sale_method: '',
-        push_fee: '0',
-        push_fee_currency: 'CNY'
-      };
-      const initial = { ...defaultData, ...(window.initialData || {}) };
-      const [form, setForm] = useState(initial);
-      const [pushRate, setPushRate] = useState(1);
-      const isEdit = Boolean(window.initialData);
+  <main class="form-shell">
+    <section class="form-hero">
+      <p class="eyebrow">VPS Control Panel</p>
+      <h1>{{ '编辑 VPS' if vps_data.name else '添加 VPS' }}</h1>
+      <p>无需依赖外部 React/CDN，表单由服务端直接渲染；即使网络屏蔽第三方脚本也可以正常打开和保存。</p>
+    </section>
 
-      const fetchRate = () => {
-        fetch(`https://open.er-api.com/v6/latest/${form.currency}`)
-          .then(res => res.json())
-          .then(data => {
-            if (data && data.rates && data.rates.CNY) {
-              setForm(f => ({ ...f, exchange_rate: data.rates.CNY.toFixed(3) }));
-            }
-          })
-          .catch(() => {});
-      };
-
-      useEffect(() => {
-        if (form.exchange_rate_source === 'system') {
-          fetchRate();
-        }
-      }, [form.currency, form.exchange_rate_source]);
-
-      useEffect(() => {
-        if (form.push_fee_currency === 'CNY') {
-          setPushRate(1);
-          return;
-        }
-        fetch(`https://open.er-api.com/v6/latest/${form.push_fee_currency}`)
-          .then(res => res.json())
-          .then(data => {
-            if (data && data.rates && data.rates.CNY) {
-              setPushRate(data.rates.CNY);
-            }
-          })
-          .catch(() => setPushRate(1));
-      }, [form.push_fee_currency]);
-
-      // no cycle base or expiry date fields; cycle is computed server-side
-
-      const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
-      };
-
-      const handleSubmit = () => {
-        console.log(JSON.stringify(form));
-      };
-
-      const salePercent = parseFloat(form.sale_percent) || 0;
-      const saleFixed = parseFloat(form.sale_fixed) || 0;
-      const pushFee = parseFloat(form.push_fee) || 0;
-      const renewalPrice = parseFloat(form.renewal_price) || 0;
-      const renewalDays = parseInt(form.renewal_days) || 0;
-      const exchangeRate = parseFloat(form.exchange_rate) || 1;
-      const DAY_MS = 24 * 3600 * 1000;
-      const monthsMap = {30: 1, 90: 3, 365: 12, 1095: 36};
-      const addMonths = (date, months) => {
-        const d = new Date(date);
-        const day = d.getDate();
-        d.setMonth(d.getMonth() + months);
-        if (d.getDate() < day) {
-          d.setDate(0);
-        }
-        return d;
-      };
-      let remainingValue = 0;
-      if (form.purchase_date && renewalDays) {
-        const purchase = new Date(form.purchase_date);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        let start = purchase;
-        let end;
-        if (monthsMap[renewalDays]) {
-          const months = monthsMap[renewalDays];
-          while (addMonths(start, months) <= today) {
-            start = addMonths(start, months);
-          }
-          end = addMonths(start, months);
-        } else {
-          const deltaMs = renewalDays * DAY_MS;
-          while (start.getTime() + deltaMs <= today.getTime()) {
-            start = new Date(start.getTime() + deltaMs);
-          }
-          end = new Date(start.getTime() + deltaMs);
-        }
-        const remainingDays = Math.max(Math.floor((end - today) / DAY_MS), 0);
-        const totalDays = Math.max(Math.floor((end - start) / DAY_MS), 1);
-        remainingValue = renewalPrice * exchangeRate * remainingDays / totalDays;
-      }
-      const pushFeeCny = pushFee * pushRate;
-      const basePrice = remainingValue + pushFeeCny;
-      const finalPrice = basePrice * (1 + salePercent / 100) + saleFixed;
-      const transferPremium = basePrice * salePercent / 100;
-      const salePercentSign = salePercent >= 0 ? '+' : '-';
-      const saleFixedSign = saleFixed >= 0 ? '+' : '-';
-
-      return (
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-3xl mx-auto p-8 rounded-xl bg-[#1c1c1c]/70 shadow-[0_0_30px_rgba(0,255,255,0.1)] border border-cyan-500">
-            <h1 className="text-3xl font-bold text-cyan-300 mb-6 text-center">{isEdit ? '编辑 VPS' : '添加 VPS'}</h1>
-            <form method="post" onSubmit={handleSubmit} className="space-y-6">
-              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
-                <legend className="text-lg mb-2 text-cyan-300">基础信息</legend>
-                <div className="flex flex-col">
-                  <label className="mb-1 text-cyan-200">VPS 名称</label>
-                  <input name="name" value={form.name} onChange={handleChange} placeholder="请输入 VPS 名称，如 racknerd-lax-01" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">供应商</label>
-                  <input name="vendor_name" value={form.vendor_name} onChange={handleChange} placeholder="请输入厂商名称" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">描述</label>
-                  <textarea
-                    name="description"
-                    value={form.description}
-                    onChange={handleChange}
-                    placeholder="如 科学上网 / 建站 / 测试使用"
-                    className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none resize-none"
-                    rows={2}
-                  />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">VPS 状态</label>
-                  <select name="status" value={form.status} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
-                    <option value="active">使用中</option>
-                    <option value="forsale">待出售</option>
-                    <option value="sold">已转手</option>
-                    <option value="inactive">已停用</option>
-                  </select>
-                  {form.status === 'forsale' && (
-                    <>
-                      <div className="flex flex-col mt-4">
-                        <label className="mb-1 text-cyan-200">交易方式</label>
-                        <input name="sale_method" list="sale_method_list" value={form.sale_method} onChange={handleChange} placeholder="如 PUSH" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                        <datalist id="sale_method_list">
-                          <option value="PUSH" />
-                          <option value="原邮" />
-                          <option value="改邮箱" />
-                          <option value="给ROOT" />
-                        </datalist>
-                      </div>
-                        <div className="mt-4 p-4 border border-cyan-500 rounded-md">
-                        <p className="text-sm text-gray-400 mb-2">
-                          溢价计算方式：最终价格 = （剩余价值 + PUSH费用） * （1 + 转让溢价%） + 固定溢价
-                        </p>
-                        <div className="mt-4 space-y-4 pl-4">
-                          <div className="flex flex-col">
-                            <label className="mb-1 text-cyan-200">转让溢价 (%)</label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              name="sale_percent"
-                              value={form.sale_percent}
-                              onChange={handleChange}
-                              placeholder="如 10"
-                              className="input-full-width bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-                            />
-                          </div>
-                          <div className="flex flex-col">
-                            <label className="mb-1 text-cyan-200">固定溢价 (RMB)</label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              name="sale_fixed"
-                              value={form.sale_fixed}
-                              onChange={handleChange}
-                              placeholder="如 10"
-                              className="input-full-width bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-                            />
-                          </div>
-                          <div className="flex flex-col">
-                            <label className="mb-1 text-cyan-200">Push 费用</label>
-                            <div className="flex gap-2">
-                              <input
-                                type="number"
-                                step="0.01"
-                                name="push_fee"
-                                value={form.push_fee}
-                                onChange={handleChange}
-                                placeholder="如 5"
-                                className="input-full-width flex-1 bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-                              />
-                              <select
-                                name="push_fee_currency"
-                                value={form.push_fee_currency}
-                                onChange={handleChange}
-                                className="bg-black border border-cyan-500 rounded-md px-2 text-white focus:ring-2 focus:ring-cyan-400"
-                              >
-                                <option value="USD">USD</option>
-                                <option value="CNY">CNY</option>
-                                <option value="EUR">EUR</option>
-                                <option value="JPY">JPY</option>
-                                <option value="HKD">HKD</option>
-                              </select>
-                            </div>
-                          </div>
-                          </div>
-                          <div className="mt-6 overflow-auto flex flex-col items-center">
-                            <table className="price-table">
-                              <thead>
-                                <tr>
-                                  <th>转让溢价</th>
-                                  <th>剩余价值</th>
-                                  <th>Push费用</th>
-                                  <th>转让溢价%</th>
-                                  <th>固定溢价</th>
-                                  <th>最终价格</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td>{transferPremium.toFixed(2)}</td>
-                                  <td>{remainingValue.toFixed(2)}</td>
-                                  <td>{pushFeeCny.toFixed(2)}</td>
-                                  <td>{salePercent}%</td>
-                                  <td>{saleFixed}</td>
-                                  <td className="final">{finalPrice.toFixed(2)}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <div className="calculation-text">
-                              最终价格 <span className="equal-sign">=</span> ({remainingValue.toFixed(2)} + {pushFeeCny.toFixed(2)})
-                              <span className="equal-sign">*</span> (1 {salePercentSign} {Math.abs(salePercent)}%)
-                              <span className="equal-sign">{saleFixedSign}</span> {Math.abs(saleFixed)}
-                              <span className="equal-sign">=</span>
-                              <strong style={{ color: '#2ae39d' }}>{finalPrice.toFixed(2)}</strong>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </fieldset>
-
-              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
-                <legend className="text-lg mb-2 text-cyan-300">续费信息</legend>
-                <div className="flex flex-col">
-                  <label className="mb-1 text-cyan-200">购买日期</label>
-                  <input type="date" name="purchase_date" value={form.purchase_date} onChange={handleChange} placeholder="请选择购买时间" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" required />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">续费周期</label>
-                  <select name="renewal_days" value={form.renewal_days} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
-                    <option value="30">每月</option>
-                    <option value="90">每季度</option>
-                    <option value="365">每年</option>
-                    <option value="1095">三年</option>
-                    <option value="0">一次性</option>
-                  </select>
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">续费金额</label>
-                  <input type="number" step="0.01" name="renewal_price" value={form.renewal_price} onChange={handleChange} placeholder="如 5.99" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">币种</label>
-                  <select name="currency" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400" value={form.currency} onChange={handleChange}>
-                    <option value="USD">美元（USD）</option>
-                    <option value="CNY">人民币（CNY）</option>
-                    <option value="EUR">欧元（EUR）</option>
-                    <option value="JPY">日元（JPY）</option>
-                    <option value="HKD">港币（HKD）</option>
-                  </select>
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">支付手续费（USD）</label>
-                  <input type="number" step="0.01" name="transaction_fee" value={form.transaction_fee} onChange={handleChange} placeholder="如 0.5，单位 USD" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">支付方式</label>
-                  <select name="payment_method" value={form.payment_method} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
-                    <option>PayPal</option>
-                    <option>信用卡</option>
-                    <option>支付宝</option>
-                    <option>微信支付</option>
-                    <option>加密货币</option>
-                    <option>银联转账</option>
-                  </select>
-                </div>
-                <div className="flex flex-col mt-4">
-                  <div className="flex items-center gap-2">
-                    <label className="mb-1 text-cyan-200">汇率来源</label>
-                    <span className="text-gray-400 cursor-help" title="系统自动将通过汇率 API 获取最新汇率">❓</span>
-                  </div>
-                  <select name="exchange_rate_source" value={form.exchange_rate_source} onChange={handleChange} className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white focus:ring-2 focus:ring-cyan-400">
-                    <option value="system">系统自动</option>
-                    <option value="custom">自定义</option>
-                  </select>
-                </div>
-                <div className="flex flex-col mt-4 relative">
-                  <label className="mb-1 text-cyan-200">实时汇率 (→ CNY)</label>
-                  <input type="number" step="0.0001" name="exchange_rate" value={form.exchange_rate} onChange={handleChange} readOnly={form.exchange_rate_source === 'system'} className={`w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none ${form.exchange_rate_source === 'system' ? 'opacity-75' : ''}`} />
-                  {form.exchange_rate_source === 'system' && <span className="absolute right-2 top-8">🔄</span>}
-                </div>
-              </fieldset>
-
-              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
-                <legend className="text-lg mb-2 text-cyan-300">系统信息</legend>
-                <div className="flex flex-col">
-                  <label className="mb-1 text-cyan-200">实例配置</label>
-                  <input name="instance_config" value={form.instance_config} onChange={handleChange} placeholder="如 8C/0.5G/41G 或 8C 0.5G 41G" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">所在机房</label>
-                  <input name="location" value={form.location} onChange={handleChange} placeholder="如 洛杉矶 / 香港" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">流量限制（月）</label>
-                  <input name="traffic_limit" value={form.traffic_limit} onChange={handleChange} placeholder="如 3TB / 无限" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-                <div className="flex flex-col mt-4">
-                  <label className="mb-1 text-cyan-200">IP 地址（可含端口）</label>
-                  <input name="ip_address" value={form.ip_address} onChange={handleChange} placeholder="如 1.2.3.4 或 1.2.3.4:8080" className="w-full bg-black border border-cyan-500 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-cyan-400 focus:outline-none" />
-                </div>
-              </fieldset>
-
-              <fieldset className="border-b border-cyan-500 pb-4 mb-4">
-                <legend className="text-lg mb-2 text-cyan-300">设置项</legend>
-                <div className="flex items-center gap-2">
-                  <input type="checkbox" name="dynamic_svg" checked={form.dynamic_svg} onChange={handleChange} className="h-5 w-5" />
-                  <label className="text-cyan-200">启用动态 SVG（每天自动更新剩余价值）</label>
-                </div>
-              </fieldset>
-
-              <input type="hidden" name="update_cycle" value={form.update_cycle} />
-
-              <button type="submit" className="w-full mt-6 bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-4 rounded-full transition shadow-lg hover:shadow-green-300">💾 保存</button>
-            </form>
+    <form method="post" class="vps-edit-form" id="vps-edit-form">
+      <section class="form-card">
+        <div class="form-section-title">
+          <span>01</span>
+          <div>
+            <h2>基础信息</h2>
+            <p>用于列表卡片、SVG 标题和管理识别。</p>
           </div>
         </div>
-      );
-    }
+        <div class="form-grid">
+          <label>VPS 名称<input name="name" value="{{ vps_data.name }}" required placeholder="如 racknerd-lax-01"></label>
+          <label>供应商<input name="vendor_name" value="{{ vps_data.vendor_name }}" placeholder="如 BandwagonHost"></label>
+          <label>VPS 状态
+            <select name="status" id="status-select">
+              <option value="active" {% if vps_data.status == 'active' %}selected{% endif %}>使用中</option>
+              <option value="forsale" {% if vps_data.status == 'forsale' %}selected{% endif %}>待出售</option>
+              <option value="sold" {% if vps_data.status == 'sold' %}selected{% endif %}>已转手</option>
+              <option value="inactive" {% if vps_data.status == 'inactive' %}selected{% endif %}>已停用</option>
+            </select>
+          </label>
+          <label class="form-grid-full">描述说明<textarea name="description" rows="3" placeholder="如 科学上网 / 建站 / 测试使用">{{ vps_data.description }}</textarea></label>
+        </div>
+      </section>
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<AddVPSForm />);
-  {% endraw %}
+      <section class="form-card">
+        <div class="form-section-title">
+          <span>02</span>
+          <div>
+            <h2>续费与价值</h2>
+            <p>保存后由服务端重新计算剩余价值和动态 SVG。</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label>购买日期<input type="date" name="purchase_date" value="{{ vps_data.purchase_date }}" required></label>
+          <label>续费周期
+            <select name="renewal_days">
+              <option value="30" {% if vps_data.renewal_days == 30 %}selected{% endif %}>每月</option>
+              <option value="90" {% if vps_data.renewal_days == 90 %}selected{% endif %}>每季度</option>
+              <option value="365" {% if vps_data.renewal_days == 365 %}selected{% endif %}>每年</option>
+              <option value="1095" {% if vps_data.renewal_days == 1095 %}selected{% endif %}>三年</option>
+              <option value="0" {% if vps_data.renewal_days == 0 %}selected{% endif %}>一次性</option>
+            </select>
+          </label>
+          <label>续费金额<input type="number" step="0.01" name="renewal_price" value="{{ vps_data.renewal_price }}" placeholder="如 5.99"></label>
+          <label>币种
+            <select name="currency">
+              {% for currency in ['USD', 'CNY', 'EUR', 'JPY', 'HKD'] %}
+              <option value="{{ currency }}" {% if vps_data.currency == currency %}selected{% endif %}>{{ currency }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>支付方式
+            <select name="payment_method">
+              {% for method in ['PayPal', '信用卡', '支付宝', '微信支付', '加密货币', '银联转账'] %}
+              <option value="{{ method }}" {% if vps_data.payment_method == method %}selected{% endif %}>{{ method }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>支付手续费（USD）<input type="number" step="0.01" name="transaction_fee" value="{{ vps_data.transaction_fee }}" placeholder="如 0.5"></label>
+          <label>汇率来源
+            <select name="exchange_rate_source">
+              <option value="system" {% if vps_data.exchange_rate_source == 'system' %}selected{% endif %}>系统自动</option>
+              <option value="custom" {% if vps_data.exchange_rate_source == 'custom' %}selected{% endif %}>自定义</option>
+            </select>
+          </label>
+          <label>汇率（→ CNY）<input type="number" step="0.0001" name="exchange_rate" value="{{ vps_data.exchange_rate }}" placeholder="如 7.2"></label>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <div class="form-section-title">
+          <span>03</span>
+          <div>
+            <h2>系统与网络</h2>
+            <p>配置字段会被解析到卡片 CPU / 内存 / 存储信息。</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label>实例配置<input name="instance_config" value="{{ vps_data.instance_config }}" placeholder="如 8C/0.5G/41G 或 8C 0.5G 41G"></label>
+          <label>所在机房<input name="location" value="{{ vps_data.location }}" placeholder="如 洛杉矶 / 香港"></label>
+          <label>流量限制（月）<input name="traffic_limit" value="{{ vps_data.traffic_limit }}" placeholder="如 3TB / 无限"></label>
+          <label>IP 地址（可含端口）<input name="ip_address" value="{{ vps_data.ip_address }}" placeholder="如 1.2.3.4 或 1.2.3.4:8080"></label>
+        </div>
+      </section>
+
+      <section class="form-card" id="sale-fields">
+        <div class="form-section-title">
+          <span>04</span>
+          <div>
+            <h2>出售信息</h2>
+            <p>仅当状态为“待出售”时用于最终价格展示。</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label>交易方式<input name="sale_method" list="sale_method_list" value="{{ vps_data.sale_method }}" placeholder="如 PUSH / 原邮"></label>
+          <datalist id="sale_method_list"><option value="PUSH"><option value="原邮"><option value="改邮箱"><option value="给ROOT"></datalist>
+          <label>转让溢价 (%)<input type="number" step="0.01" name="sale_percent" value="{{ vps_data.sale_percent }}"></label>
+          <label>固定溢价 (CNY)<input type="number" step="0.01" name="sale_fixed" value="{{ vps_data.sale_fixed }}"></label>
+          <label>Push 费用<input type="number" step="0.01" name="push_fee" value="{{ vps_data.push_fee }}"></label>
+          <label>Push 费用币种
+            <select name="push_fee_currency">
+              {% for currency in ['CNY', 'USD', 'EUR', 'JPY', 'HKD'] %}
+              <option value="{{ currency }}" {% if vps_data.push_fee_currency == currency %}selected{% endif %}>{{ currency }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="form-card form-actions-card">
+        <label class="checkbox-row"><input type="checkbox" name="dynamic_svg" {% if vps_data.dynamic_svg %}checked{% endif %}> 启用动态 SVG（每天自动更新剩余价值）</label>
+        <input type="hidden" name="update_cycle" value="{{ vps_data.update_cycle }}">
+        <div class="form-actions">
+          <a href="{{ url_for('manage_vps') }}" class="secondary-action">返回管理</a>
+          <button type="submit">💾 保存 VPS</button>
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <script>
+    const statusSelect = document.getElementById('status-select');
+    const saleFields = document.getElementById('sale-fields');
+    function syncSaleFields() {
+      saleFields.hidden = statusSelect.value !== 'forsale';
+    }
+    statusSelect.addEventListener('change', syncSaleFields);
+    syncSaleFields();
   </script>
   {% include 'footer.html' %}
 </body>
 </html>
-

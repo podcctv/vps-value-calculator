@@ -128,3 +128,22 @@ def test_add_vps_rejects_path_traversal(client):
     assert svg_files_after == svg_files_before
     outside_path = ROOT / 'static' / 'etc' / 'passwd.svg'
     assert not outside_path.exists()
+
+def test_edit_vps_handles_nullable_fields(client):
+    username = f"u_{uuid.uuid4().hex}"
+    res = client.post('/register', data={'username': username, 'password': 'p', 'invite_code': 'Flanker'})
+    assert res.status_code == 302
+
+    vps_name = f"nullable_{uuid.uuid4().hex}"
+    with app_module.Session(app_module.engine) as db:
+        vps = app_module.VPS(name=vps_name, purchase_date=None, status=None)
+        db.add(vps)
+        db.commit()
+        vps_id = vps.id
+
+    resp = client.get(f'/vps/{vps_id}/edit')
+    assert resp.status_code == 200
+    text = resp.get_data(as_text=True)
+    assert '编辑 VPS' in text
+    assert 'react.development.js' not in text
+    assert 'name="name"' in text
