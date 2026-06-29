@@ -25,16 +25,6 @@
 {% include 'navbar.html' %}
 
 <main class="page-shell">
-    <section class="hero-panel">
-        <p class="eyebrow">Realtime VPS Portfolio</p>
-        <h1>VPS 资产仪表盘</h1>
-        <p>集中查看主机配置、在线状态、续费周期与剩余价值，快速判断哪些实例值得保留、转让或下线。</p>
-        <div class="hero-actions" aria-label="资产概览">
-            <span>在用 {{ site_stats.count }} 台</span>
-            <span>剩余价值 {{ site_stats.total_value }} 元</span>
-            <span>按状态与价值排序</span>
-        </div>
-    </section>
     {% if vps_data %}
     <div class="card-wrapper">
         {% for vps, data, specs, ip_info in vps_data %}
