@@ -245,6 +245,7 @@ def inject_globals():
         "config": get_site_config(),
         "site_stats": get_site_stats(),
         "current_year": datetime.now().year,
+        "asset_version": os.environ.get("ASSET_VERSION", "20260629"),
     }
 
 

@@ -8,11 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"></noscript>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css', v=asset_version) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css', v=asset_version) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css', v=asset_version) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css', v=asset_version) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css', v=asset_version) }}">
 </head>
 <body class="bg-gradient-to-br from-[#0f0f1a] to-[#000000] text-white min-h-screen font-mono flex flex-col">
 {% include 'loading_overlay.html' %}

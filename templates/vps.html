@@ -7,17 +7,17 @@
     <link rel="canonical" href="{{ url_for('vps_list', _external=True) }}">
     <title>vps剩余价值计算器</title>
     <link rel="preload" href="{{ url_for('static', filename='fonts/JetBrainsMono-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ url_for('static', filename='css/tailwind.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="{{ url_for('static', filename='css/crt.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="{{ url_for('static', filename='css/cards.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="{{ url_for('static', filename='css/responsive.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="{{ url_for('static', filename='css/loading.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/tailwind.css', v=asset_version) }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/crt.css', v=asset_version) }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/cards.css', v=asset_version) }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/responsive.css', v=asset_version) }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ url_for('static', filename='css/loading.css', v=asset_version) }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css', v=asset_version) }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/crt.css', v=asset_version) }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css', v=asset_version) }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css', v=asset_version) }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/loading.css', v=asset_version) }}">
     </noscript>
 </head>
 <body class="min-h-screen font-mono flex flex-col">
@@ -27,13 +27,18 @@
 <main class="page-shell">
     <section class="hero-panel">
         <p class="eyebrow">Realtime VPS Portfolio</p>
-        <h1>VPS 列表</h1>
-        <p>快速查看每台主机的配置、在线状态与剩余价值，按状态和价值自动排序。</p>
+        <h1>VPS 资产仪表盘</h1>
+        <p>集中查看主机配置、在线状态、续费周期与剩余价值，快速判断哪些实例值得保留、转让或下线。</p>
+        <div class="hero-actions" aria-label="资产概览">
+            <span>在用 {{ site_stats.count }} 台</span>
+            <span>剩余价值 {{ site_stats.total_value }} 元</span>
+            <span>按状态与价值排序</span>
+        </div>
     </section>
     {% if vps_data %}
     <div class="card-wrapper">
         {% for vps, data, specs, ip_info in vps_data %}
-        <div class="vps-card relative {% if vps.status == 'sold' %}sold{% elif vps.status == 'inactive' %}inactive{% elif vps.status == 'forsale' %}forsale{% endif %}" data-href="{{ url_for('view_vps', name=vps.name) }}">
+        <div class="vps-card relative {% if vps.status == 'sold' %}sold{% elif vps.status == 'inactive' %}inactive{% elif vps.status == 'forsale' %}forsale{% endif %}" data-href="{{ url_for('view_vps', name=vps.name) }}" role="link" tabindex="0">
             {% if vps.status == 'active' %}
             <span class="card-status-tag">在使用</span>
             {% elif vps.status == 'forsale' %}
@@ -84,40 +89,17 @@
 </main>
 
 <script>
-    function unifyCardSizes() {
-        const cards = Array.from(document.querySelectorAll('.vps-card'));
-        if (!cards.length) return;
-        let maxWidth = 0;
-        let maxHeight = 0;
-        cards.forEach(card => {
-            const rect = card.getBoundingClientRect();
-            if (rect.width > maxWidth) maxWidth = rect.width;
-            if (rect.height > maxHeight) maxHeight = rect.height;
+    document.querySelectorAll('.vps-card').forEach(card => {
+        const openCard = () => {
+            window.location.href = card.dataset.href;
+        };
+        card.addEventListener('click', openCard);
+        card.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openCard();
+            }
         });
-        cards.forEach(card => {
-            card.style.width = `${maxWidth}px`;
-            card.style.height = `${maxHeight}px`;
-            card.style.flex = `0 0 ${maxWidth}px`;
-        });
-    }
-
-    function initCards() {
-        unifyCardSizes();
-        document.querySelectorAll('.vps-card').forEach(card => {
-            card.addEventListener('click', () => {
-                window.location.href = card.dataset.href;
-            });
-        });
-    }
-
-    window.addEventListener('load', initCards);
-    window.addEventListener('resize', () => {
-        document.querySelectorAll('.vps-card').forEach(card => {
-            card.style.width = '';
-            card.style.height = '';
-            card.style.flex = '';
-        });
-        unifyCardSizes();
     });
 </script>
 {% include 'footer.html' %}
