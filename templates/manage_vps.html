@@ -18,19 +18,19 @@
 {% include 'loading_overlay.html' %}
 {% include 'navbar.html' %}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">管理 VPS</h1>
+    <h1 class="text-center text-4xl font-bold text-white mb-8">管理 VPS</h1>
     {% if vps_list %}
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {% for vps in vps_list %}
-        <div class="bg-[#111111] rounded-xl border border-cyan-400 p-6 relative shadow-lg hover:shadow-2xl hover:border-cyan-200 transition-transform transform hover:-translate-y-1" data-abs-url="{{ vps.abs_url }}">
-            <h2 class="text-xl text-cyan-400 mb-2">{{ vps.name }}</h2>
+        <div class="manage-card p-6 relative transition-transform transform hover:-translate-y-1" data-abs-url="{{ vps.abs_url }}">
+            <h2 class="text-xl text-white mb-2">{{ vps.name }}</h2>
             <p class="text-sm text-gray-300 mb-2">IP：{{ vps.ip_display }}</p>
             <div class="crt my-4 p-2 rounded overflow-x-auto" data-svg-url="{{ url_for('static', filename='images/' ~ vps.name ~ '.svg') }}"></div>
             <div class="flex flex-wrap gap-2 mt-4">
-                <button type="button" class="copy-markdown text-sm px-3 py-1 bg-green-600 rounded hover:bg-green-500 text-white">📋 复制 Markdown</button>
-                <a href="{{ url_for('edit_vps', vps_id=vps.id) }}" class="text-sm px-3 py-1 bg-blue-500 rounded hover:bg-blue-400 text-white">✏️ 编辑</a>
+                <button type="button" class="copy-markdown manage-action manage-action-muted text-sm px-3 py-1">📋 复制 Markdown</button>
+                <a href="{{ url_for('edit_vps', vps_id=vps.id) }}" class="manage-action manage-action-primary text-sm px-3 py-1">✏️ 编辑</a>
                 <form method="post" action="{{ url_for('delete_vps', vps_id=vps.id) }}" onsubmit="return confirm('确定要删除这个 VPS 吗？');">
-                    <button type="submit" class="text-sm px-3 py-1 bg-red-600 rounded hover:bg-red-500 text-white">🗑 删除</button>
+                    <button type="submit" class="manage-action manage-action-danger text-sm px-3 py-1">🗑 删除</button>
                 </form>
             </div>
         </div>

@@ -312,3 +312,267 @@ body {
     grid-template-columns: 4.5rem minmax(0, 1fr);
   }
 }
+
+/* Minimal production theme: neutral surfaces, one calm accent, no decorative glow */
+:root {
+  --bg-color: #0f1115;
+  --card-bg: #181b20;
+  --card-border: #2a3038;
+  --font-color: #e7ebf0;
+  --font-green: #a7b0bd;
+  --font-blue: #d8dee8;
+  --highlight-green: #2f6fed;
+  --surface-1: #15181d;
+  --surface-2: #1b1f26;
+  --surface-3: #242a33;
+  --line-soft: #2a3038;
+  --line-strong: #3a4656;
+  --accent-teal: #2f6fed;
+  --accent-mint: #2f6fed;
+  --accent-sky: #2f6fed;
+  --accent-amber: #a66f2d;
+  --accent-rose: #a14d56;
+  --text-muted: #8f99a8;
+}
+
+html,
+body {
+  background: var(--bg-color);
+  color: var(--font-color);
+}
+
+body::before {
+  display: none;
+}
+
+.banner,
+footer {
+  background: #0f1115 !important;
+  border-color: var(--line-soft);
+  box-shadow: none;
+}
+
+.banner-title {
+  color: #f1f4f8;
+  text-shadow: none;
+}
+
+.banner-stats,
+.banner-greeting,
+.form-section-title p,
+.hero-panel p,
+.form-hero p,
+.vps-vendor-chip {
+  color: var(--text-muted);
+}
+
+.nav-pill,
+.hero-actions span,
+.secondary-action {
+  border-color: var(--line-soft);
+  background: #181b20;
+  color: #d7dde7;
+  box-shadow: none;
+}
+
+.nav-pill:hover,
+.nav-pill:focus-visible,
+.secondary-action:hover,
+.secondary-action:focus-visible {
+  border-color: #3b4656;
+  background: #222833;
+  color: #f1f4f8;
+  box-shadow: none;
+}
+
+.hero-panel,
+.form-hero,
+.form-card,
+.vps-card,
+.form-actions-card {
+  border-color: var(--line-soft);
+  background: #181b20;
+  box-shadow: none;
+}
+
+.hero-panel::before,
+.form-hero::before,
+.form-card::before,
+.vps-card::before,
+.vps-card::after {
+  background: #2f6fed;
+  box-shadow: none;
+}
+
+#sale-fields::before,
+.vps-card.forsale::before {
+  background: #a66f2d;
+}
+
+.vps-card.sold::before,
+.vps-card.inactive::before {
+  background: #596273;
+}
+
+.hero-panel h1,
+.form-hero h1,
+.vps-title,
+.form-section-title h2 {
+  color: #f1f4f8;
+}
+
+.eyebrow {
+  color: #8f99a8 !important;
+  letter-spacing: 0.14em;
+}
+
+.vps-card:hover,
+.vps-card:focus-visible {
+  border-color: #3b4656;
+  box-shadow: none;
+}
+
+.card-status-tag {
+  border-color: rgba(47, 111, 237, 0.35);
+  background: rgba(47, 111, 237, 0.14);
+  color: #b8c9f8;
+  box-shadow: none;
+}
+
+.vps-card.forsale .card-status-tag {
+  border-color: rgba(166, 111, 45, 0.38);
+  background: rgba(166, 111, 45, 0.14);
+  color: #d8b383;
+}
+
+.vps-card.sold .card-status-tag,
+.vps-card.inactive .card-status-tag {
+  border-color: rgba(143, 153, 168, 0.32);
+  background: rgba(143, 153, 168, 0.12);
+  color: #b8c0cc;
+}
+
+.vps-metric {
+  border-color: var(--line-soft);
+  background: #15181d;
+  box-shadow: none;
+}
+
+.vps-metric span,
+.vps-row span:first-child {
+  color: var(--text-muted);
+}
+
+.vps-metric strong,
+.vps-row span:last-child {
+  color: #e7ebf0;
+}
+
+.vps-price,
+.ping-status {
+  color: #d7dde7 !important;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea,
+input[type="date"] {
+  border-color: var(--line-soft);
+  background: #101318;
+  color: #eef2f7;
+  box-shadow: none;
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus {
+  border-color: #2f6fed;
+  background: #101318;
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.16);
+}
+
+.form-section-title > span {
+  border-color: rgba(47, 111, 237, 0.35);
+  background: rgba(47, 111, 237, 0.12);
+  color: #b8c9f8;
+}
+
+.checkbox-row input {
+  accent-color: #2f6fed;
+}
+
+.form-actions button {
+  border: 1px solid #2f6fed;
+  background: #2f6fed;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.form-actions button:hover,
+.form-actions button:focus-visible {
+  background: #255cc7;
+}
+
+.price-table {
+  background: #181b20;
+  box-shadow: none;
+}
+
+.price-table th {
+  background: #242a33;
+  color: #d7dde7;
+}
+
+.price-table td.final {
+  background: rgba(47, 111, 237, 0.12);
+  color: #d7dde7;
+}
+
+.manage-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #181b20;
+  box-shadow: none;
+}
+
+.manage-card:hover {
+  border-color: #3b4656;
+}
+
+.manage-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  border-radius: 6px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.manage-action-muted {
+  border: 1px solid #3b4656;
+  background: #242a33;
+}
+
+.manage-action-muted:hover {
+  background: #2c3440;
+}
+
+.manage-action-primary {
+  border: 1px solid #2f6fed;
+  background: #2f6fed;
+}
+
+.manage-action-primary:hover {
+  background: #255cc7;
+}
+
+.manage-action-danger {
+  border: 1px solid #71343a;
+  background: #71343a;
+}
+
+.manage-action-danger:hover {
+  background: #854049;
+}
