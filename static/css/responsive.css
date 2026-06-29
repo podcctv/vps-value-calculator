@@ -576,3 +576,56 @@ input[type="date"] {
 .manage-action-danger:hover {
   background: #854049;
 }
+
+/* Status readability: available VPS stay colored, sold/inactive entries fade gray */
+.vps-card:not(.sold):not(.inactive) .vps-title {
+  color: #8fb4ff;
+}
+
+.vps-card:not(.sold):not(.inactive) .vps-metric strong,
+.vps-card:not(.sold):not(.inactive) .vps-price,
+.vps-card:not(.sold):not(.inactive) .ping-status {
+  color: #9ec5ff !important;
+}
+
+.vps-card:not(.sold):not(.inactive) .vps-row span:last-child {
+  color: #dce7ff;
+}
+
+.vps-card:not(.sold):not(.inactive) .vps-row span:first-child,
+.vps-card:not(.sold):not(.inactive) .vps-metric span {
+  color: #9fb0c6;
+}
+
+.vps-card.forsale .vps-title,
+.vps-card.forsale .vps-metric strong,
+.vps-card.forsale .vps-price,
+.vps-card.forsale .vps-row span:last-child {
+  color: #d8b383 !important;
+}
+
+.vps-card.sold,
+.vps-card.inactive {
+  color: #747d8c;
+  opacity: 0.82;
+  filter: grayscale(0.25);
+}
+
+.vps-card.sold .vps-title,
+.vps-card.inactive .vps-title,
+.vps-card.sold .vps-metric span,
+.vps-card.inactive .vps-metric span,
+.vps-card.sold .vps-metric strong,
+.vps-card.inactive .vps-metric strong,
+.vps-card.sold .vps-row span,
+.vps-card.inactive .vps-row span,
+.vps-card.sold .vps-price,
+.vps-card.inactive .vps-price {
+  color: #7f8794 !important;
+}
+
+.vps-card.sold .vps-metric,
+.vps-card.inactive .vps-metric {
+  background: #15171b;
+  border-color: #262b33;
+}
