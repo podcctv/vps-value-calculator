@@ -50,7 +50,7 @@ body {
   .vps-card {
     margin: 0 auto;
     padding: 1rem;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 0.9rem;
     box-shadow: 0 0 12px rgba(0, 255, 128, 0.1);
     width: 100%;
@@ -104,5 +104,211 @@ body {
     font-size: 1rem;
     width: 100%;
     box-sizing: border-box;
+  }
+}
+
+/* Final mobile layout pass for the refreshed dashboard and forms */
+@media screen and (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+    font-size: 14px;
+  }
+
+  .banner {
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .banner-home {
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .banner-title {
+    width: 100%;
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.45;
+    text-align: left;
+  }
+
+  .banner-stats {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .banner-subinfo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  .banner-greeting {
+    grid-column: 1 / -1;
+    white-space: normal;
+  }
+
+  .nav-pill {
+    width: 100%;
+    min-height: 2.55rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .page-shell {
+    padding: 0.8rem;
+  }
+
+  .hero-panel {
+    margin-bottom: 0.85rem;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .hero-panel h1 {
+    font-size: 1.65rem;
+    line-height: 1.2;
+  }
+
+  .hero-panel p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .hero-actions span {
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+  }
+
+  .card-wrapper {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .vps-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0.95rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 12px 26px rgba(0, 0, 0, 0.22);
+  }
+
+  .card-status-tag {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    display: inline-flex;
+    max-width: 42%;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 0.72rem;
+  }
+
+  .vps-card-header {
+    align-items: flex-start;
+    margin-top: 1.7rem;
+  }
+
+  .vps-title {
+    width: calc(100% - 6rem);
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.35;
+    text-align: left;
+  }
+
+  .vps-vendor-chip {
+    font-size: 0.82rem;
+  }
+
+  .vps-metric {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem;
+  }
+
+  .vps-metric strong {
+    font-size: 1.2rem;
+  }
+
+  .vps-row {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0.42rem 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .vps-row span {
+    font-size: 0.86rem;
+  }
+
+  .vps-row span:first-child {
+    text-align: left;
+  }
+
+  .vps-row span:last-child {
+    min-width: 0;
+    text-align: right;
+  }
+
+  .form-shell {
+    padding: 0.8rem;
+  }
+
+  .form-hero h1 {
+    font-size: 1.65rem;
+    line-height: 1.2;
+  }
+
+  .form-section-title h2 {
+    font-size: 1rem;
+  }
+
+  .form-grid label,
+  .checkbox-row {
+    font-size: 0.9rem;
+  }
+
+  .form-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  footer {
+    gap: 0.45rem;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .banner-subinfo {
+    grid-template-columns: 1fr;
+  }
+
+  .banner-stats {
+    gap: 0.25rem 0.45rem;
+  }
+
+  .card-status-tag {
+    max-width: 48%;
+  }
+
+  .vps-row {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
   }
 }

@@ -78,7 +78,7 @@ textarea {
 .form-hero,
 .form-card {
   border: 1px solid rgba(34, 211, 238, 0.34);
-  border-radius: 22px;
+  border-radius: 8px;
   background:
     radial-gradient(circle at top left, rgba(34, 211, 238, 0.14), transparent 20rem),
     rgba(15, 23, 42, 0.86);
@@ -167,7 +167,7 @@ textarea {
 .form-grid textarea {
   width: 100%;
   border: 1px solid rgba(34, 211, 238, 0.55);
-  border-radius: 12px;
+  border-radius: 8px;
   background: rgba(2, 6, 23, 0.72);
   color: #f8fafc;
   padding: 0.72rem 0.85rem;
@@ -246,5 +246,270 @@ textarea {
   .form-actions button,
   .secondary-action {
     width: 100%;
+  }
+}
+
+/* Refined add/edit form surface */
+input[type="date"] {
+  background: rgba(17, 20, 25, 0.96);
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.form-shell {
+  width: min(1120px, 100%);
+  padding: clamp(0.9rem, 2.2vw, 2rem);
+}
+
+.form-hero,
+.form-card {
+  border-color: rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(23, 27, 33, 0.98), rgba(17, 20, 25, 0.98)),
+    #111419;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 16px 38px rgba(0, 0, 0, 0.22);
+}
+
+.form-hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.form-hero::before,
+.form-card::before {
+  content: "";
+  display: block;
+  height: 3px;
+  margin: -2.4rem -2.4rem clamp(1.2rem, 2vw, 1.6rem);
+  background: linear-gradient(90deg, #2dd4bf, #fbbf24, #7dd3fc);
+}
+
+.form-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.form-card::before {
+  margin: -1.5rem -1.5rem 1rem;
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.9), rgba(125, 211, 252, 0.55));
+}
+
+#sale-fields::before {
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.92), rgba(125, 211, 252, 0.55));
+}
+
+.form-hero h1 {
+  color: #f8fafc;
+  letter-spacing: 0;
+}
+
+.form-hero p {
+  color: #b8c4d0;
+  line-height: 1.7;
+}
+
+.vps-edit-form {
+  gap: 0.9rem;
+}
+
+.form-section-title {
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.form-section-title > span {
+  min-width: 2.15rem;
+  height: 2.15rem;
+  border-color: rgba(45, 212, 191, 0.28);
+  border-radius: 8px;
+  color: #bffcf5;
+  background: rgba(45, 212, 191, 0.12);
+}
+
+.form-section-title h2 {
+  color: #f3f8fc;
+  font-size: 1.08rem;
+}
+
+.form-section-title p {
+  color: #96a5b5;
+  line-height: 1.55;
+}
+
+.form-grid {
+  gap: 0.9rem;
+}
+
+.form-grid label,
+.checkbox-row {
+  gap: 0.42rem;
+  color: #c7d4df;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  min-height: 2.85rem;
+  border-color: rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  background: rgba(11, 13, 16, 0.82);
+  color: #f8fafc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.form-grid textarea {
+  min-height: 7rem;
+  line-height: 1.55;
+}
+
+.form-grid input::placeholder,
+.form-grid textarea::placeholder {
+  color: #667485;
+}
+
+.form-grid input:hover,
+.form-grid select:hover,
+.form-grid textarea:hover {
+  border-color: rgba(125, 211, 252, 0.38);
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus {
+  border-color: rgba(45, 212, 191, 0.9);
+  box-shadow:
+    0 0 0 3px rgba(45, 212, 191, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  background: rgba(11, 13, 16, 0.98);
+}
+
+.checkbox-row {
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  color: #d7e2eb;
+}
+
+.checkbox-row input {
+  flex: 0 0 auto;
+  margin-top: 0.16rem;
+  accent-color: #2dd4bf;
+}
+
+.form-actions-card {
+  background:
+    linear-gradient(180deg, rgba(24, 28, 35, 0.98), rgba(18, 21, 26, 0.98)),
+    #111419;
+}
+
+.form-actions {
+  gap: 0.65rem;
+}
+
+.form-actions button,
+.secondary-action {
+  min-height: 2.7rem;
+  border-radius: 8px;
+}
+
+.form-actions button {
+  border: 1px solid rgba(45, 212, 191, 0.46);
+  color: #061412;
+  background: linear-gradient(135deg, #2dd4bf, #b7e4a5);
+  box-shadow: 0 10px 24px rgba(45, 212, 191, 0.2);
+}
+
+.form-actions button:hover,
+.form-actions button:focus-visible {
+  background: linear-gradient(135deg, #5eead4, #facc15);
+  outline: none;
+}
+
+.secondary-action {
+  border-color: rgba(148, 163, 184, 0.24);
+  color: #dbe6ef;
+  background: rgba(32, 37, 45, 0.72);
+}
+
+.secondary-action:hover,
+.secondary-action:focus-visible {
+  border-color: rgba(203, 213, 225, 0.45);
+  background: rgba(51, 58, 68, 0.84);
+  outline: none;
+}
+
+.price-table {
+  width: min(100%, 760px);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #111419;
+  color: #e8eef5;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.22);
+}
+
+.price-table th,
+.price-table td {
+  border-color: rgba(148, 163, 184, 0.22);
+}
+
+.price-table th {
+  background: #20252d;
+  color: #bfdbfe;
+}
+
+.price-table td.final {
+  background: rgba(45, 212, 191, 0.12);
+  color: #d9f99d;
+}
+
+@media (max-width: 760px) {
+  .form-shell {
+    padding: 0.8rem;
+  }
+
+  .form-hero,
+  .form-card {
+    border-radius: 8px;
+  }
+
+  .form-hero {
+    padding: 1rem;
+  }
+
+  .form-hero::before {
+    margin: -1rem -1rem 0.9rem;
+  }
+
+  .form-card {
+    padding: 1rem;
+  }
+
+  .form-card::before {
+    margin: -1rem -1rem 0.9rem;
+  }
+
+  .form-section-title {
+    align-items: flex-start;
+  }
+
+  .form-section-title p {
+    font-size: 0.84rem;
+  }
+
+  .form-grid input,
+  .form-grid select,
+  .form-grid textarea {
+    min-height: 3rem;
+    font-size: 16px;
+  }
+
+  .checkbox-row {
+    flex-direction: row;
   }
 }
