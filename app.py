@@ -66,6 +66,37 @@ FAVICON_BASE64 = (
 )
 
 
+def get_asset_version() -> str:
+    """Return a cache-busting version for static assets.
+
+    Prefer an explicit ASSET_VERSION in production; otherwise derive a stable
+    version from local CSS mtimes so rebuilt containers get fresh URLs.
+    """
+
+    configured = os.environ.get("ASSET_VERSION")
+    if configured:
+        return configured
+
+    static_root = os.path.join(app.root_path, "static", "css")
+    mtimes = []
+    css_files = (
+        "cards.css",
+        "forms.css",
+        "responsive.css",
+        "loading.css",
+        "crt.css",
+        "tailwind.css",
+    )
+    for filename in css_files:
+        path = os.path.join(static_root, filename)
+        if os.path.exists(path):
+            mtimes.append(os.path.getmtime(path))
+    return str(int(max(mtimes))) if mtimes else "1"
+
+
+ASSET_VERSION = get_asset_version()
+
+
 @app.route("/favicon.ico")
 def favicon():
     icon_bytes = base64.b64decode(FAVICON_BASE64)
@@ -245,7 +276,7 @@ def inject_globals():
         "config": get_site_config(),
         "site_stats": get_site_stats(),
         "current_year": datetime.now().year,
-        "asset_version": os.environ.get("ASSET_VERSION", "20260629"),
+        "asset_version": ASSET_VERSION,
     }
 
 
