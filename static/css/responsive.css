@@ -629,3 +629,264 @@ input[type="date"] {
   background: #15171b;
   border-color: #262b33;
 }
+
+/* Professional contrast theme: graphite market board with cobalt and copper status color */
+:root {
+  --bg-color: #0c0f14;
+  --card-bg: #171b22;
+  --card-border: #2b3340;
+  --font-color: #e8edf4;
+  --font-green: #a8b5c4;
+  --font-blue: #8ebcff;
+  --highlight-green: #4f9dff;
+  --surface-1: #141820;
+  --surface-2: #1b2029;
+  --surface-3: #242b36;
+  --line-soft: #2a323f;
+  --line-strong: #415066;
+  --accent-teal: #4f9dff;
+  --accent-mint: #6bb6ff;
+  --accent-sky: #8ebcff;
+  --accent-amber: #c48a3a;
+  --accent-rose: #b35a63;
+  --text-muted: #96a3b4;
+  --status-active: #5aa7ff;
+  --status-active-soft: rgba(90, 167, 255, 0.14);
+  --status-sale: #c48a3a;
+  --status-sale-soft: rgba(196, 138, 58, 0.15);
+  --status-muted: #778292;
+}
+
+html,
+body {
+  background:
+    linear-gradient(180deg, #0b0d11 0%, #10151c 48%, #0c0f14 100%),
+    var(--bg-color);
+}
+
+.banner {
+  background: rgba(12, 15, 20, 0.94) !important;
+  border-bottom-color: #26303c;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
+}
+
+.banner-title {
+  color: #f4f7fb;
+}
+
+.banner-stats strong {
+  color: #f6f8fb;
+}
+
+.nav-pill {
+  border-color: #2d3746;
+  background: #171b22;
+  color: #d6dee9;
+}
+
+.nav-pill:hover,
+.nav-pill:focus-visible {
+  border-color: #4f9dff;
+  background: #1d2836;
+  color: #ffffff;
+}
+
+.page-shell {
+  width: min(1840px, 100%);
+  padding: clamp(1rem, 1.8vw, 1.75rem);
+}
+
+.card-wrapper {
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: clamp(1rem, 1.4vw, 1.35rem);
+}
+
+.vps-card {
+  border-color: #2b3340;
+  background:
+    linear-gradient(180deg, #1a1f27 0%, #151920 100%),
+    #171b22;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+.vps-card:hover,
+.vps-card:focus-visible {
+  border-color: #44546a;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 22px 56px rgba(0, 0, 0, 0.3);
+}
+
+.vps-card::before,
+.hero-panel::before,
+.form-hero::before,
+.form-card::before {
+  background: #4f9dff;
+}
+
+.vps-card.forsale {
+  border-color: rgba(196, 138, 58, 0.48);
+}
+
+.vps-card.forsale::before,
+#sale-fields::before {
+  background: #c48a3a;
+}
+
+.vps-card.sold::before,
+.vps-card.inactive::before {
+  background: #667080;
+}
+
+.vps-card:not(.sold):not(.inactive) .vps-title {
+  color: #8ebcff;
+}
+
+.vps-card.forsale .vps-title {
+  color: #d5a15e !important;
+}
+
+.vps-vendor-chip {
+  color: #91a0b4;
+}
+
+.card-status-tag {
+  border-color: rgba(90, 167, 255, 0.45);
+  background: rgba(90, 167, 255, 0.15);
+  color: #c9defd;
+}
+
+.vps-card.forsale .card-status-tag {
+  border-color: rgba(196, 138, 58, 0.5);
+  background: rgba(196, 138, 58, 0.18);
+  color: #e0bb83;
+}
+
+.vps-card.sold .card-status-tag,
+.vps-card.inactive .card-status-tag {
+  border-color: rgba(119, 130, 146, 0.38);
+  background: rgba(119, 130, 146, 0.13);
+  color: #a8b0bd;
+}
+
+.vps-metric {
+  border-color: #2d3948;
+  background:
+    linear-gradient(90deg, rgba(79, 157, 255, 0.09), rgba(21, 25, 32, 0.94));
+}
+
+.vps-card.forsale .vps-metric {
+  border-color: rgba(196, 138, 58, 0.36);
+  background:
+    linear-gradient(90deg, rgba(196, 138, 58, 0.1), rgba(21, 25, 32, 0.94));
+}
+
+.vps-card:not(.sold):not(.inactive) .vps-metric strong,
+.vps-card:not(.sold):not(.inactive) .vps-price,
+.vps-card:not(.sold):not(.inactive) .ping-status {
+  color: #9ecbff !important;
+}
+
+.vps-card.forsale .vps-metric strong,
+.vps-card.forsale .vps-price,
+.vps-card.forsale .vps-row span:last-child {
+  color: #d5a15e !important;
+}
+
+.vps-row {
+  border-bottom-color: rgba(145, 160, 180, 0.13);
+}
+
+.vps-card:not(.sold):not(.inactive) .vps-row span:first-child,
+.vps-card:not(.sold):not(.inactive) .vps-metric span {
+  color: #9baec4;
+}
+
+.vps-card:not(.sold):not(.inactive) .vps-row span:last-child {
+  color: #dce8f7;
+}
+
+.vps-card.sold,
+.vps-card.inactive {
+  opacity: 0.78;
+  filter: saturate(0.3);
+}
+
+.vps-card.sold .vps-title,
+.vps-card.inactive .vps-title,
+.vps-card.sold .vps-metric span,
+.vps-card.inactive .vps-metric span,
+.vps-card.sold .vps-metric strong,
+.vps-card.inactive .vps-metric strong,
+.vps-card.sold .vps-row span,
+.vps-card.inactive .vps-row span,
+.vps-card.sold .vps-price,
+.vps-card.inactive .vps-price {
+  color: #808a98 !important;
+}
+
+.form-hero,
+.form-card,
+.form-actions-card,
+.manage-card {
+  border-color: #2b3340;
+  background:
+    linear-gradient(180deg, #1a1f27 0%, #151920 100%),
+    #171b22;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.2);
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea,
+input[type="date"] {
+  border-color: #2c3542;
+  background: #0f1319;
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus {
+  border-color: #4f9dff;
+  box-shadow: 0 0 0 3px rgba(79, 157, 255, 0.16);
+}
+
+.form-section-title > span {
+  border-color: rgba(79, 157, 255, 0.42);
+  background: rgba(79, 157, 255, 0.14);
+  color: #c9defd;
+}
+
+.checkbox-row input {
+  accent-color: #4f9dff;
+}
+
+.form-actions button,
+.manage-action-primary {
+  border-color: #4f9dff;
+  background: #2f75d6;
+}
+
+.form-actions button:hover,
+.form-actions button:focus-visible,
+.manage-action-primary:hover {
+  background: #3c86ed;
+}
+
+.manage-action-muted {
+  border-color: #364253;
+  background: #222936;
+}
+
+.manage-action-danger {
+  border-color: #8f454e;
+  background: #8f454e;
+}
+
+@media screen and (max-width: 768px) {
+  .card-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
