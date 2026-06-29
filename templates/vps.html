@@ -22,33 +22,14 @@
 </head>
 <body class="min-h-screen font-mono flex flex-col">
 {% include 'loading_overlay.html' %}
-<nav class="banner">
-    <a href="{{ url_for('vps_list') }}" class="banner-home">
-        <div class="banner-title">
-            ⚡ <span>VPS</span> <span>剩余价值计算器</span>
-        </div>
-        <div class="banner-stats">
-            在用主机：<strong>{{ site_stats.count }} 台</strong> / 总价值：<strong>{{ site_stats.total_value }} 元</strong>
-        </div>
-    </a>
-    <div class="banner-subinfo">
-        {% if current_user %}
-        <span>你好, {{ current_user.username }}</span>
-        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('add_vps') }}">添加 VPS</a>
-        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_vps') }}">管理 VPS</a>
-        {% if current_user.is_admin %}
-        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('manage_users') }}">用户管理</a>
-        {% endif %}
-        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('logout') }}">退出登录</a>
-        {% else %}
-        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('login') }}">登录</a>
-        <a class="text-sm border border-cyan-400 hover:bg-cyan-600 text-cyan-200 hover:text-white px-3 py-1 rounded transition" href="{{ url_for('register') }}">注册</a>
-        {% endif %}
-    </div>
-</nav>
+{% include 'navbar.html' %}
 
-<div class="mx-auto px-4 py-8">
-    <h1 class="text-center text-4xl font-bold text-cyan-300 mb-8">VPS 列表</h1>
+<main class="page-shell">
+    <section class="hero-panel">
+        <p class="eyebrow">Realtime VPS Portfolio</p>
+        <h1>VPS 列表</h1>
+        <p>快速查看每台主机的配置、在线状态与剩余价值，按状态和价值自动排序。</p>
+    </section>
     {% if vps_data %}
     <div class="card-wrapper">
         {% for vps, data, specs, ip_info in vps_data %}
@@ -62,7 +43,14 @@
             {% elif vps.status == 'inactive' %}
             <span class="card-status-tag">已停用</span>
             {% endif %}
-            <h3 class="vps-title">{{ vps.name }}</h3>
+            <div class="vps-card-header">
+                <h3 class="vps-title">{{ vps.name }}</h3>
+                <span class="vps-vendor-chip">{{ vps.vendor_name or '未知商家' }}</span>
+            </div>
+            <div class="vps-metric">
+                <span>剩余价值</span>
+                <strong>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_value }} CNY{% else %}-{% endif %}</strong>
+            </div>
             <div class="vps-content">
                 <div class="vps-row"><span>商家：</span><span class="vendor-name">{{ vps.vendor_name or '-' }}</span></div>
     <div class="vps-row"><span>ISP：</span><span class="isp-name">{{ ip_info.isp }}</span></div>
@@ -79,7 +67,6 @@
                 <div class="vps-row"><span>购买日期：</span><span>{{ vps.purchase_date.strftime('%Y-%m-%d') if vps.purchase_date and (vps.status == 'active' or vps.status == 'forsale') else '-' }}</span></div>
                 <div class="vps-row"><span>续费周期：</span><span>{% if vps.renewal_days == 30 %}每月{% elif vps.renewal_days == 90 %}每季度{% elif vps.renewal_days == 365 %}每年{% elif vps.renewal_days == 1095 %}三年{% elif vps.renewal_days %}{{ vps.renewal_days }}天{% else %}-{% endif %}</span></div>
                 <div class="vps-row"><span>剩余天数：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_days }} 天{% else %}-{% endif %}</span></div>
-                <div class="vps-row"><span>剩余价值：</span><span>{% if vps.status == 'active' or vps.status == 'forsale' %}{{ data.remaining_value }} CNY{% else %}-{% endif %}</span></div>
                 {% if vps.status == 'forsale' %}
                 <div class="vps-row">
                     <span>最终价格：</span>
@@ -94,7 +81,7 @@
     {% else %}
     <p class="text-center">暂无 VPS 条目。</p>
     {% endif %}
-</div>
+</main>
 
 <script>
     function unifyCardSizes() {

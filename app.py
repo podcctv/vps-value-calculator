@@ -151,6 +151,13 @@ def inject_visit_stats():
 _vps_cache = {"data": None, "time": 0}
 
 
+def invalidate_vps_cache() -> None:
+    """Clear cached VPS list data after writes so public pages update immediately."""
+
+    _vps_cache["data"] = None
+    _vps_cache["time"] = 0
+
+
 def get_vps_data():
     now = time.time()
     if _vps_cache["data"] is not None and now - _vps_cache["time"] < 60:
@@ -438,7 +445,7 @@ def add_vps():
                 exchange_rate_source=form.get("exchange_rate_source"),
                 update_cycle=int(form.get("update_cycle") or 7),
                 dynamic_svg=bool(form.get("dynamic_svg")),
-                status=form.get("status"),
+                status=form.get("status") or "active",
                 sale_percent=float(form.get("sale_percent") or 0.0),
                 sale_fixed=float(form.get("sale_fixed") or 0.0),
                 sale_method=form.get("sale_method"),
@@ -447,6 +454,7 @@ def add_vps():
             )
             db.add(vps)
             db.commit()
+            invalidate_vps_cache()
             config = db.query(SiteConfig).first()
             data = calculate_remaining(vps)
             generate_svg(vps, data, config, safe_name=safe_name)
@@ -499,13 +507,14 @@ def edit_vps(vps_id: int):
             vps.exchange_rate_source = form.get("exchange_rate_source")
             vps.update_cycle = int(form.get("update_cycle") or 7)
             vps.dynamic_svg = bool(form.get("dynamic_svg"))
-            vps.status = form.get("status")
+            vps.status = form.get("status") or "active"
             vps.sale_percent = float(form.get("sale_percent") or 0.0)
             vps.sale_fixed = float(form.get("sale_fixed") or 0.0)
             vps.sale_method = form.get("sale_method")
             vps.push_fee = float(form.get("push_fee") or 0.0)
             vps.push_fee_currency = form.get("push_fee_currency")
             db.commit()
+            invalidate_vps_cache()
             config = db.query(SiteConfig).first()
             data = calculate_remaining(vps)
             generate_svg(vps, data, config, safe_name=safe_name)
@@ -546,6 +555,7 @@ def delete_vps(vps_id: int):
         if vps:
             db.delete(vps)
             db.commit()
+            invalidate_vps_cache()
     return redirect(url_for("manage_vps"))
 
 

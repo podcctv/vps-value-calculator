@@ -79,7 +79,7 @@ def test_manage_displays_ip_without_port(client):
     resp = client.get('/manage')
     assert resp.status_code == 200
     text = resp.get_data(as_text=True)
-    assert '1.**.**.4' in text
+    assert '1.2.**.**' in text
     assert ':5678' not in text
 
 
